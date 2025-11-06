@@ -1,0 +1,64 @@
+header {
+    /*Level 1*/
+    display: flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+}
+
+#logoHolder {
+    /*Level 2 - header*/
+    text-align: center;
+}
+
+#actualHeaderHolder {
+    /*Level 2 - header*/
+    display: flex;
+    flex-direction: column;
+    background-color: aquamarine;
+}
+
+#title {
+    /*Level 3 - actualHeaderHolder*/
+    width: 100%;
+    text-align: center;
+}
+
+#menuBar {
+    /*Level 3 - actualHeaderHolder*/
+    
+}
+
+#menuTitle {
+    /*Level 4 - menuBar [ALSO menuObject]*/
+
+}
+
+.menuOption {
+    /*Level 4 - menuBar [ALSO menuObject]*/
+
+}
+
+.menuObject {
+    /*Level 4 - menuBar [BOTH menuTitle and menuOption]*/
+
+}
+
+siteBody {
+    /*Level 1*/
+
+}
+
+siteBody h1 {
+    /*Level 2 - siteBody*/
+
+}
+
+siteBody h2 {
+    /*Level 2 - siteBody*/
+
+}
+
+siteBody p {
+    /*Level 2 - siteBody*/
+    
+}
