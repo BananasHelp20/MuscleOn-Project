@@ -6,6 +6,10 @@ body, html {
     margin: 0;
 }
 
+a {
+    text-decoration: none;
+}
+
 img {
     width: 100%;
 }
@@ -25,7 +29,8 @@ img {
     bottom: 0;
     z-index: -1;
     transform: scale(1.2);
-    /* MUCHO IMPORTANTE beim bluren --> sonst weiße vignette */
+        /* MUCHO IMPORTANTE beim bluren --> sonst weiße vignette */
+    -webkit-filter: blur(25px) saturate(170%);
 }
 
 header {
@@ -77,8 +82,9 @@ header {
     width: 10%;
     padding-left: 1.5%;
     padding-right: 1.5%;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     border-left: 1px solid rgba(193, 193, 193, 0.42);
 }
 
@@ -99,8 +105,9 @@ header {
     /*Level 5 - menuOption Bar AND Level 4 - menuBar*/
     padding-left: 1.5%;
     padding-right: 1.5%;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
 .siteBody {
