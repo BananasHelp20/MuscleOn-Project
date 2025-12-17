@@ -14,6 +14,10 @@ img {
     width: 100%;
 }
 
+h1, h2, h3, h4, h5, h6 {
+    color: rgb(255, 230, 0);
+}
+
 .background {
     background-image: url(../images/background.jpg);
     position: fixed;
@@ -99,6 +103,7 @@ header {
     /*Level5-menuOptionBar[BOTHmenuTitleandmenuOption]*/
     border-right: 1px solid rgba(193, 193, 193, 0.42);
     color: rgb(220, 220, 220);
+    font-size: 20px;
 }
 
 .menuOption {
@@ -112,7 +117,7 @@ header {
 
 .siteBody {
     /*Level1*/
-    background-color: rgba(56, 56, 56, 0.884);
+    background-color: rgba(56, 56, 56, 0.742);
     color: rgb(240, 240, 240);
     padding-left: 5%;
     padding-right: 5%;
@@ -123,6 +128,19 @@ header {
     margin-right: 10%;
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
+}
+
+.dataTable {
+    /*Level 3 - p //only on data site*/
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+
+.dataTable td {
+    /*Level 4 .dataTable //only on data site*/
+    padding: 8px;
 }
 
 .siteBody h1 {
