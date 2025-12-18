@@ -1,0 +1,13 @@
+[
+    {
+        "userID": 1,
+        "avgHeartFrequence": 2,
+        "avgOxygen": 98,
+        "avgMuscleUsage": 100,
+        "avgMuscleUsageRaw": 890,
+        "maxMuscleUsage": 1000,
+        "trainedMuscles": ["Bizeps", "Trizeps"],
+        "burnedKalories": 250,
+        "Training": true //für Zeitrechnung (Wenn false, Zeit stoppen)
+    }
+]

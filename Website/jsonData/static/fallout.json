@@ -1,0 +1,11 @@
+[
+    {
+        "userID": 1,
+        "heartFrequence": 2,
+        "oxygen": 98,
+        "currentMuscleUsage": 100,
+        "currentMuscleUsageRaw": 890,
+        "currentMuscle": "Bizeps",
+        "currentTraining": "Curls"
+    }
+]
