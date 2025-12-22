@@ -1,11 +1,16 @@
-[
-    {
-        "userID": 1,
-        "avgHeartFrequence": 150,
-        "avgoxygen": 98,
-        "avgMuscleUsage": 79,
-        "avgMuscleUsageRaw": 540,
-        "mostTrainedMuscle": "Bizeps",
-        "mostDone": "Curls"
+ 
+{
+    "users": {
+        "0": {
+            "avgHeartFrequence": 150,
+            "avgoxygen": 98,
+            "avgMuscleUsage": 79,
+            "avgMuscleUsageRaw": 540,
+            "weeklyBurnedCalories": 2000,
+            "monthlyStrengthIncrease": 15,
+            "weeklyTrainingTime": "10:10:00",
+            "mostTrainedMuscle": "Bizeps",
+            "mostDone": "Curls"
+        }
     }
-]
+}

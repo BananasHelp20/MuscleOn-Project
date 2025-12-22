@@ -1,5 +1,15 @@
-[
-    "Pull-Ups",
-    "Push-Ups",
-    "Curls"
-]
+{
+    "bizeps": [
+        "Pull-Ups",
+        "Push-Ups",
+        "Curls"
+    ],
+    "trizeps": [
+        "Pull-Ups",
+        "Push-Ups",
+        "Curls"
+    ],
+    "ois": [
+        "hinig"
+    ]
+}

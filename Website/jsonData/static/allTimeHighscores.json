@@ -1,10 +1,12 @@
-[
-    {
-        "userID": 1,
-        "maxMuscleUsageAllTimeRaw": 920,
-        "maxMuscleUsageAllTime": 165,
-        "maxTimeTrained": "4:35:22",
-        "maxDoneInOne": [["Curls", 10], ["Pull-Ups"]],
-        "maxHeartRate": 220
+
+{
+    "users": {
+        "0": {
+            "maxMuscleUsageAllTimeRaw": 920,
+            "maxMuscleUsageAllTime": 165,
+            "maxTimeTrained": "4:35:22",
+            "maxDoneInOne": [["Curls", 10], ["Pull-Ups"]],
+            "maxHeartRate": 220
+        }
     }
-]
+}

@@ -1,11 +1,20 @@
-[
-    {
-        "userID": 1,
-        "name": "William Riegler",
-        "weight": 71,
-        "size": 175,
-        "age": 17,
-        "sessionTimes": [["Saturday", "9:30", "11:30"], ["Wednesday", "15:30", "17:00"], ["Thursday", "13:30", "15:00"]],
-        "strengthWhenMesured": 670
+{
+    "users": {
+        "0": {
+            "name": "William Riegler",
+            "weight": 71,
+            "size": 175,
+            "birthday": "14.08.2008",
+            "sessionTimes": [
+                ["Saturday", "9:30", "11:30"],
+                ["Wednesday", "15:30", "17:00"], 
+                ["Thursday", "13:30", "15:00"]
+            ],
+            "additional-sessions": [
+                ["Sunday", "21.12.2025", "14:00", "16:30"],
+                ["Monday", "22.12.2025", "20:00", "22:00"]
+            ],
+            "strengthWhenMesured": 670
+        }
     }
-]
+}
