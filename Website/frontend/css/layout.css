@@ -99,8 +99,13 @@ header {
     width: 100%;
 }
 
+#darkmodeButton {
+    /*Level3-siteBodyp*/
+    transform: scale(1.2);
+}
+
 .menuObject {
-    /*Level5-menuOptionBar[BOTHmenuTitleandmenuOption]*/
+    /*Level5 - menuOptionBar [BOTH menuTitle and menuOption]*/
     border-right: 1px solid rgba(193, 193, 193, 0.42);
     color: rgb(220, 220, 220);
     font-size: 20px;

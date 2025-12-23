@@ -5,7 +5,7 @@
             "maxMuscleUsageAllTimeRaw": 920,
             "maxMuscleUsageAllTime": 165,
             "maxTimeTrained": "4:35:22",
-            "maxDoneInOne": [["Curls", 10], ["Pull-Ups"]],
+            "maxDoneInOne": [["Curls", 10], ["Pull-Ups", 14]],
             "maxHeartRate": 220
         }
     }

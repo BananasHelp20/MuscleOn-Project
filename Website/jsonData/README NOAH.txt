@@ -3,4 +3,4 @@ stats.json: daten live übertragen
 average.json: langzeitdaten, also Daten aus der Durchschnitt der Daten aus der Datenbank
 fallout.json: durchschnittsdaten während ausfall (z.B. Connection loss)
 settings.json: Einstellungen
-instructions.txt: um Daten von Website zu Backend zu übermitteln, durch stichwörter
+instructions.txt: um Daten von Website zu Backend zu übermitteln, durch stichwörter z.B. "stop process" oder "start messuring"
