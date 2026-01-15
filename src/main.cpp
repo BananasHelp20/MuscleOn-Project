@@ -1,5 +1,10 @@
 #include <Arduino.h>
-#define EMG_PIN 34
+#include "calibrations.h"
+
+static int iteration = 0;
+static float smoothedValue = 0.0;
+static float baseline = 0.0;
+static float maxValue = 0.0;
 
 void setup() {
   Serial.begin(115200);
@@ -7,14 +12,35 @@ void setup() {
   analogSetAttenuation(ADC_11db);  // up to ~3.3V
 }
 
+
 void loop() {
+  static bool started = false;
+  iteration++;
+
   int raw = analogRead(EMG_PIN);
-  float voltage = raw * (3.3 / 4095.0);
+  smoothedValue = smooth(smoothedValue, raw, 0.1);
 
-  Serial.print("Raw: ");
-  Serial.print(raw);
-  Serial.print("  Voltage: ");
-  Serial.println(voltage, 3);
+  
+  if (!started) {
+    if (smoothedValue > 600.0) {
+      baseline = generateBaseLine();
+      maxValue = generateMaxValue();
+      started = true;
+    }
+  } else {
+    if (iteration % 50 == 1) {
+      printValues();
+    }
+  }
 
-  delay(50);
+  delay(5);
+}
+
+void printValues() {
+  Serial.print("Raw (smoothed): ");
+  Serial.print(smoothedValue, 0);
+  Serial.print(" | Baseline-Adjusted: ");
+  Serial.print(smoothedValue - baseline, 0);
+  Serial.print(" | Normalized: ");
+  Serial.println((smoothedValue - baseline) / (maxValue - baseline), 2);
 }
