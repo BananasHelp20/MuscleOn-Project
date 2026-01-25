@@ -1,6 +1,6 @@
 {
-    "users": {
-        "0": {
+    "users": [
+        {
             "avgHeartFrequence": 2,
             "avgOxygen": 98,
             "avgMuscleUsage": 100,
@@ -10,5 +10,5 @@
             "burnedKalories": 250,
             "Training": true //für Zeitrechnung (Wenn false, Zeit stoppen stoppen)
         }
-    }
+    ]
 }

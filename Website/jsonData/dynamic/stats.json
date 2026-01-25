@@ -1,6 +1,6 @@
 {
-    "users": {
-        "0": {
+    "users": [
+        {
             "userID": 1,
             "heartFrequence": 2,
             "oxygen": 98,
@@ -9,5 +9,5 @@
             "currentMuscle": "Bizeps",
             "currentTraining": "Curls"
         }
-    }
+    ]
 }

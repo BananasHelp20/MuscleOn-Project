@@ -1,7 +1,8 @@
 {
-    "users": {
-        "0": {
-            "name": "William Riegler",
+    "users": [
+        {
+            "userName": "William Riegler",
+            "passwd": "!Passme",
             "weight": 71,
             "size": 175,
             "birthday": "14.08.2008",
@@ -10,11 +11,26 @@
                 ["Wednesday", "15:30", "17:00"], 
                 ["Thursday", "13:30", "15:00"]
             ],
-            "additional-sessions": [
+            "additionalSessions": [
                 ["Sunday", "21.12.2025", "14:00", "16:30"],
                 ["Monday", "22.12.2025", "20:00", "22:00"]
             ],
             "strengthWhenMesured": 670
+        },
+        {
+            "userName": "dev",
+            "passwd": "",
+            "weight": 75,
+            "size": 175,
+            "birthday": "01.01.2000",
+            "sessionTimes": [
+                ["Saturday", "9:30", "11:30"],
+                ["Wednesday", "15:30", "17:00"], 
+                ["Thursday", "13:30", "15:00"]
+            ],
+            "additionalSessions": [
+            ],
+            "strengthWhenMesured": 700
         }
-    }
+    ]
 }

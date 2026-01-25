@@ -1,7 +1,7 @@
  
 {
-    "users": {
-        "0": {
+    "users": [
+        {
             "avgHeartFrequence": 150,
             "avgoxygen": 98,
             "avgMuscleUsage": 79,
@@ -12,5 +12,5 @@
             "mostTrainedMuscle": "Bizeps",
             "mostDone": "Curls"
         }
-    }
+    ]
 }

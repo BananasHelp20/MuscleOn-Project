@@ -1,0 +1,51 @@
+Rollen und Arbeitsverteilung
+
+Noah (Backend and else):
+	Rollen:
+		Lead Backend Developer
+		Dokumentmann
+		3D Artist
+	Dokumente
+	Backend auf ESP32
+		Sammeln der Daten mit Sensoren
+		Fehlerbehandlung:
+			Verbindung getrennt: dann lieferung nach jsonData/static/fallout.json, und in jsondata/error.json fallout Property auf true setzten
+			Keine Daten verfügbar: "N/A" (z.B. wenn Sensor nicht funktioniert, oder unrealistische Werte geliefert werden) und in error.json zum Sensor zugehöriges property auf false setzen, sonst auf true
+		jsonData/dynamic/ immer sekündlich aktualiesieren
+	Casings grundsätzlich designen
+
+Tobi (Hardware and Middleman):
+	Rollen:
+		Hardwarespezialist
+		Projektleiter
+		Organisator
+	Hardware
+	Verbindung mit Raspi und lieferung der Daten (als json) an die Website
+	Korrektes Hosten der Website
+	Hardware minimieren, und nutzerfreundlich machen (inkl. Kabelsalat)
+
+Willi (WWW: William Wolfgang Webdeveloper):
+	Rollen: 
+		Lead Frontend Developer
+		Github Manager
+	Website Frontend
+		Subsites
+		Design
+			Animationen
+			Farben
+		Layout
+			Für PC, Handy und Tablet verschieden
+		Subsites
+			custom 404 site (wenn möglich)
+			Einstellungen
+			Langzeitdaten (aus jsonData/static/)
+			Kurzzeitdaten (aus jsonData/dynamic/ oder jsonData/static/fallout.json)
+			Hauptseite (About)
+			Configurationsseite
+			Startseite (starten eines Workouts)
+			Recommended (empfohlene Workouts für gewisse Muskelgruppen)
+			
+	Website Backend
+		Interpretation von gelieferten JSon Dateien
+			unterteilt in jsonData/static/ und jsonData/dynamic/
+			auswertung und senden der Daten an die Website

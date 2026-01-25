@@ -1,3 +1,5 @@
 {
-    "running": true
+    "running": true,
+    "loggedIn": false,
+    "loggedInAsUser": "dev"
 }

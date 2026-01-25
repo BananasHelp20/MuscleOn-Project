@@ -2,7 +2,7 @@
     "users": {
         "0": {
             "mode": "darkmode",
-            "viewing": "session and longterm",
+            "viewing": ["session", "longterm", "real-time"],
             "dev": true
         }
     }
