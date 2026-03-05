@@ -7,7 +7,7 @@
             "avgMuscleUsage": 100,
             "trainedMuscles": ["Bizeps", "Trizeps"],
             "burnedKalories": 250,
-            "Training": true //für Zeitrechnung (Wenn false, Zeit stoppen stoppen)
+            "Training": true
         }
     ]
 }

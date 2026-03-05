@@ -276,7 +276,7 @@ function initialiseViewingModes() {
 
 function init() {
     loadDataFromLocalStorage();
-    log(userData);
+    console.log(userData);
     loadPropertiesFromLocalStorage();
     loadUserSettingsFromLocalStorage((currentProperties.loggedIn) ? currentProperties.loggedInWithUserId : -1);
     if (document.getElementById("currentUser") && currentProperties.loggedIn) {
