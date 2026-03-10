@@ -3,6 +3,7 @@
         {
             "id": 0,
             "userName": "William Riegler",
+            "mail": "hallo@icloud.com",
             "passwd": "!Passme",
             "weight": 71,
             "size": 175,
@@ -20,6 +21,7 @@
         {
             "id": 1,
             "userName": "dev",
+            "mail": "dev@icloud.com",
             "passwd": "",
             "weight": 75,
             "size": 175,

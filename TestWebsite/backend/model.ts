@@ -8,10 +8,10 @@ export interface User {
     birthday: string,
     sessionTimes: string[][],
     additionalSessions?: string[][],
-    userSessionData: userSessionData,
-    userShortTerm: userShortTermData,
-    userHighscores: userHighscoreData,
-    userLongTermAverages: userLongTermAverageData,
+    userSessionData: userSessionData | null,
+    userShortTerm: userShortTermData | null,
+    userHighscores: userHighscoreData | null,
+    userLongTermAverages: userLongTermAverageData | null,
     userSettings: userSettings
 }
 

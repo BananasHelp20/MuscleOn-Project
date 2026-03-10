@@ -1,5 +1,5 @@
 function updateFromJsonData() {
-    fetch("/getData") // assemble userData in typescript from json files
+    fetch("/api/getData") // assemble userData in typescript from json files
         .then(response => response.json())
         .then(data => {
             for (let i = 0; i < data.users.length; i++) {
@@ -26,7 +26,7 @@ function setUserSettings(selectedUserId) { //send settings to backend and save t
         devMode: devMode
     }
 
-    fetch("/saveSettings", {
+    fetch("/api/saveSettings/" + selectedUserId, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -38,4 +38,30 @@ function setUserSettings(selectedUserId) { //send settings to backend and save t
     userSettings.viewing = viewing;
     userSettings.devMode = devMode;
     userData[getIndexOfUserId(selectedUserId)].userSettings = userSettings;
+}
+
+function addUser(user) {
+    fetch("/api/addUser", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    });
+}
+
+function deleteUser(userId) {
+    fetch("/api/deleteUser/" + userId, {
+        method: "DELETE"
+    });
+}
+
+function updateUser(user) {
+    fetch("/api/updateUser/" + user.userId, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    })
 }
