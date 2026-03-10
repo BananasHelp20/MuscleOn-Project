@@ -19,27 +19,24 @@ export async function getUserData(): Promise<model.User[]> {
     let properties: model.userProperties[] = [];
     let supportedExercises: model.supportedExercises;
 
-    readFile(join(__dirname, "../jsonData/dynamic/sessionStats.json"), 'utf-8').then(data => {
-        sessionStats = JSON.parse(data);
-    });
-    readFile(join(__dirname, "../jsonData/dynamic/stats.json"), 'utf-8').then(data => {
-        shortTermData = JSON.parse(data);
-    });
-    readFile(join(__dirname, "../jsonData/dynamic/settings.json"), 'utf-8').then(data => {
-        settings = JSON.parse(data);
-    });
-    readFile(join(__dirname, "../jsonData/else/supportedExercises.json"), 'utf-8').then(data => {
-        supportedExercises = JSON.parse(data);
-    });
-    readFile(join(__dirname, "../jsonData/else/users.json"), 'utf-8').then(data => {
-        properties = JSON.parse(data);
-    });
-    readFile(join(__dirname, "../jsonData/static/allTimeHighscores.json"), 'utf-8').then(data => {
-        highscoreData = JSON.parse(data);
-    });
-    readFile(join(__dirname, "../jsonData/static/longTermAverages.json"), 'utf-8').then(data => {
-        longTermAverageData = JSON.parse(data);
-    });
+    // Alle Dateien GLEICHZEITIG laden mit await
+    const [sessionStatsData, statsData, settingsData, exercisesData, usersData, highscoresData, longTermData] = await Promise.all([
+        readFile(join(__dirname, "../jsonData/dynamic/sessionStats.json"), 'utf-8').catch(() => '[]'),
+        readFile(join(__dirname, "../jsonData/dynamic/stats.json"), 'utf-8').catch(() => '[]'),
+        readFile(join(__dirname, "../jsonData/else/settings.json"), 'utf-8').catch(() => '[]'),
+        readFile(join(__dirname, "../jsonData/else/supportedExercises.json"), 'utf-8').catch(() => '[]'),
+        readFile(join(__dirname, "../jsonData/else/users.json"), 'utf-8').catch(() => '[]'),
+        readFile(join(__dirname, "../jsonData/static/allTimeHighscores.json"), 'utf-8').catch(() => '[]'),
+        readFile(join(__dirname, "../jsonData/static/average.json"), 'utf-8').catch(() => '[]')
+    ]);
+
+    sessionStats = JSON.parse(sessionStatsData);
+    shortTermData = JSON.parse(statsData);
+    settings = JSON.parse(settingsData);
+    supportedExercises = JSON.parse(exercisesData);
+    properties = JSON.parse(usersData);
+    highscoreData = JSON.parse(highscoresData);
+    longTermAverageData = JSON.parse(longTermData);
 
     for (let i = 0; i < properties.length; i++) {
         let property = properties[getIndexByUserId(properties[i].userId, properties)];

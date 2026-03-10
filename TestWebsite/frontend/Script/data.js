@@ -12,15 +12,10 @@ function updateFromJsonData() {
         });
 }
 
-function getDataFromJson() {
-    fetch("/api/getData/all") // assemble userData in typescript from json files
-        .then(response => response.json())
-        .then(data => {
-            return data.users;
-        })
-        .catch(error => {
-            console.error("Error fetching JSON:", error);
-        });
+async function getDataFromJson() {
+    const response = await fetch("/api/getData/all"); // assemble userData in typescript from json files
+    const data = await response.json();
+    return data.users;
 }
 
 function setUserSettings(selectedUserId, userSettings) { //send settings to backend and save them in json file
@@ -46,7 +41,7 @@ function setUserSettings(selectedUserId, userSettings) { //send settings to back
     });
 
     userSettings.mode = mode;
-    userSettings.viewing = viewing;
+    userSettings.viewing = userSettings.viewing;
     userSettings.devMode = devMode;
     userData[getIndexOfUserId(selectedUserId)].userSettings = userSettings;
 }

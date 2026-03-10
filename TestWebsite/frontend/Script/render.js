@@ -23,8 +23,8 @@ function renderViewing(viewing) {
 }
 
 function updateDisplay(selectedUserId) {
-    if (selectedUserId === undefined) {
-        selectedUserId = userData[0].userId;
+    if (selectedUserId === undefined || userData.length === 0) {
+        return;
     }
     let user = userData[getIndexOfUserId(selectedUserId)];
     if (averageHeartFrequenceDisplay && user) {
@@ -55,4 +55,7 @@ function updateDisplay(selectedUserId) {
     }
 }
 
-init();
+// Starte init() wenn DOM geladen ist
+document.addEventListener("DOMContentLoaded", () => {
+    init();
+});

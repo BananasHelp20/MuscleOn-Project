@@ -74,14 +74,18 @@ let user = {
     }
 }
 
-let userData = getDataFromJson();
-let userSettings = userData[0].userSettings;
+let userData = [];
+let userSettings = {
+    mode: "darkmode",
+    viewing: ["session", "longterm", "real-time"],
+    devMode: false
+};
 
 let currentProperties = {
     running: false,
     loggedIn: false,
-    loggedInAsUser: userData[0].userName,
-    loggedInWithUserId: userData[0].userId
+    loggedInAsUser: "",
+    loggedInWithUserId: -1
 }
 
 let supportedExercises = [];
@@ -274,10 +278,25 @@ function initialiseViewingModes() {
 
 
 function init() {
-    loadDataFromLocalStorage();
-    console.log(userData);
     loadPropertiesFromLocalStorage();
+    loadDataFromLocalStorage();
     loadUserSettingsFromLocalStorage((currentProperties.loggedIn) ? currentProperties.loggedInWithUserId : -1);
+    
+    // Falls localStorage leer, lade vom Server
+    if (userData.length === 0) {
+        getDataFromJson().then(data => {
+            userData = data;
+            if (userData.length > 0 && !currentProperties.loggedIn) {
+                userSettings = userData[0].userSettings;
+            }
+            initializeUI();
+        }).catch(error => console.error("Error loading data:", error));
+    } else {
+        initializeUI();
+    }
+}
+
+function initializeUI() {
     if (document.getElementById("currentUser") && currentProperties.loggedIn) {
         document.getElementById("currentUser").innerHTML = `Momentan eingeloggt: ${currentProperties.loggedInAsUser} <button id="logoutButton">Logout</button>`;
     } else if (document.getElementById("currentUser")) {
@@ -300,10 +319,17 @@ function init() {
 
     initializeLoginAndSignup();
     initialiseModes();
+    
+    // Aktualisiere Daten jede Sekunde
     setInterval(() => {
-        updateFromJsonData();
-        userData = getDataFromJson();
-        userSettings = userData[getIndexOfUserId(selectedUserId)].userSettings;
-        updateDisplay(selectedUserId);
-    }, 2000);
+        getDataFromJson().then(data => {
+            if (data && data.length > 0) {
+                userData = data;
+                if (selectedUserId >= 0) {
+                    userSettings = userData[getIndexOfUserId(selectedUserId)]?.userSettings || userSettings;
+                }
+                updateDisplay(selectedUserId);
+            }
+        }).catch(error => console.error("Error updating data:", error));
+    }, 1000);
 }
