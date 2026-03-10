@@ -31,3 +31,15 @@ function getUserIdFromPasswordAndMail(password, mail) {
     }
     return -1;
 }
+
+function getUserIdFromUsernameAndPassword(username, password) {
+    if (username === "" || password === "") {
+        return -1;
+    }
+    for (let i = 0; i < userData.length; i++) {
+        if (userData[i].userPassword === password && userData[i].userName === username) {
+            return userData[i].userId;
+        }
+    }
+    return -1;
+}

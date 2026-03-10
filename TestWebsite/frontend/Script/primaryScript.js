@@ -74,7 +74,7 @@ let user = {
     }
 }
 
-let userData = [user];
+let userData = getDataFromJson();
 let userSettings = userData[0].userSettings;
 
 let currentProperties = {
@@ -184,6 +184,7 @@ function login(userId) {
     currentProperties.loggedIn = true;
     currentProperties.loggedInAsUser = userData[getIndexOfUserId(userId)].userName;
     currentProperties.loggedInWithUserId = userId;
+    userData = getDataFromJson();
     userSettings = userData[getIndexOfUserId(userId)].userSettings;
     updateSettings(selectedUserId);
     savePropertiesToLocalStorage();
@@ -214,12 +215,10 @@ function initializeLoginAndSignup() {
     if (document.getElementById("loginButton")) {
         loadDataFromLocalStorage();
         document.getElementById("loginButton")?.addEventListener("click", () => {
-            let id = getUserIdFromPasswordAndMail(document.getElementById("password").value, document.getElementById("email").value);
+            let id = getUserIdFromUsernameAndPassword(document.getElementById("username").value, document.getElementById("password").value);
             if (id !== -1) {
-                if (document.getElementById("password") && document.getElementById("email")) {
-                    if (userData[getIndexOfUserId(id)].userMail == document.getElementById("email").value && userData[getIndexOfUserId(id)].userPassword == document.getElementById("password").value) {
-                        userData[getIndexOfUserId(id)].userPassword = document.getElementById("password").value;
-                        userData[getIndexOfUserId(id)].userMail = document.getElementById("email").value;
+                if (document.getElementById("password") && document.getElementById("username")) {
+                    if (userData[getIndexOfUserId(id)].userName == document.getElementById("username").value && userData[getIndexOfUserId(id)].userPassword == document.getElementById("password").value) {
                         login(id);
                         window.location.href = "./index.html";
                     } else {
@@ -302,7 +301,9 @@ function init() {
     initializeLoginAndSignup();
     initialiseModes();
     setInterval(() => {
-        //updateFromJsonData();
+        updateFromJsonData();
+        userData = getDataFromJson();
+        userSettings = userData[getIndexOfUserId(selectedUserId)].userSettings;
         updateDisplay(selectedUserId);
     }, 2000);
 }

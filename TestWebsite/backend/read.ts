@@ -241,3 +241,18 @@ export async function saveAndOverrideIntoJson(userData: model.User) {
     await writeFile(join(__dirname, "../jsonData/static/allTimeHighscores.json"), JSON.stringify(highscoreDataJson, null, 2));
     await writeFile(join(__dirname, "../jsonData/static/longTermAverages.json"), JSON.stringify(longTermAverageDataJson, null, 2));
 }
+
+export async function saveAndOverrideAllUsers(userData: model.User[]) {
+    for (let i = 0; i < userData.length; i++) {
+        await saveAndOverrideIntoJson(userData[i]);
+    }
+}
+
+export async function deleteUser(userId: number) {
+    let userData = await getUserData();
+    if (userId >= userData.length || userId < 0) {
+        throw new Error("User id out of bounds (not found)");
+    }
+    userData.splice(userId, 1);
+    await saveAndOverrideAllUsers(userData);
+}

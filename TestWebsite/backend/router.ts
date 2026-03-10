@@ -1,14 +1,18 @@
 import e from "express";
 import { get } from "http";
-import { getUserData, getDeviceProperties, getSupportedExercises, saveAndOverrideIntoJson, saveAndAddToJson, getSpecificUserData } from "./read";
+import { deleteUser, getUserData, getDeviceProperties, getSupportedExercises, saveAndOverrideIntoJson, saveAndAddToJson, getSpecificUserData, saveDeviceProperties, saveSupportedExercises } from "./read";
 import { User } from "./model";
 import * as model from "./model";
 
 
-const muscleRouter = e.Router();
+export const muscleRouter = e.Router();
 let userData: model.User[]; //Hier werden die Daten der User gespeichert
-let deviceProperties: model.deviceProperties = await getDeviceProperties(); //Hier werden die Daten der Geräte gespeichert
-let supportedExercises: model.supportedExercises = await getSupportedExercises(); //Hier werden die Daten der unterstützten Übungen gespeichert
+let deviceProperties: model.deviceProperties; //Hier werden die Daten der Geräte gespeichert
+let supportedExercises: model.supportedExercises; //Hier werden die Daten der unterstützten Übungen gespeichert
+
+muscleRouter.get('/api/getData/all', async (req, res) => {
+    res.json({ users: await getUserData() });
+});
 
 muscleRouter.get('/api/getData/:id', async (req, res) => {
     res.json(await getSpecificUserData(Number(req.params.id)));
@@ -55,11 +59,36 @@ muscleRouter.get('/api/getDeviceProperties', async (req, res) => {
     res.json(deviceProperties);
 });
 
+muscleRouter.post('/api/updateDeviceProperties', async (req, res) => {
+    const updatedDeviceProperties = await req.body.json();
+    deviceProperties = await getDeviceProperties();
+    deviceProperties = {
+        running: updatedDeviceProperties.running || deviceProperties.running,
+        loggedIn: updatedDeviceProperties.loggedIn || deviceProperties.loggedIn,
+        loggedInAsUser: updatedDeviceProperties.loggedInAsUser || deviceProperties.loggedInAsUser,
+        loggedInWithUserId: updatedDeviceProperties.loggedInWithUserId || deviceProperties.loggedInWithUserId,
+    };
+    await saveDeviceProperties(deviceProperties);
+    res.statusCode = 200;
+    res.json({ message: "Device properties updated successfully" });
+});
+
 muscleRouter.get('/api/getSupportedExercises', async (req, res) => {
     res.json(supportedExercises);
 });
 
-muscleRouter.post('/abi/deleteUser/:id', async (req, res) => {
+muscleRouter.post('/api/updateSupportedExercises', async (req, res) => {
+    const updatedSupportedExercises = await req.body.json();
+    supportedExercises = await getSupportedExercises();
+    supportedExercises = {
+        excercises: updatedSupportedExercises.exercises || supportedExercises.excercises
+    };
+    await saveSupportedExercises(supportedExercises);
+    res.statusCode = 200;
+    res.json({ message: "Supported exercises updated successfully" });
+});
+
+muscleRouter.post('/api/deleteUser/:id', async (req, res) => {
     userData = await getUserData();
     if (Number(req.params.id) >= userData.length || Number(req.params.id) < 0) {
         res.statusCode = 404;

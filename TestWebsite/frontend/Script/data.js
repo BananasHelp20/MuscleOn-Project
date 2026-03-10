@@ -1,5 +1,5 @@
 function updateFromJsonData() {
-    fetch("/api/getData") // assemble userData in typescript from json files
+    fetch("/api/getData/" + selectedUserId) // assemble userData in typescript from json files
         .then(response => response.json())
         .then(data => {
             for (let i = 0; i < data.users.length; i++) {
@@ -12,7 +12,18 @@ function updateFromJsonData() {
         });
 }
 
-function setUserSettings(selectedUserId) { //send settings to backend and save them in json file
+function getDataFromJson() {
+    fetch("/api/getData/all") // assemble userData in typescript from json files
+        .then(response => response.json())
+        .then(data => {
+            return data.users;
+        })
+        .catch(error => {
+            console.error("Error fetching JSON:", error);
+        });
+}
+
+function setUserSettings(selectedUserId, userSettings) { //send settings to backend and save them in json file
     let mode = document.getElementById("lightSwitch").innerText;
     let devMode = document.getElementById("dev").innerText === "devmode" ? true : false;
 
