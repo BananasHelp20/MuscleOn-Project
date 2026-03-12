@@ -13,9 +13,17 @@ function updateFromJsonData() {
 }
 
 async function getDataFromJson() {
-    const response = await fetch("/api/getData/all"); // assemble userData in typescript from json files
-    const data = await response.json();
-    return data.users;
+    try {
+        const response = await fetch("/api/getData/all");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.users;
+    } catch (error) {
+        console.error("Error in getDataFromJson:", error);
+        return [];
+    }
 }
 
 function setUserSettings(selectedUserId, userSettings) { //send settings to backend and save them in json file
@@ -23,9 +31,9 @@ function setUserSettings(selectedUserId, userSettings) { //send settings to back
     let devMode = document.getElementById("dev").innerText === "devmode" ? true : false;
 
     let settings = {
-        userName: userData[getIndexOfUserId(selectedUserId)].userName,
+        username: userData[getIndexOfUserId(selectedUserId)].username,
         userMail: userData[getIndexOfUserId(selectedUserId)].userMail,
-        userPassword: userData[getIndexOfUserId(selectedUserId)].userPassword,
+        passwd: userData[getIndexOfUserId(selectedUserId)].passwd,
         userId: selectedUserId,
         mode: mode,
         viewing: userSettings.viewing,

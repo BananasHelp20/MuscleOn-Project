@@ -7,7 +7,7 @@ const port = 3000;
 
 app.use(express.static(join(__dirname, 'frontend'), { extensions: ['html', 'css', 'js'] }));
 app.use(express.json());
-app.use('/api', muscleRouter);
+app.use('/', muscleRouter);
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });

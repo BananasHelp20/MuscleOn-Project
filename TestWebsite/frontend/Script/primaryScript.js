@@ -28,8 +28,8 @@ let sessionStatsSection = document.getElementById("dynamicDiv");
 
 let user = {
     userId: 0,
-    userName: "testUser",
-    userPassword: "pwd",
+    username: "testUser",
+    passwd: "pwd",
     userMail: "test@example.com",
     userSessionData: {
         sessionId: 0,
@@ -47,27 +47,26 @@ let user = {
     },
 
     userHighscores: {
-        maxTimeTrained: 0,
+        maxTimeTrained: "0:00:00",
         maxDoneInOneForEachExercise: [],
         maxHeartRate: 0,
     },
 
     userLongTermAverages: {
-        averageTimeTrained: 0,
+        userId: 0,
+        averageTimeTrained: "0:00:00",
         averageLongtermHeartFrequence: 0,
         averageLongtermOxygen: 0,
         averageLongtermMuscleUsageInPercent: 0,
-    },
-
-    userOtherStats: {
         weeklyBurnedCalories: 0,
         monthlyStrengthIncrease: 0,
-        weeklyTrainingTime: 0,
+        weeklyTrainingTime: "0:00:00",
         mostTrainedMuscle: "",
         mostDoneExercise: ""
     },
 
     userSettings: {
+        userId: 0,
         mode: "darkmode",
         viewing: ["session", "longterm", "real-time"],
         devMode: false
@@ -129,12 +128,12 @@ function initialiseModes() {
     }
 }
 
-function signup(userName, password, email) {
+function signup(username, password, email) {
     let newUserId = userData.length;
     let newUser = {
         userId: newUserId,
-        userName: userName,
-        userPassword: password,
+        username: username,
+        passwd: password,
         userMail: email,
         userSessionData: {
             sessionId: 0,
@@ -152,27 +151,26 @@ function signup(userName, password, email) {
         },
 
         userHighscores: {
-            maxTimeTrained: 0,
+            maxTimeTrained: "0:00:00",
             maxDoneInOneForEachExercise: [],
             maxHeartRate: 0,
         },
 
         userLongTermAverages: {
-            averageTimeTrained: 0,
+            userId: newUserId,
+            averageTimeTrained: "0:00:00",
             averageLongtermHeartFrequence: 0,
             averageLongtermOxygen: 0,
             averageLongtermMuscleUsageInPercent: 0,
-        },
-
-        userOtherStats: {
             weeklyBurnedCalories: 0,
             monthlyStrengthIncrease: 0,
-            weeklyTrainingTime: 0,
+            weeklyTrainingTime: "0:00:00",
             mostTrainedMuscle: "",
             mostDoneExercise: ""
         },
 
         userSettings: {
+            userId: newUserId,
             mode: "darkmode",
             viewing: ["session", "longterm", "real-time"],
             devMode: false
@@ -180,15 +178,23 @@ function signup(userName, password, email) {
     }
     userData.push(newUser);
     saveDataToLocalStorage();
-    login(newUser.userId);
+    addUser(newUser);
+    userData = getDataFromJson();
+    if (newUser.userId !== -1 && getIndexOfUserId(newUser.userId) !== -1) {
+        login(newUser.userId);
+    }
 }
 
 function login(userId) {
+    if (userId === -1 || getIndexOfUserId(userId) === -1) {
+        alert("Account nicht gefunden, oder nicht in der Datenbank!");
+        return;
+    }
+    userData = getDataFromJson();
     selectedUserId = userId;
     currentProperties.loggedIn = true;
-    currentProperties.loggedInAsUser = userData[getIndexOfUserId(userId)].userName;
+    currentProperties.loggedInAsUser = userData[getIndexOfUserId(userId)].username;
     currentProperties.loggedInWithUserId = userId;
-    userData = getDataFromJson();
     userSettings = userData[getIndexOfUserId(userId)].userSettings;
     updateSettings(selectedUserId);
     savePropertiesToLocalStorage();
@@ -219,21 +225,32 @@ function initializeLoginAndSignup() {
     if (document.getElementById("loginButton")) {
         loadDataFromLocalStorage();
         document.getElementById("loginButton")?.addEventListener("click", () => {
-            let id = getUserIdFromUsernameAndPassword(document.getElementById("username").value, document.getElementById("password").value);
-            if (id !== -1) {
-                if (document.getElementById("password") && document.getElementById("username")) {
-                    if (userData[getIndexOfUserId(id)].userName == document.getElementById("username").value && userData[getIndexOfUserId(id)].userPassword == document.getElementById("password").value) {
+            // Lade Daten vom Backend bevor Login versucht wird
+            getDataFromJson().then(data => {
+                console.log("Geladene Daten:", data);
+                if (data && data.length > 0) {
+                    userData = data;
+                    console.log("userData gesetzt:", userData);
+                    let username = document.getElementById("username").value;
+                    let password = document.getElementById("password").value;
+                    console.log("Login versucht mit:", username, password);
+                    
+                    let id = getUserIdFromUsernameAndPassword(username, password);
+                    console.log("Gefundene User ID:", id);
+                    
+                    if (id !== -1) {
                         login(id);
                         window.location.href = "./index.html";
                     } else {
                         alert("Account nicht gefunden!");
                     }
                 } else {
-                    alert("you fucked up");
+                    alert("Keine Daten vom Server erhalten!");
                 }
-            } else {
-                alert("Account nicht gefunden!");
-            }
+            }).catch(error => {
+                console.error("Fehler beim Datenladen:", error);
+                alert("Fehler beim Laden der Benutzerdaten: " + error.message);
+            });
         });
     }
     if (document.getElementById("signupButton")) {
@@ -245,7 +262,7 @@ function initializeLoginAndSignup() {
                 signup(username, password, email);
                 window.location.href = "./index.html";
             } else {
-                alert("Invalid Username or Email!");
+                alert("Invalid username or Email!");
             }
         });
     }

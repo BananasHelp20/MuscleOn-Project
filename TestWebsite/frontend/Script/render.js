@@ -47,11 +47,11 @@ function updateDisplay(selectedUserId) {
         averageOxygenDisplay.textContent = user.userLongTermAverages.averageLongtermOxygen;
         averageMuscleUsageInPercentDisplay.textContent = user.userLongTermAverages.averageLongtermMuscleUsageInPercent;
 
-        weeklyBurnedCaloriesDisplay.textContent = user.userOtherStats.weeklyBurnedCalories;
-        monthlyStrengthIncreaseDisplay.textContent = user.userOtherStats.monthlyStrengthIncrease;
-        weeklyTrainingTimeDisplay.textContent = user.userOtherStats.weeklyTrainingTime;
-        mostTrainedMuscleDisplay.textContent = user.userOtherStats.mostTrainedMuscle;
-        mostDoneExerciseDisplay.textContent = user.userOtherStats.mostDoneExercise;
+        weeklyBurnedCaloriesDisplay.textContent = user.userLongTermAverages.weeklyBurnedCalories;
+        monthlyStrengthIncreaseDisplay.textContent = user.userLongTermAverages.monthlyStrengthIncrease;
+        weeklyTrainingTimeDisplay.textContent = user.userLongTermAverages.weeklyTrainingTime;
+        mostTrainedMuscleDisplay.textContent = user.userLongTermAverages.mostTrainedMuscle;
+        mostDoneExerciseDisplay.textContent = user.userLongTermAverages.mostDoneExercise;
     }
 }
 

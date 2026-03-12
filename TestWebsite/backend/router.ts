@@ -37,7 +37,7 @@ muscleRouter.post('/api/addUser', async (req, res) => {
     const newId = userData.length;
     const newUserData: User = {
         userId: newId,
-        userName: newUser.userName,
+        username: newUser.username,
         userMail: newUser.mail,
         passwd: newUser.passwd,
         weight: newUser.weight,
@@ -117,7 +117,7 @@ muscleRouter.post('/api/updateUser/:id', async (req, res) => {
     //Hier werden nur die übergebenen Felder aktualisiert, damit nicht versehentlich Daten gelöscht werden, die nicht im Request enthalten sind
     userData[Number(req.params.id)] = {
         userId: userToUpdate.userId,
-        userName: updatedUser.userName || userToUpdate.userName,
+        username: updatedUser.username || userToUpdate.username,
         userMail: updatedUser.mail || userToUpdate.userMail,
         passwd: updatedUser.passwd || userToUpdate.passwd,
         weight: updatedUser.weight || userToUpdate.weight,

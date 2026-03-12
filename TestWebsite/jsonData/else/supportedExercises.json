@@ -1,0 +1,20 @@
+{
+  "excercises": [
+    {
+      "muscle": "bizeps",
+      "excercisesForMuscle": [
+        "Pull-Ups",
+        "Push-Ups",
+        "Curls"
+      ]
+    },
+    {
+      "muscle": "trizeps",
+      "excercisesForMuscle": [
+        "Pull-Ups",
+        "Push-Ups",
+        "Curls"
+      ]
+    }
+  ]
+}

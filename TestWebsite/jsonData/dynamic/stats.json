@@ -1,20 +1,18 @@
-{
-    "users": [
-        {
-            "userId": 0,
-            "heartFrequence": 75,
-            "oxygen": 95,
-            "currentMuscleUsageInPercent": 45,
-            "currentMuscleBeingTrained": "Bizeps",
-            "currentExercise": "Bizeps-curls"
-        },
-        {
-            "userId": 1,
-            "heartFrequence": 80,
-            "oxygen": 96,
-            "currentMuscleUsageInPercent": 50,
-            "currentMuscleBeingTrained": "Trizeps",
-            "currentExercise": "Trizeps-dips"
-        }
-    ]
-}
+[
+  {
+    "userId": 0,
+    "heartFrequence": 75,
+    "oxygen": 95,
+    "currentMuscleUsageInPercent": 45,
+    "currentMuscleBeingTrained": "Bizeps",
+    "currentExercise": "Bizeps-curls"
+  },
+  {
+    "userId": 1,
+    "heartFrequence": 80,
+    "oxygen": 96,
+    "currentMuscleUsageInPercent": 50,
+    "currentMuscleBeingTrained": "Trizeps",
+    "currentExercise": "Trizeps-dips"
+  }
+]

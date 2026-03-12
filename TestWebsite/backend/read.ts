@@ -42,7 +42,7 @@ export async function getUserData(): Promise<model.User[]> {
         let property = properties[getIndexByUserId(properties[i].userId, properties)];
         user = {
             userId: property.userId,
-            userName: property.userName,
+            username: property.username,
             passwd: property.passwd,
             userMail: property.userMail,
             weight: property.weight,
@@ -80,7 +80,7 @@ export async function getSupportedExercises(): Promise<model.supportedExercises>
 }
 
 export async function saveSupportedExercises(supportedExercises: model.supportedExercises) {
-    return writeFile(join(__dirname, "../jsonData/else/supportedExercises.json"), JSON.stringify({ supportedExercises: supportedExercises }, null, 2));
+    return writeFile(join(__dirname, "../jsonData/else/supportedExercises.json"), JSON.stringify(supportedExercises, null, 2));
 }
 
 export async function saveDeviceProperties(deviceProperties: model.deviceProperties) {
@@ -90,7 +90,7 @@ export async function saveDeviceProperties(deviceProperties: model.devicePropert
 export async function saveAndAddToJson(userData: model.User) {
     let userProperties: model.userProperties = {
         userId: userData.userId,
-        userName: userData.userName,
+        username: userData.username,
         passwd: userData.passwd,
         userMail: userData.userMail,
         weight: userData.weight,
@@ -125,12 +125,13 @@ export async function saveAndAddToJson(userData: model.User) {
     }
     let highscoreData: model.userHighscoreData = {
         userId: userData.userHighscores?.userId || 0,
-        maxTimeTrained: userData.userHighscores?.maxTimeTrained || 0,
+        maxTimeTrained: userData.userHighscores?.maxTimeTrained || "0:00:00",
         maxDoneInOneForEachExercise: userData.userHighscores?.maxDoneInOneForEachExercise || [],
         maxHeartRate: userData.userHighscores?.maxHeartRate || 0
     }
     let longTermAverageData: model.userLongTermAverageData = {
-        averageTimeTrained: userData.userLongTermAverages?.averageTimeTrained || 0,
+        userId: userData.userId,
+        averageTimeTrained: userData.userLongTermAverages?.averageTimeTrained || "0:00:00",
         averageLongtermHeartFrequence: userData.userLongTermAverages?.averageLongtermHeartFrequence || 0,
         averageLongtermOxygen: userData.userLongTermAverages?.averageLongtermOxygen || 0,
         averageLongtermMuscleUsageInPercent: userData.userLongTermAverages?.averageLongtermMuscleUsageInPercent || 0,
@@ -138,15 +139,15 @@ export async function saveAndAddToJson(userData: model.User) {
         mostDoneExercise: userData.userLongTermAverages?.mostDoneExercise || "",
         mostTrainedMuscle: userData.userLongTermAverages?.mostTrainedMuscle || "",
         monthlyStrengthIncrease: userData.userLongTermAverages?.monthlyStrengthIncrease || 0,
-        weeklyTrainingTime: userData.userLongTermAverages?.weeklyTrainingTime || 0
+        weeklyTrainingTime: userData.userLongTermAverages?.weeklyTrainingTime || "0:00:00"
     }
 
     let usersJson: model.userProperties[] = await readFile(join(__dirname, "../jsonData/else/users.json"), 'utf-8').then(data => JSON.parse(data));
     let sessionStatsJson: model.userSessionData[] = await readFile(join(__dirname, "../jsonData/dynamic/sessionStats.json"), 'utf-8').then(data => JSON.parse(data));
     let shortTermDataJson: model.userShortTermData[] = await readFile(join(__dirname, "../jsonData/dynamic/stats.json"), 'utf-8').then(data => JSON.parse(data));
-    let settingsJson: model.userSettings[] = await readFile(join(__dirname, "../jsonData/dynamic/settings.json"), 'utf-8').then(data => JSON.parse(data));
+    let settingsJson: model.userSettings[] = await readFile(join(__dirname, "../jsonData/else/settings.json"), 'utf-8').then(data => JSON.parse(data));
     let highscoreDataJson: model.userHighscoreData[] = await readFile(join(__dirname, "../jsonData/static/allTimeHighscores.json"), 'utf-8').then(data => JSON.parse(data));
-    let longTermAverageDataJson: model.userLongTermAverageData[] = await readFile(join(__dirname, "../jsonData/static/longTermAverages.json"), 'utf-8').then(data => JSON.parse(data));
+    let longTermAverageDataJson: model.userLongTermAverageData[] = await readFile(join(__dirname, "../jsonData/static/average.json"), 'utf-8').then(data => JSON.parse(data));
 
     usersJson.push(userProperties);
     sessionStatsJson.push(sessionStats);
@@ -166,7 +167,7 @@ export async function saveAndAddToJson(userData: model.User) {
 export async function saveAndOverrideIntoJson(userData: model.User) {
     let userProperties: model.userProperties = {
         userId: userData.userId,
-        userName: userData.userName,
+        username: userData.username,
         passwd: userData.passwd,
         userMail: userData.userMail,
         weight: userData.weight,
@@ -201,12 +202,13 @@ export async function saveAndOverrideIntoJson(userData: model.User) {
     }
     let highscoreData: model.userHighscoreData = {
         userId: userData.userHighscores?.userId || 0,
-        maxTimeTrained: userData.userHighscores?.maxTimeTrained || 0,
+        maxTimeTrained: userData.userHighscores?.maxTimeTrained || "0:00:00",
         maxDoneInOneForEachExercise: userData.userHighscores?.maxDoneInOneForEachExercise || [],
         maxHeartRate: userData.userHighscores?.maxHeartRate || 0
     }
     let longTermAverageData: model.userLongTermAverageData = {
-        averageTimeTrained: userData.userLongTermAverages?.averageTimeTrained || 0,
+        userId: userData.userId,
+        averageTimeTrained: userData.userLongTermAverages?.averageTimeTrained || "0:00:00",
         averageLongtermHeartFrequence: userData.userLongTermAverages?.averageLongtermHeartFrequence || 0,
         averageLongtermOxygen: userData.userLongTermAverages?.averageLongtermOxygen || 0,
         averageLongtermMuscleUsageInPercent: userData.userLongTermAverages?.averageLongtermMuscleUsageInPercent || 0,
@@ -214,15 +216,15 @@ export async function saveAndOverrideIntoJson(userData: model.User) {
         mostDoneExercise: userData.userLongTermAverages?.mostDoneExercise || "",
         mostTrainedMuscle: userData.userLongTermAverages?.mostTrainedMuscle || "",
         monthlyStrengthIncrease: userData.userLongTermAverages?.monthlyStrengthIncrease || 0,
-        weeklyTrainingTime: userData.userLongTermAverages?.weeklyTrainingTime || 0
+        weeklyTrainingTime: userData.userLongTermAverages?.weeklyTrainingTime || "0:00:00"
     }
 
     let usersJson: model.userProperties[] = await readFile(join(__dirname, "../jsonData/else/users.json"), 'utf-8').then(data => JSON.parse(data));
     let sessionStatsJson: model.userSessionData[] = await readFile(join(__dirname, "../jsonData/dynamic/sessionStats.json"), 'utf-8').then(data => JSON.parse(data));
     let shortTermDataJson: model.userShortTermData[] = await readFile(join(__dirname, "../jsonData/dynamic/stats.json"), 'utf-8').then(data => JSON.parse(data));
-    let settingsJson: model.userSettings[] = await readFile(join(__dirname, "../jsonData/dynamic/settings.json"), 'utf-8').then(data => JSON.parse(data));
+    let settingsJson: model.userSettings[] = await readFile(join(__dirname, "../jsonData/else/settings.json"), 'utf-8').then(data => JSON.parse(data));
     let highscoreDataJson: model.userHighscoreData[] = await readFile(join(__dirname, "../jsonData/static/allTimeHighscores.json"), 'utf-8').then(data => JSON.parse(data));
-    let longTermAverageDataJson: model.userLongTermAverageData[] = await readFile(join(__dirname, "../jsonData/static/longTermAverages.json"), 'utf-8').then(data => JSON.parse(data));
+    let longTermAverageDataJson: model.userLongTermAverageData[] = await readFile(join(__dirname, "../jsonData/static/average.json"), 'utf-8').then(data => JSON.parse(data));
 
     usersJson[getIndexByUserId(userData.userId, usersJson)] = userProperties;
     sessionStatsJson[getIndexByUserId(userData.userId, sessionStatsJson)] = sessionStats;
@@ -234,9 +236,9 @@ export async function saveAndOverrideIntoJson(userData: model.User) {
     await writeFile(join(__dirname, "../jsonData/else/users.json"), JSON.stringify(usersJson, null, 2));
     await writeFile(join(__dirname, "../jsonData/dynamic/sessionStats.json"), JSON.stringify(sessionStatsJson, null, 2));
     await writeFile(join(__dirname, "../jsonData/dynamic/stats.json"), JSON.stringify(shortTermDataJson, null, 2));
-    await writeFile(join(__dirname, "../jsonData/dynamic/settings.json"), JSON.stringify(settingsJson, null, 2));
+    await writeFile(join(__dirname, "../jsonData/else/settings.json"), JSON.stringify(settingsJson, null, 2));
     await writeFile(join(__dirname, "../jsonData/static/allTimeHighscores.json"), JSON.stringify(highscoreDataJson, null, 2));
-    await writeFile(join(__dirname, "../jsonData/static/longTermAverages.json"), JSON.stringify(longTermAverageDataJson, null, 2));
+    await writeFile(join(__dirname, "../jsonData/static/average.json"), JSON.stringify(longTermAverageDataJson, null, 2));
 }
 
 export async function saveAndOverrideAllUsers(userData: model.User[]) {
