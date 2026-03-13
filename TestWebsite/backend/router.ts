@@ -1,4 +1,5 @@
 import e from "express";
+import { get } from "http";
 import { deleteUser, getUserData, getDeviceProperties, getSupportedExercises, saveAndOverrideIntoJson, saveAndAddToJson, getSpecificUserData, saveDeviceProperties, saveSupportedExercises } from "./read";
 import { User } from "./model";
 import * as model from "./model";

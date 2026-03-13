@@ -46,8 +46,6 @@ function setUserSettings(selectedUserId, userSettings) { //send settings to back
             "Content-Type": "application/json"
         },
         body: JSON.stringify(settings)
-    }).catch(error => {
-        console.error("Fehler beim Senden der Settings:", error);
     });
 
     userSettings.mode = mode;
