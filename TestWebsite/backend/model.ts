@@ -1,6 +1,6 @@
 export interface User {
-    userId: number,
-    userName: string,
+    userId: number, //user id brauch ma, falls a user glöscht wird, daher ned index sondern id
+    username: string,
     passwd: string,
     userMail: string,
     weight: number,
@@ -8,16 +8,16 @@ export interface User {
     birthday: string,
     sessionTimes: string[][],
     additionalSessions?: string[][],
-    userSessionData: userSessionData,
-    userShortTerm: userShortTermData,
-    userHighscores: userHighscoreData,
-    userLongTermAverages: userLongTermAverageData,
+    userSessionData: userSessionData | null,
+    userShortTerm: userShortTermData | null,
+    userHighscores: userHighscoreData | null,
+    userLongTermAverages: userLongTermAverageData | null,
     userSettings: userSettings
 }
 
 export interface userProperties {
     userId: number,
-    userName: string,
+    username: string,
     passwd: string,
     userMail: string,
     weight: number,
@@ -49,26 +49,27 @@ export interface userShortTermData {
 
 export interface userHighscoreData {
         userId: number,
-        maxTimeTrained: number,
-        maxDoneInOneForEachExercise: number[],
+        maxTimeTrained: string,
+        maxDoneInOneForEachExercise: [string, number][],
         maxHeartRate: number,
 }
 
 export interface userLongTermAverageData {
-        averageTimeTrained: number,
+        userId: number,
+        averageTimeTrained: string,
         averageLongtermHeartFrequence: number,
         averageLongtermOxygen: number,
         averageLongtermMuscleUsageInPercent: number,
         weeklyBurnedCalories: number,
         monthlyStrengthIncrease: number,
-        weeklyTrainingTime: number,
+        weeklyTrainingTime: string,
         mostTrainedMuscle: string,
         mostDoneExercise: string
 }
 
 export interface userProperties {
         userId: number,
-        userName: string,
+        username: string,
         passwd: string,
         userMail: string
         weight: number,

@@ -1,0 +1,41 @@
+Doc.
+Backend:
+	calc: noah sei gschicht (aktuallisiert de json datein)
+	model: interfaces
+	router: basically the main programm, routes everything
+	read: IO
+		getUserData(): assembles every User-based Json Data into one User Object and returns that
+		getIndexByUserId(): name checks out
+		saveAndAddToJson(): does the exact opposite to getUserData(), dissassembles the userObject and saves it.
+		saveAndOverrideToJson(): does the exact opposite to getUserData()
+
+Frontend:
+	data: routing
+		updateFromJsonData():
+		setUserSettings():
+		addUser():
+		deleteUser():
+		updateUser():
+	helper: helper methods
+		getIndexOfUserId():
+		getUserIdOfUserMail():
+		getUserIdFromPasswordAndMail():
+	primaryScript: basically main programm (includes init())
+		initialiseModes():
+		signup():
+		login():
+		logout():
+		initializeLoginAndSignup():
+		initialiseViewingModes():
+		-- init() --
+	render: renders everything on Website (updates data and stuff)
+		updateSettings():
+		renderViewing():
+		updateDisplay():
+	save: saves into local divce storage
+		savePropertiesToLocalStorage():
+		saveDataToLocalStorage():
+		loadDataFromLocalStorage():
+		loadPropertiesFromLocalStorage():
+		saveUserSettingsToLocalStorage():
+		loadUserSettingsFromLocalStorage():

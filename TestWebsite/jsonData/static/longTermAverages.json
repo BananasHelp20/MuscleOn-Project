@@ -2,7 +2,7 @@
   {
     "userId": 0,
     "averageTimeTrained": "1:30:00",
-    "averageLongtermHeartFrequence": 155,
+    "averageLongtermHeartFrequence": 150,
     "averageLongtermOxygen": 98,
     "averageLongtermMuscleUsageInPercent": 79,
     "weeklyBurnedCalories": 2000,
@@ -14,7 +14,7 @@
   {
     "userId": 1,
     "averageTimeTrained": "1:45:00",
-    "averageLongtermHeartFrequence": 120,
+    "averageLongtermHeartFrequence": 155,
     "averageLongtermOxygen": 96,
     "averageLongtermMuscleUsageInPercent": 82,
     "weeklyBurnedCalories": 2500,

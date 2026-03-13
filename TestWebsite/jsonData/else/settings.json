@@ -1,9 +1,14 @@
-{
-    "users": [
-        {
-            "mode": "darkmode",
-            "viewing": ["session", "longterm", "real-time"],
-            "devMode": true
-        }
-    ]
-}
+[
+  {
+    "userId": 0,
+    "mode": "darkmode",
+    "viewing": ["session", "longterm", "real-time"],
+    "devMode": true
+  },
+  {
+    "userId": 1,
+    "mode": "darkmode",
+    "viewing": ["session", "longterm", "real-time"],
+    "devMode": false
+  }
+]

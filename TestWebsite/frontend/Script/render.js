@@ -23,8 +23,8 @@ function renderViewing(viewing) {
 }
 
 function updateDisplay(selectedUserId) {
-    if (selectedUserId === undefined) {
-        selectedUserId = userData[0].userId;
+    if (selectedUserId === undefined || userData.length === 0) {
+        return;
     }
     let user = userData[getIndexOfUserId(selectedUserId)];
     if (averageHeartFrequenceDisplay && user) {
@@ -47,12 +47,15 @@ function updateDisplay(selectedUserId) {
         averageOxygenDisplay.textContent = user.userLongTermAverages.averageLongtermOxygen;
         averageMuscleUsageInPercentDisplay.textContent = user.userLongTermAverages.averageLongtermMuscleUsageInPercent;
 
-        weeklyBurnedCaloriesDisplay.textContent = user.userOtherStats.weeklyBurnedCalories;
-        monthlyStrengthIncreaseDisplay.textContent = user.userOtherStats.monthlyStrengthIncrease;
-        weeklyTrainingTimeDisplay.textContent = user.userOtherStats.weeklyTrainingTime;
-        mostTrainedMuscleDisplay.textContent = user.userOtherStats.mostTrainedMuscle;
-        mostDoneExerciseDisplay.textContent = user.userOtherStats.mostDoneExercise;
+        weeklyBurnedCaloriesDisplay.textContent = user.userLongTermAverages.weeklyBurnedCalories;
+        monthlyStrengthIncreaseDisplay.textContent = user.userLongTermAverages.monthlyStrengthIncrease;
+        weeklyTrainingTimeDisplay.textContent = user.userLongTermAverages.weeklyTrainingTime;
+        mostTrainedMuscleDisplay.textContent = user.userLongTermAverages.mostTrainedMuscle;
+        mostDoneExerciseDisplay.textContent = user.userLongTermAverages.mostDoneExercise;
     }
 }
 
-init();
+// Starte init() wenn DOM geladen ist
+document.addEventListener("DOMContentLoaded", () => {
+    init();
+});

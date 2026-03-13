@@ -20,6 +20,6 @@ a {
     text-decoration: none;
 }
 
-#loginLink, #signupLink {
+#loginLink, #signupLink, #returnLink {
     color: rgb(0, 145, 255);
 }

@@ -1,5 +1,5 @@
 function updateFromJsonData() {
-    fetch("/getData") // assemble userData in typescript from json files
+    fetch("/api/getData/" + selectedUserId) // assemble userData in typescript from json files
         .then(response => response.json())
         .then(data => {
             for (let i = 0; i < data.users.length; i++) {
@@ -12,21 +12,35 @@ function updateFromJsonData() {
         });
 }
 
-function setUserSettings(selectedUserId) { //send settings to backend and save them in json file
+async function getDataFromJson() {
+    try {
+        const response = await fetch("/api/getData/all");
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
+        return data.users;
+    } catch (error) {
+        console.error("Error in getDataFromJson:", error);
+        return [];
+    }
+}
+
+function setUserSettings(selectedUserId, userSettings) { //send settings to backend and save them in json file
     let mode = document.getElementById("lightSwitch").innerText;
     let devMode = document.getElementById("dev").innerText === "devmode" ? true : false;
 
     let settings = {
-        userName: userData[getIndexOfUserId(selectedUserId)].userName,
+        username: userData[getIndexOfUserId(selectedUserId)].username,
         userMail: userData[getIndexOfUserId(selectedUserId)].userMail,
-        userPassword: userData[getIndexOfUserId(selectedUserId)].userPassword,
+        passwd: userData[getIndexOfUserId(selectedUserId)].passwd,
         userId: selectedUserId,
         mode: mode,
         viewing: userSettings.viewing,
         devMode: devMode
     }
 
-    fetch("/saveSettings", {
+    fetch("/api/saveSettings/" + selectedUserId, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -37,7 +51,33 @@ function setUserSettings(selectedUserId) { //send settings to backend and save t
     });
 
     userSettings.mode = mode;
-    userSettings.viewing = viewing;
+    userSettings.viewing = userSettings.viewing;
     userSettings.devMode = devMode;
     userData[getIndexOfUserId(selectedUserId)].userSettings = userSettings;
+}
+
+function addUser(user) {
+    fetch("/api/addUser", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    });
+}
+
+function deleteUser(userId) {
+    fetch("/api/deleteUser/" + userId, {
+        method: "DELETE"
+    });
+}
+
+function updateUser(user) {
+    fetch("/api/updateUser/" + user.userId, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(user)
+    })
 }

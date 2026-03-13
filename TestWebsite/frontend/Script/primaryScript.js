@@ -28,8 +28,8 @@ let sessionStatsSection = document.getElementById("dynamicDiv");
 
 let user = {
     userId: 0,
-    userName: "testUser",
-    userPassword: "pwd",
+    username: "testUser",
+    passwd: "pwd",
     userMail: "test@example.com",
     userSessionData: {
         sessionId: 0,
@@ -47,41 +47,44 @@ let user = {
     },
 
     userHighscores: {
-        maxTimeTrained: 0,
+        maxTimeTrained: "0:00:00",
         maxDoneInOneForEachExercise: [],
         maxHeartRate: 0,
     },
 
     userLongTermAverages: {
-        averageTimeTrained: 0,
+        userId: 0,
+        averageTimeTrained: "0:00:00",
         averageLongtermHeartFrequence: 0,
         averageLongtermOxygen: 0,
         averageLongtermMuscleUsageInPercent: 0,
-    },
-
-    userOtherStats: {
         weeklyBurnedCalories: 0,
         monthlyStrengthIncrease: 0,
-        weeklyTrainingTime: 0,
+        weeklyTrainingTime: "0:00:00",
         mostTrainedMuscle: "",
         mostDoneExercise: ""
     },
 
     userSettings: {
+        userId: 0,
         mode: "darkmode",
         viewing: ["session", "longterm", "real-time"],
         devMode: false
     }
 }
 
-let userData = [user];
-let userSettings = userData[0].userSettings;
+let userData = [];
+let userSettings = {
+    mode: "darkmode",
+    viewing: ["session", "longterm", "real-time"],
+    devMode: false
+};
 
 let currentProperties = {
     running: false,
     loggedIn: false,
-    loggedInAsUser: userData[0].userName,
-    loggedInWithUserId: userData[0].userId
+    loggedInAsUser: "",
+    loggedInWithUserId: -1
 }
 
 let supportedExercises = [];
@@ -125,12 +128,12 @@ function initialiseModes() {
     }
 }
 
-function signup(userName, password, email) {
+function signup(username, password, email) {
     let newUserId = userData.length;
     let newUser = {
         userId: newUserId,
-        userName: userName,
-        userPassword: password,
+        username: username,
+        passwd: password,
         userMail: email,
         userSessionData: {
             sessionId: 0,
@@ -148,27 +151,26 @@ function signup(userName, password, email) {
         },
 
         userHighscores: {
-            maxTimeTrained: 0,
+            maxTimeTrained: "0:00:00",
             maxDoneInOneForEachExercise: [],
             maxHeartRate: 0,
         },
 
         userLongTermAverages: {
-            averageTimeTrained: 0,
+            userId: newUserId,
+            averageTimeTrained: "0:00:00",
             averageLongtermHeartFrequence: 0,
             averageLongtermOxygen: 0,
             averageLongtermMuscleUsageInPercent: 0,
-        },
-
-        userOtherStats: {
             weeklyBurnedCalories: 0,
             monthlyStrengthIncrease: 0,
-            weeklyTrainingTime: 0,
+            weeklyTrainingTime: "0:00:00",
             mostTrainedMuscle: "",
             mostDoneExercise: ""
         },
 
         userSettings: {
+            userId: newUserId,
             mode: "darkmode",
             viewing: ["session", "longterm", "real-time"],
             devMode: false
@@ -176,15 +178,39 @@ function signup(userName, password, email) {
     }
     userData.push(newUser);
     saveDataToLocalStorage();
+    addUser(newUser);
     login(newUser.userId);
 }
 
-function login(userId) {
+async function login(userId) {
+    if (userId === -1 || getIndexOfUserId(userId) === -1) {
+        alert("Keine Daten vom Server erhalten!");
+        return;
+    }
+    
+    // Lade Daten vom Backend
+    userData = await getDataFromJson();
+    console.log("userData nach Login:", userData);
+    
+    // Finde den User mit der ID
+    let userIndex = -1;
+    for (let i = 0; i < userData.length; i++) {
+        if (userData[i].userId === userId) {
+            userIndex = i;
+            break;
+        }
+    }
+    
+    if (userIndex === -1) {
+        alert("Account nicht gefunden, oder nicht in der Datenbank!");
+        return;
+    }
+    
     selectedUserId = userId;
     currentProperties.loggedIn = true;
-    currentProperties.loggedInAsUser = userData[getIndexOfUserId(userId)].userName;
+    currentProperties.loggedInAsUser = userData[userIndex].username;
     currentProperties.loggedInWithUserId = userId;
-    userSettings = userData[getIndexOfUserId(userId)].userSettings;
+    userSettings = userData[userIndex].userSettings;
     updateSettings(selectedUserId);
     savePropertiesToLocalStorage();
     saveUserSettingsToLocalStorage(userId);
@@ -213,23 +239,43 @@ function initializeLoginAndSignup() {
     }
     if (document.getElementById("loginButton")) {
         loadDataFromLocalStorage();
-        document.getElementById("loginButton")?.addEventListener("click", () => {
-            let id = getUserIdFromPasswordAndMail(document.getElementById("password").value, document.getElementById("email").value);
-            if (id !== -1) {
-                if (document.getElementById("password") && document.getElementById("email")) {
-                    if (userData[getIndexOfUserId(id)].userMail == document.getElementById("email").value && userData[getIndexOfUserId(id)].userPassword == document.getElementById("password").value) {
-                        userData[getIndexOfUserId(id)].userPassword = document.getElementById("password").value;
-                        userData[getIndexOfUserId(id)].userMail = document.getElementById("email").value;
-                        login(id);
-                        window.location.href = "./index.html";
-                    } else {
-                        alert("Account nicht gefunden!");
-                    }
-                } else {
-                    alert("you fucked up");
+        document.getElementById("loginButton")?.addEventListener("click", async () => {
+            try {
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                
+                if (!username) {
+                    alert("Benutzername erforderlich!");
+                    return;
                 }
-            } else {
-                alert("Account nicht gefunden!");
+                
+                // Lade Daten vom Backend
+                const data = await getDataFromJson();
+                console.log("Daten vom Backend:", data);
+                
+                if (!data || data.length === 0) {
+                    alert("Keine Benutzer auf dem Server gefunden!");
+                    return;
+                }
+                
+                // Suche Benutzer
+                let foundUserId = -1;
+                for (let user of data) {
+                    if (user.username === username && user.passwd === password) {
+                        foundUserId = user.userId;
+                        break;
+                    }
+                }
+                
+                if (foundUserId !== -1) {
+                    await login(foundUserId);
+                    window.location.href = "./index.html";
+                } else {
+                    alert("Keine Daten vom Server erhalten!");
+                }
+            } catch (error) {
+                console.error("Error beim Login:", error);
+                alert("Fehler beim Laden der Benutzerdaten: " + error.message);
             }
         });
     }
@@ -242,7 +288,7 @@ function initializeLoginAndSignup() {
                 signup(username, password, email);
                 window.location.href = "./index.html";
             } else {
-                alert("Invalid Username or Email!");
+                alert("Invalid username or Email!");
             }
         });
     }
@@ -275,10 +321,25 @@ function initialiseViewingModes() {
 
 
 function init() {
-    loadDataFromLocalStorage();
-    console.log(userData);
     loadPropertiesFromLocalStorage();
+    loadDataFromLocalStorage();
     loadUserSettingsFromLocalStorage((currentProperties.loggedIn) ? currentProperties.loggedInWithUserId : -1);
+    
+    // Falls localStorage leer, lade vom Server
+    if (userData.length === 0) {
+        getDataFromJson().then(data => {
+            userData = data;
+            if (userData.length > 0 && !currentProperties.loggedIn) {
+                userSettings = userData[0].userSettings;
+            }
+            initializeUI();
+        }).catch(error => console.error("Error loading data:", error));
+    } else {
+        initializeUI();
+    }
+}
+
+function initializeUI() {
     if (document.getElementById("currentUser") && currentProperties.loggedIn) {
         document.getElementById("currentUser").innerHTML = `Momentan eingeloggt: ${currentProperties.loggedInAsUser} <button id="logoutButton">Logout</button>`;
     } else if (document.getElementById("currentUser")) {
@@ -301,8 +362,17 @@ function init() {
 
     initializeLoginAndSignup();
     initialiseModes();
+    
+    // Aktualisiere Daten jede Sekunde
     setInterval(() => {
-        //updateFromJsonData();
-        updateDisplay(selectedUserId);
-    }, 2000);
+        getDataFromJson().then(data => {
+            if (data && data.length > 0) {
+                userData = data;
+                if (selectedUserId >= 0) {
+                    userSettings = userData[getIndexOfUserId(selectedUserId)]?.userSettings || userSettings;
+                }
+                updateDisplay(selectedUserId);
+            }
+        }).catch(error => console.error("Error updating data:", error));
+    }, 1000);
 }
