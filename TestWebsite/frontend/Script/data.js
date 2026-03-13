@@ -54,20 +54,23 @@ function setUserSettings(selectedUserId, userSettings) { //send settings to back
     userData[getIndexOfUserId(selectedUserId)].userSettings = userSettings;
 }
 
-function addUser(user) {
-    fetch("/api/addUser", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-    });
-}
-
-function deleteUser(userId) {
-    fetch("/api/deleteUser/" + userId, {
-        method: "DELETE"
-    });
+async function addUser(user) {
+    try {
+        const response = await fetch("/api/addUser", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error adding user:", error);
+        return null;
+    }
 }
 
 function updateUser(user) {

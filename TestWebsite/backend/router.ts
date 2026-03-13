@@ -33,24 +33,25 @@ muscleRouter.post('/api/saveSettings/:id', async (req, res) => {
 });
 
 muscleRouter.post('/api/addUser', async (req, res) => {
-    const newUser = req.body.json();
+    const newUser = await req.body.json();  // ← await hinzufügen
+    userData = await getUserData();  // ← userData aktualisieren
     const newId = userData.length;
     const newUserData: User = {
         userId: newId,
         username: newUser.username,
-        userMail: newUser.mail,
+        userMail: newUser.userMail,  // ← userMail statt mail
         passwd: newUser.passwd,
         weight: newUser.weight,
         size: newUser.size,
         birthday: newUser.birthday,
         sessionTimes: newUser.sessionTimes,
-        userSessionData: null,
-        userShortTerm: null,
-        userHighscores: null,
-        userLongTermAverages: null,
-        userSettings: newUser.settings
+        userSessionData: newUser.userSessionData,  // ← Alle Properties korrekt übernehmen
+        userShortTerm: newUser.userShortTerm,
+        userHighscores: newUser.userHighscores,
+        userLongTermAverages: newUser.userLongTermAverages,
+        userSettings: newUser.userSettings  // ← userSettings statt settings
     }
-    saveAndAddToJson(newUserData);
+    await saveAndAddToJson(newUserData);
     res.statusCode = 200;
     res.json({ message: "User added successfully", userId: newId });
 });

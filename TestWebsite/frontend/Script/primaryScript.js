@@ -128,7 +128,7 @@ function initialiseModes() {
     }
 }
 
-function signup(username, password, email) {
+async function signup(username, password, email) {
     let newUserId = userData.length;
     let newUser = {
         userId: newUserId,
@@ -178,8 +178,8 @@ function signup(username, password, email) {
     }
     userData.push(newUser);
     saveDataToLocalStorage();
-    addUser(newUser);
-    login(newUser.userId);
+    await addUser(newUser);  // ← Warten!
+    await login(newUser.userId);
 }
 
 async function login(userId) {
@@ -331,6 +331,7 @@ function init() {
     }
 
     initialiseModes();
+    initializeLoginAndSignup();
 
     if (userData.length === 0) {
         getDataFromJson().then(data => {
@@ -365,9 +366,6 @@ function initializeUI() {
     } else if (document.getElementById("dev")) {
         document.getElementById("dev").innerText = "usermode";
     }
-
-    initializeLoginAndSignup();
-    initialiseModes();
     
     // Aktualisiere Daten jede Sekunde
     setInterval(() => {
