@@ -179,23 +179,38 @@ function signup(username, password, email) {
     userData.push(newUser);
     saveDataToLocalStorage();
     addUser(newUser);
-    userData = getDataFromJson();
-    if (newUser.userId !== -1 && getIndexOfUserId(newUser.userId) !== -1) {
-        login(newUser.userId);
-    }
+    login(newUser.userId);
 }
 
-function login(userId) {
+async function login(userId) {
     if (userId === -1 || getIndexOfUserId(userId) === -1) {
+        alert("Keine Daten vom Server erhalten!");
+        return;
+    }
+    
+    // Lade Daten vom Backend
+    userData = await getDataFromJson();
+    console.log("userData nach Login:", userData);
+    
+    // Finde den User mit der ID
+    let userIndex = -1;
+    for (let i = 0; i < userData.length; i++) {
+        if (userData[i].userId === userId) {
+            userIndex = i;
+            break;
+        }
+    }
+    
+    if (userIndex === -1) {
         alert("Account nicht gefunden, oder nicht in der Datenbank!");
         return;
     }
-    userData = getDataFromJson();
+    
     selectedUserId = userId;
     currentProperties.loggedIn = true;
-    currentProperties.loggedInAsUser = userData[getIndexOfUserId(userId)].username;
+    currentProperties.loggedInAsUser = userData[userIndex].username;
     currentProperties.loggedInWithUserId = userId;
-    userSettings = userData[getIndexOfUserId(userId)].userSettings;
+    userSettings = userData[userIndex].userSettings;
     updateSettings(selectedUserId);
     savePropertiesToLocalStorage();
     saveUserSettingsToLocalStorage(userId);
@@ -224,33 +239,44 @@ function initializeLoginAndSignup() {
     }
     if (document.getElementById("loginButton")) {
         loadDataFromLocalStorage();
-        document.getElementById("loginButton")?.addEventListener("click", () => {
-            // Lade Daten vom Backend bevor Login versucht wird
-            getDataFromJson().then(data => {
-                console.log("Geladene Daten:", data);
-                if (data && data.length > 0) {
-                    userData = data;
-                    console.log("userData gesetzt:", userData);
-                    let username = document.getElementById("username").value;
-                    let password = document.getElementById("password").value;
-                    console.log("Login versucht mit:", username, password);
-                    
-                    let id = getUserIdFromUsernameAndPassword(username, password);
-                    console.log("Gefundene User ID:", id);
-                    
-                    if (id !== -1) {
-                        login(id);
-                        window.location.href = "./index.html";
-                    } else {
-                        alert("Account nicht gefunden!");
+        document.getElementById("loginButton")?.addEventListener("click", async () => {
+            try {
+                const username = document.getElementById("username").value;
+                const password = document.getElementById("password").value;
+                
+                if (!username) {
+                    alert("Benutzername erforderlich!");
+                    return;
+                }
+                
+                // Lade Daten vom Backend
+                const data = await getDataFromJson();
+                console.log("Daten vom Backend:", data);
+                
+                if (!data || data.length === 0) {
+                    alert("Keine Benutzer auf dem Server gefunden!");
+                    return;
+                }
+                
+                // Suche Benutzer
+                let foundUserId = -1;
+                for (let user of data) {
+                    if (user.username === username && user.passwd === password) {
+                        foundUserId = user.userId;
+                        break;
                     }
+                }
+                
+                if (foundUserId !== -1) {
+                    await login(foundUserId);
+                    window.location.href = "./index.html";
                 } else {
                     alert("Keine Daten vom Server erhalten!");
                 }
-            }).catch(error => {
-                console.error("Fehler beim Datenladen:", error);
+            } catch (error) {
+                console.error("Error beim Login:", error);
                 alert("Fehler beim Laden der Benutzerdaten: " + error.message);
-            });
+            }
         });
     }
     if (document.getElementById("signupButton")) {
