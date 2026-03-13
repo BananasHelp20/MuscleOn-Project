@@ -92,7 +92,7 @@ let devMode = false;
 
 function initialiseModes() {
     document.getElementById("lightSwitch").addEventListener("click", () => {
-        userSettings.mode = userSettings.mode === "lightmode" ? "darkmode" : "lightmode";
+        userSettings.mode = userSettings.mode == "lightmode" ? "darkmode" : "lightmode";
         if (currentProperties.loggedIn) {
             updateSettings(selectedUserId);
         }
@@ -187,11 +187,11 @@ async function login(userId) {
         alert("Keine Daten vom Server erhalten!");
         return;
     }
-    
+
     // Lade Daten vom Backend
     userData = await getDataFromJson();
     console.log("userData nach Login:", userData);
-    
+
     // Finde den User mit der ID
     let userIndex = -1;
     for (let i = 0; i < userData.length; i++) {
@@ -200,12 +200,12 @@ async function login(userId) {
             break;
         }
     }
-    
+
     if (userIndex === -1) {
         alert("Account nicht gefunden, oder nicht in der Datenbank!");
         return;
     }
-    
+
     selectedUserId = userId;
     currentProperties.loggedIn = true;
     currentProperties.loggedInAsUser = userData[userIndex].username;
@@ -213,6 +213,7 @@ async function login(userId) {
     userSettings = userData[userIndex].userSettings;
     updateSettings(selectedUserId);
     savePropertiesToLocalStorage();
+    saveDataToLocalStorage();
     saveUserSettingsToLocalStorage(userId);
 }
 
@@ -324,8 +325,13 @@ function init() {
     loadPropertiesFromLocalStorage();
     loadDataFromLocalStorage();
     loadUserSettingsFromLocalStorage((currentProperties.loggedIn) ? currentProperties.loggedInWithUserId : -1);
-    
-    // Falls localStorage leer, lade vom Server
+
+    if (currentProperties.loggedIn) {
+        selectedUserId = currentProperties.loggedInWithUserId;
+    }
+
+    initialiseModes();
+
     if (userData.length === 0) {
         getDataFromJson().then(data => {
             userData = data;

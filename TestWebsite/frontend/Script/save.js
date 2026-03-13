@@ -28,8 +28,11 @@ function loadUserSettingsFromLocalStorage(userId) {
     let savedUserSettings = localStorage.getItem("userSettings" + userId);
     if (savedUserSettings) {
         userSettings = JSON.parse(savedUserSettings);
-        if (currentProperties.loggedIn) {
-            userData[getIndexOfUserId(selectedUserId)].userSettings = userSettings;
+        if (currentProperties.loggedIn && userData.length > 0) {
+            const userIndex = getIndexOfUserId(selectedUserId);
+            if (userIndex !== -1) {
+                userData[userIndex].userSettings = userSettings;
+            }
         }
     }
 }
