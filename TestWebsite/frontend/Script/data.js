@@ -26,6 +26,18 @@ async function getDataFromJson() {
     }
 }
 
+function sendDataToJson(data) {
+    fetch("/api/updateData", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ users: data })
+    }).catch(error => {
+        console.error("Error sending data to JSON:", error);
+    });
+}
+
 function setUserSettings(selectedUserId, userSettings) { //send settings to backend and save them in json file
     let mode = document.getElementById("lightSwitch").innerText;
     let devMode = document.getElementById("dev").innerText === "devmode" ? true : false;

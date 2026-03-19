@@ -11,6 +11,7 @@ function loadDataFromLocalStorage() {
     if (savedData) {
         userData = JSON.parse(savedData);
     }
+    return userData;
 }
 
 function loadPropertiesFromLocalStorage() {

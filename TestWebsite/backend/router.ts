@@ -9,9 +9,16 @@ export const muscleRouter = e.Router();
 let userData: model.User[]; //Hier werden die Daten der User gespeichert
 let deviceProperties: model.deviceProperties; //Hier werden die Daten der Geräte gespeichert
 let supportedExercises: model.supportedExercises; //Hier werden die Daten der unterstützten Übungen gespeichert
+let loggedInUser: number = -1; //Hier wird die ID des aktuell eingeloggten Users gespeichert
 
 muscleRouter.get('/api/getData/all', async (req, res) => {
     res.json({ users: await getUserData() });
+});
+
+muscleRouter.post('/api/sendLoggedInUser', async (req, res) => {
+    loggedInUser = await req.body.json().userId;
+    res.statusCode = 200;
+    res.json({ message: "Logged in user updated successfully" });
 });
 
 muscleRouter.get('/api/getData/:id', async (req, res) => {
