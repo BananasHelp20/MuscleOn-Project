@@ -8,9 +8,17 @@ const char* password = "12345678";
 const char* server = "http://10.136.219.86:8000/emg";
 
 static int iteration = 0;
-static float smoothedValue = 0.0;
 static float baseline = 0.0;
-static float maxValue = 0.0;
+static float smoothedMuscleValue = 0.0;
+static float maxMuscleValue = 0.0;
+
+static float currentHeartRate = 0.0;
+static float averageHeartRate = 0.0;
+static float maxHeartRate = 0.0;
+
+static float currentOxygenSaturation = 0.0;
+static float averageOxygenSaturation = 0.0;
+
 
 void setup() {
   Serial.begin(115200);
@@ -36,12 +44,12 @@ void loop() {
   iteration++;
 
   int raw = analogRead(EMG_PIN);
-  smoothedValue = smooth(smoothedValue, raw, 0.1);
+  smoothedMuscleValue = smooth(smoothedMuscleValue, raw, 0.1);
 
   if (!started) {
-    if (smoothedValue > 600.0) {
+    if (smoothedMuscleValue > 600.0) {
       baseline = generateBaseLine();
-      maxValue = generateMaxValue();
+      maxMuscleValue = generateMaxValue();
       started = true;
     }
   } 
@@ -56,11 +64,11 @@ void loop() {
 
 void sendValues() {
 
-  float adjusted = smoothedValue - baseline;
-  float normalized = (smoothedValue - baseline) / (maxValue - baseline);
+  float adjusted = smoothedMuscleValue - baseline;
+  float normalized = (smoothedMuscleValue - baseline) / (maxMuscleValue - baseline);
 
   Serial.print("Raw: ");
-  Serial.print(smoothedValue);
+  Serial.print(smoothedMuscleValue);
   Serial.print(" Adjusted: ");
   Serial.print(adjusted);
   Serial.print(" Normalized: ");
@@ -71,7 +79,7 @@ void sendValues() {
     HTTPClient http;
 
     String url = String(server) +
-      "?raw=" + String(smoothedValue) +
+      "?raw=" + String(smoothedMuscleValue) +
       "&adj=" + String(adjusted) +
       "&norm=" + String(normalized);
 
