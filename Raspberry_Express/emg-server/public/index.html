@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>EMG Monitor</title>
+  <script src="/socket.io/socket.io.js"></script>
+</head>
+<body>
+  <h1>EMG Monitor</h1>
+  <p id="status">Verbinde...</p>
+  <div id="log"></div>
+
+  <script>
+    const socket = io();
+
+    socket.on('connect', () => {
+      document.getElementById('status').textContent = 'Verbunden ✅';
+    });
+
+    socket.on('disconnect', () => {
+      document.getElementById('status').textContent = 'Getrennt ❌';
+    });
+
+    socket.on('emg-data', (data) => {
+      const log = document.getElementById('log');
+      const entry = document.createElement('p');
+      entry.textContent = `Raw: ${data.raw} | Adjusted: ${data.adjusted} | Normalized: ${data.normalized}`;
+      log.prepend(entry);
+    });
+  </script>
+</body>
+</html>

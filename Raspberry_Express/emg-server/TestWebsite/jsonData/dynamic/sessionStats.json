@@ -1,0 +1,22 @@
+[
+  {
+    "userId": 0,
+    "sessionId": 0,
+    "averageHeartFrequence": 85,
+    "averageOxygen": 94,
+    "averageMuscleUsageInPercent": 60,
+    "trainedMusclesInCurrentOrLatestSession": ["Bizeps", "Trizeps"],
+    "burnedKalories": 350,
+    "training": true
+  },
+  {
+    "userId": 1,
+    "sessionId": 1,
+    "averageHeartFrequence": 88,
+    "averageOxygen": 93,
+    "averageMuscleUsageInPercent": 65,
+    "trainedMusclesInCurrentOrLatestSession": ["Brust", "Rücken"],
+    "burnedKalories": 400,
+    "training": false
+  }
+]
