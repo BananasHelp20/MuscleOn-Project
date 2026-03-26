@@ -1,7 +1,7 @@
 [
   {
     "userId": 0,
-    "heartFrequence": 100,
+    "heartFrequence": 75,
     "oxygen": 95,
     "currentMuscleUsageInPercent": 45,
     "currentMuscleBeingTrained": "Bizeps",

@@ -128,7 +128,8 @@ function initialiseModes() {
     }
 }
 
-function signup(username, password, email) {
+async function signup(username, password, email) {
+    userData = loadDataFromLocalStorage() || [];
     let newUserId = userData.length;
     let newUser = {
         userId: newUserId,
@@ -178,21 +179,17 @@ function signup(username, password, email) {
     }
     userData.push(newUser);
     saveDataToLocalStorage();
-    addUser(newUser);
+    sendDataToJson(userData); //was ned ob des wirkli do her muss
+    await addUser(newUser);
     login(newUser.userId);
 }
 
-async function login(userId) {
+function login(userId) {
     if (userId === -1 || getIndexOfUserId(userId) === -1) {
         alert("Keine Daten vom Server erhalten!");
         return;
     }
 
-    // Lade Daten vom Backend
-    userData = await getDataFromJson();
-    console.log("userData nach Login:", userData);
-
-    // Finde den User mit der ID
     let userIndex = -1;
     for (let i = 0; i < userData.length; i++) {
         if (userData[i].userId === userId) {
@@ -200,6 +197,8 @@ async function login(userId) {
             break;
         }
     }
+
+
 
     if (userIndex === -1) {
         alert("Account nicht gefunden, oder nicht in der Datenbank!");
@@ -224,11 +223,12 @@ function logout() {
     currentProperties.loggedInWithUserId = -1;
     userSettings = {
         mode: "darkmode",
-        viewing: ["session", "longterm", "real-time"],
+        viewing: [],
         devMode: false
     }
     savePropertiesToLocalStorage();
     saveUserSettingsToLocalStorage(-1);
+    initializeUI();
     location.reload();
 }
 
@@ -251,7 +251,7 @@ function initializeLoginAndSignup() {
                 }
                 
                 // Lade Daten vom Backend
-                const data = await getDataFromJson();
+                const data = loadDataFromLocalStorage();
                 console.log("Daten vom Backend:", data);
                 
                 if (!data || data.length === 0) {
@@ -331,6 +331,7 @@ function init() {
     }
 
     initialiseModes();
+    initializeLoginAndSignup();
 
     if (userData.length === 0) {
         getDataFromJson().then(data => {
@@ -365,19 +366,16 @@ function initializeUI() {
     } else if (document.getElementById("dev")) {
         document.getElementById("dev").innerText = "usermode";
     }
-
-    initializeLoginAndSignup();
-    initialiseModes();
     
-    // Aktualisiere Daten jede Sekunde
-    setInterval(() => {
-        getDataFromJson().then(data => {
+    setInterval(async () => {
+        await getDataFromJson().then(data => {
             if (data && data.length > 0) {
                 userData = data;
                 if (selectedUserId >= 0) {
                     userSettings = userData[getIndexOfUserId(selectedUserId)]?.userSettings || userSettings;
                 }
                 updateDisplay(selectedUserId);
+                saveDataToLocalStorage();
             }
         }).catch(error => console.error("Error updating data:", error));
     }, 1000);

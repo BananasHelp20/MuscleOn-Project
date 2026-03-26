@@ -53,11 +53,12 @@ let user: User = {
         heartFrequence: 0,
         oxygen: 0,
         currentMuscleBeingTrained: "",
-        currentMuscleBeingTrained: "",
+        currentMuscleUsageInPercent: 0,
         currentExercise: ""
     },
 
     userHighscores: {
+        userId: 0,
         maxTimeTrained: "0:00:00",
         maxDoneInOneForEachExercise: [],
         maxHeartRate: 0,
@@ -83,3 +84,4 @@ let user: User = {
         devMode: false
     }
 }
+

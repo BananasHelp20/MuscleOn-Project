@@ -26,6 +26,18 @@ async function getDataFromJson() {
     }
 }
 
+function sendDataToJson(data) {
+    fetch("/api/updateData", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ users: data })
+    }).catch(error => {
+        console.error("Error sending data to JSON:", error);
+    });
+}
+
 function setUserSettings(selectedUserId, userSettings) { //send settings to backend and save them in json file
     let mode = document.getElementById("lightSwitch").innerText;
     let devMode = document.getElementById("dev").innerText === "devmode" ? true : false;
@@ -54,20 +66,23 @@ function setUserSettings(selectedUserId, userSettings) { //send settings to back
     userData[getIndexOfUserId(selectedUserId)].userSettings = userSettings;
 }
 
-function addUser(user) {
-    fetch("/api/addUser", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(user)
-    });
-}
-
-function deleteUser(userId) {
-    fetch("/api/deleteUser/" + userId, {
-        method: "DELETE"
-    });
+async function addUser(user) {
+    try {
+        const response = await fetch("/api/addUser", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(user)
+        });
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return await response.json();
+    } catch (error) {
+        console.error("Error adding user:", error);
+        return null;
+    }
 }
 
 function updateUser(user) {

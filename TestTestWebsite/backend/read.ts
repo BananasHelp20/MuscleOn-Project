@@ -110,7 +110,7 @@ export async function saveAndAddToJson(userData: model.User) {
         training: userData.userSessionData?.training || false
     }
     let shortTermData: model.userShortTermData = {
-        userId: userData.userShortTerm?.userId || 0,
+        userId: userData.userId,
         heartFrequence: userData.userShortTerm?.heartFrequence || 0,
         oxygen: userData.userShortTerm?.oxygen || 0,
         currentMuscleUsageInPercent: userData.userShortTerm?.currentMuscleUsageInPercent || 0,
@@ -118,13 +118,13 @@ export async function saveAndAddToJson(userData: model.User) {
         currentExercise: userData.userShortTerm?.currentExercise || ""
     }
     let settings: model.userSettings = {
-        userId: userData.userSettings?.userId || 0,
+        userId: userData.userId,
         mode: userData.userSettings?.mode || "",
         viewing: userData.userSettings?.viewing || [],
         devMode: userData.userSettings?.devMode || false
     }
     let highscoreData: model.userHighscoreData = {
-        userId: userData.userHighscores?.userId || 0,
+        userId: userData.userId,
         maxTimeTrained: userData.userHighscores?.maxTimeTrained || "0:00:00",
         maxDoneInOneForEachExercise: userData.userHighscores?.maxDoneInOneForEachExercise || [],
         maxHeartRate: userData.userHighscores?.maxHeartRate || 0
@@ -159,9 +159,9 @@ export async function saveAndAddToJson(userData: model.User) {
     await writeFile(join(__dirname, "../jsonData/else/users.json"), JSON.stringify(usersJson, null, 2));
     await writeFile(join(__dirname, "../jsonData/dynamic/sessionStats.json"), JSON.stringify(sessionStatsJson, null, 2));
     await writeFile(join(__dirname, "../jsonData/dynamic/stats.json"), JSON.stringify(shortTermDataJson, null, 2));
-    await writeFile(join(__dirname, "../jsonData/dynamic/settings.json"), JSON.stringify(settingsJson, null, 2));
+    await writeFile(join(__dirname, "../jsonData/else/settings.json"), JSON.stringify(settingsJson, null, 2));
     await writeFile(join(__dirname, "../jsonData/static/allTimeHighscores.json"), JSON.stringify(highscoreDataJson, null, 2));
-    await writeFile(join(__dirname, "../jsonData/static/longTermAverages.json"), JSON.stringify(longTermAverageDataJson, null, 2));
+    await writeFile(join(__dirname, "../jsonData/static/average.json"), JSON.stringify(longTermAverageDataJson, null, 2));
 }
 
 export async function saveAndOverrideIntoJson(userData: model.User) {
@@ -187,7 +187,7 @@ export async function saveAndOverrideIntoJson(userData: model.User) {
         training: userData.userSessionData?.training || false
     }
     let shortTermData: model.userShortTermData = {
-        userId: userData.userShortTerm?.userId || 0,
+        userId: userData.userId,
         heartFrequence: userData.userShortTerm?.heartFrequence || 0,
         oxygen: userData.userShortTerm?.oxygen || 0,
         currentMuscleUsageInPercent: userData.userShortTerm?.currentMuscleUsageInPercent || 0,
@@ -195,13 +195,13 @@ export async function saveAndOverrideIntoJson(userData: model.User) {
         currentExercise: userData.userShortTerm?.currentExercise || ""
     }
     let settings: model.userSettings = {
-        userId: userData.userSettings?.userId || 0,
+        userId: userData.userId,
         mode: userData.userSettings?.mode || "",
         viewing: userData.userSettings?.viewing || [],
         devMode: userData.userSettings?.devMode || false
     }
     let highscoreData: model.userHighscoreData = {
-        userId: userData.userHighscores?.userId || 0,
+        userId: userData.userId,
         maxTimeTrained: userData.userHighscores?.maxTimeTrained || "0:00:00",
         maxDoneInOneForEachExercise: userData.userHighscores?.maxDoneInOneForEachExercise || [],
         maxHeartRate: userData.userHighscores?.maxHeartRate || 0
