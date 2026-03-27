@@ -1,0 +1,25 @@
+* {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    margin-left: 15%;
+    margin-right: 15%;
+}
+
+h1, h2, h3 {
+    text-align: center;
+}
+
+button {
+    margin: 10px;
+    padding: 5px;
+}
+
+a {
+    text-decoration: none;
+}
+
+#loginLink, #signupLink, #returnLink {
+    color: rgb(0, 145, 255);
+}
