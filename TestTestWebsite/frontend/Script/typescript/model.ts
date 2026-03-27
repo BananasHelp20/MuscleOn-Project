@@ -12,7 +12,7 @@ export interface User {
     userShortTerm: userShortTermData | null,
     userHighscores: userHighscoreData | null,
     userLongTermAverages: userLongTermAverageData | null,
-    userSettings: userSettings
+    userSettings: UserSettings
 }
 
 export interface userProperties {
@@ -79,7 +79,7 @@ export interface userProperties {
         additionalSessions?: string[][]
 }
 
-export interface userSettings {
+export interface UserSettings {
         userId: number,
         mode: string,
         viewing: string[],
