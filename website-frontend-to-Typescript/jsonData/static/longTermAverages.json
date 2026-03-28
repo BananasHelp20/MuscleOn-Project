@@ -1,0 +1,26 @@
+[
+  {
+    "userId": 0,
+    "averageTimeTrained": "1:30:00",
+    "averageLongtermHeartFrequence": 150,
+    "averageLongtermOxygen": 98,
+    "averageLongtermMuscleUsageInPercent": 79,
+    "weeklyBurnedCalories": 2000,
+    "monthlyStrengthIncrease": 15,
+    "weeklyTrainingTime": "10:10:00",
+    "mostTrainedMuscle": "Bizeps",
+    "mostDoneExercise": "Curls"
+  },
+  {
+    "userId": 1,
+    "averageTimeTrained": "1:45:00",
+    "averageLongtermHeartFrequence": 155,
+    "averageLongtermOxygen": 96,
+    "averageLongtermMuscleUsageInPercent": 82,
+    "weeklyBurnedCalories": 2500,
+    "monthlyStrengthIncrease": 20,
+    "weeklyTrainingTime": "11:00:00",
+    "mostTrainedMuscle": "Brust",
+    "mostDoneExercise": "Bench-Press"
+  }
+]
