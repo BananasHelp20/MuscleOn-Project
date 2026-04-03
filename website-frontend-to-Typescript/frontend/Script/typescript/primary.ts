@@ -1,6 +1,7 @@
-import { getIndexOfUserId, initializeLoginAndSignup, updateUI, updateDisplay} from "./helper";
-import { loadPropertiesFromLocalStorage, loadUserSettingsFromLocalStorage, saveDataToLocalStorage, savePropertiesToLocalStorage, saveUserSettingsToLocalStorage } from "./localSave";
+import { getIndexOfUserId, initializeLoginAndSignup, updateUI, updateDisplay, initialiseModes} from "./helper";
+import { loadDataFromLocalStorage, loadPropertiesFromLocalStorage, loadUserSettingsFromLocalStorage, saveDataToLocalStorage, savePropertiesToLocalStorage, saveUserSettingsToLocalStorage } from "./localSave";
 import { DeviceProperties, User, UserSettings } from "./model";
+import { getDataFromESP } from "./router";
 
 //important variables
 export let avgHeartRateDisplay = document.getElementById("averageHeartFrequence");
@@ -31,28 +32,31 @@ export let longtermStatsSection = document.getElementById("staticDiv");
 export let realTimeStatsSection = document.getElementById("realTimeDiv");
 export let sessionStatsSection = document.getElementById("dynamicDiv");
 
-//setters required
-export let userData: User[] = [];
-export let currentUser: User;
-export let userSettings: UserSettings = {
+//ned verwendet
+/*
+let userData: User[] = [];
+let currentUser: User;
+let userSettings: UserSettings = {
     userId: 0,
     mode: "darkmode",
     viewing: ["session", "longterm", "real-time"],
     devMode: false
 };
 
-export let currentProperties: deviceProperties = {
+let currentProperties: DeviceProperties = {
     running: false,
     loggedIn: false,
     loggedInAsUser: "",
     loggedInWithUserId: -1
 }
-export let supportedExercises = [];
-export let devMode = false;
+let supportedExercises = [];
+let devMode = false;*/
 
 //init
 export function init() {
-    currentProperties = loadPropertiesFromLocalStorage();
+    let currentProperties = loadPropertiesFromLocalStorage();
+    let userSettings: UserSettings;
+    let currentUser: User;
 
     if (currentProperties.loggedIn) {
         userSettings = loadUserSettingsFromLocalStorage(currentProperties.loggedInWithUserId);
@@ -63,12 +67,15 @@ export function init() {
     updateUI();
     initializeLoginAndSignup();
 
-    setInterval(() => {
-        userData = getUserDataFromESP();
-        currentUser = userData[getIndexOfUserId(selectedUserId)];
-        updateDisplay(currentUser.userId);
-        saveDataToLocalStorage(userData);
-        saveUserSettingsToLocalStorage(currentUser.userId);
-        savePropertiesToLocalStorage();
-    }, 1000);
+    if (currentProperties.loggedIn) {
+        let userData = loadDataFromLocalStorage();
+        setInterval(async () => {
+            await getDataFromESP();
+            userData = loadDataFromLocalStorage();
+            currentUser = userData[getIndexOfUserId(selectedUserId)];
+            updateDisplay(currentUser.userId);
+            saveUserSettingsToLocalStorage(currentUser.userId);
+            savePropertiesToLocalStorage();
+        }, 1000);
+    }
 }

@@ -54,8 +54,3 @@ function updateDisplay(selectedUserId) {
         mostDoneExerciseDisplay.textContent = user.userLongTermAverages.mostDoneExercise;
     }
 }
-
-// Starte init() wenn DOM geladen ist
-document.addEventListener("DOMContentLoaded", () => {
-    init();
-});

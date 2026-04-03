@@ -1,6 +1,7 @@
-import { login, signup } from "./feature";
+import { login, logout, signup } from "./feature";
 import { loadDataFromLocalStorage, loadPropertiesFromLocalStorage, loadUserSettingsFromLocalStorage, saveDataToLocalStorage, saveUserSettingsToLocalStorage } from "./localSave";
 import { User } from "./model";
+import * as vars from "./primary";
 
 export function getIndexOfUserId(userId: number): number {
     let userData: User[] = loadDataFromLocalStorage(); //ausn localStorage, weil i des so zwischenspeichere.
@@ -70,6 +71,7 @@ export function updateSettings(selectedUserId: number) {
 }
 
 export function renderViewing(viewing: string[]) {
+    let currentProperties = loadPropertiesFromLocalStorage();
     if (document.getElementById("dynamicDiv") === null || document.getElementById("realTimeDiv") === null || document.getElementById("staticDiv") === null || document.getElementById("dynamicHeadline") === null) {
         return;
     }
@@ -81,7 +83,7 @@ export function renderViewing(viewing: string[]) {
     } else {
         document.getElementById("dynamicHeadline")!.hidden = true;
     }
-    updateDisplay(selectedUserId);
+    updateDisplay(currentProperties.loggedInWithUserId);
 }
 
 export function updateDisplay(selectedUserId: number) {
@@ -90,36 +92,38 @@ export function updateDisplay(selectedUserId: number) {
         return;
     }
     let user = userData[getIndexOfUserId(selectedUserId)];
-    if (averageHeartFrequenceDisplay && user) {
-        avgHeartRateDisplay!.textContent = user.userSessionData!.averageHeartFrequence + "";
-        avgOxygenDisplay!.textContent = user.userSessionData!.averageOxygen + "";
-        avgMuscleUsageDisplay!.textContent = user.userSessionData!.averageMuscleUsageInPercent + "";
-        trainedMusclesInCurrentOrLatestSessionDisplay!.textContent = user.userSessionData!.trainedMusclesInCurrentOrLatestSession.join(", ");
+    if (vars.averageHeartFrequenceDisplay && user) {
+        vars.avgHeartRateDisplay!.textContent = user.userSessionData!.averageHeartFrequence + "";
+        vars.avgOxygenDisplay!.textContent = user.userSessionData!.averageOxygen + "";
+        vars.avgMuscleUsageDisplay!.textContent = user.userSessionData!.averageMuscleUsageInPercent + "";
+        vars.trainedMusclesInCurrentOrLatestSessionDisplay!.textContent = user.userSessionData!.trainedMusclesInCurrentOrLatestSession.join(", ");
 
-        heartRateDisplay!.textContent = user.userShortTerm!.heartFrequence + "";
-        oxygenDisplay!.textContent = user.userShortTerm!.oxygen + "";
-        currentMuscleBeingTrainedDisplay!.textContent = user.userShortTerm!.currentMuscleBeingTrained;
-        currentExerciseDisplay!.textContent = user.userShortTerm!.currentExercise;
+        vars.heartRateDisplay!.textContent = user.userShortTerm!.heartFrequence + "";
+        vars.oxygenDisplay!.textContent = user.userShortTerm!.oxygen + "";
+        vars.currentMuscleBeingTrainedDisplay!.textContent = user.userShortTerm!.currentMuscleBeingTrained;
+        vars.currentExerciseDisplay!.textContent = user.userShortTerm!.currentExercise;
 
-        maxTimeTrainedDisplay!.textContent = user.userHighscores!.maxTimeTrained;
-        maxDoneInOneForEachExerciseDisplay!.textContent = user.userHighscores!.maxDoneInOneForEachExercise.join(", ");
-        maxHeartRateDisplay!.textContent = user.userHighscores!.maxHeartRate + "";
+        vars.maxTimeTrainedDisplay!.textContent = user.userHighscores!.maxTimeTrained;
+        vars.maxDoneInOneForEachExerciseDisplay!.textContent = user.userHighscores!.maxDoneInOneForEachExercise.join(", ");
+        vars.maxHeartRateDisplay!.textContent = user.userHighscores!.maxHeartRate + "";
 
-        averageTimeTrainedDisplay!.textContent = user.userLongTermAverages!.averageTimeTrained;
-        averageHeartFrequenceDisplay!.textContent = user.userLongTermAverages!.averageLongtermHeartFrequence + "";
-        averageOxygenDisplay!.textContent = user.userLongTermAverages!.averageLongtermOxygen + "";
-        averageMuscleUsageInPercentDisplay!.textContent = user.userLongTermAverages!.averageLongtermMuscleUsageInPercent + "";
+        vars.averageTimeTrainedDisplay!.textContent = user.userLongTermAverages!.averageTimeTrained;
+        vars.averageHeartFrequenceDisplay!.textContent = user.userLongTermAverages!.averageLongtermHeartFrequence + "";
+        vars.averageOxygenDisplay!.textContent = user.userLongTermAverages!.averageLongtermOxygen + "";
+        vars.averageMuscleUsageInPercentDisplay!.textContent = user.userLongTermAverages!.averageLongtermMuscleUsageInPercent + "";
 
-        weeklyBurnedCaloriesDisplay!.textContent = user.userLongTermAverages!.weeklyBurnedCalories + "";
-        monthlyStrengthIncreaseDisplay!.textContent = user.userLongTermAverages!.monthlyStrengthIncrease + "";
-        weeklyTrainingTimeDisplay!.textContent = user.userLongTermAverages!.weeklyTrainingTime;
-        mostTrainedMuscleDisplay!.textContent = user.userLongTermAverages!.mostTrainedMuscle;
-        mostDoneExerciseDisplay!.textContent = user.userLongTermAverages!.mostDoneExercise;
+        vars.weeklyBurnedCaloriesDisplay!.textContent = user.userLongTermAverages!.weeklyBurnedCalories + "";
+        vars.monthlyStrengthIncreaseDisplay!.textContent = user.userLongTermAverages!.monthlyStrengthIncrease + "";
+        vars.weeklyTrainingTimeDisplay!.textContent = user.userLongTermAverages!.weeklyTrainingTime;
+        vars.mostTrainedMuscleDisplay!.textContent = user.userLongTermAverages!.mostTrainedMuscle;
+        vars.mostDoneExerciseDisplay!.textContent = user.userLongTermAverages!.mostDoneExercise;
     }
 }
 
 //initialise zeigs
 export function updateUI() {
+    let currentProperties = loadPropertiesFromLocalStorage();
+    let userSettings = loadUserSettingsFromLocalStorage(loadPropertiesFromLocalStorage().loggedInWithUserId);
     if (document.getElementById("currentUser") && currentProperties.loggedIn) {
         document.getElementById("currentUser")!.innerHTML = `Momentan eingeloggt: ${currentProperties.loggedInAsUser} <button id="logoutButton">Logout</button>`;
     } else if (document.getElementById("currentUser")) {
@@ -164,7 +168,6 @@ export function initialiseModes() {
         if (currentProperties.loggedIn) {
             userData[getIndexOfUserId(selectedUserId)].userSettings = userSettings;
             saveDataToLocalStorage(userData);
-            saveDataToESP(userData);
         }
     });
 
@@ -172,26 +175,24 @@ export function initialiseModes() {
         let userData = loadDataFromLocalStorage();
         let currentProperties = loadPropertiesFromLocalStorage();
         let userSettings = loadUserSettingsFromLocalStorage(currentProperties.loggedInWithUserId);
-        let selectedUserId = currentProperties.loggedInWithUserId;
-        devMode = !devMode;
-        if (devMode && document.getElementById("dev")) {
+        userSettings.devMode = !userSettings.devMode;
+        if (userSettings.devMode && document.getElementById("dev")) {
             document.getElementById("dev")!.innerText = "devmode";
         } else if (document.getElementById("dev")) {
             document.getElementById("dev")!.innerText = "usermode";
         }
-        userSettings.devMode = devMode;
         if (currentProperties.loggedIn) {
-            updateSettings(selectedUserId);
-            saveUserSettingsToLocalStorage(selectedUserId);
+            updateSettings(currentProperties.loggedInWithUserId);
+            saveUserSettingsToLocalStorage(currentProperties.loggedInWithUserId);
         }
         if (currentProperties.loggedIn) {
-            userData[getIndexOfUserId(selectedUserId)].userSettings = userSettings;
-            saveDataToESP(userData);
+            userData[getIndexOfUserId(currentProperties.loggedInWithUserId)].userSettings = userSettings;
         }
     });
+    let currentProperties = loadPropertiesFromLocalStorage();
     if (currentProperties.loggedIn) {
         initialiseViewingModes();
-        updateSettings(selectedUserId);
+        updateSettings(currentProperties.loggedInWithUserId);
     }
 }
 
@@ -210,8 +211,22 @@ function toggleViewingMode(modeKey: string) {
     }
     saveUserSettingsToLocalStorage(currentProperties.loggedInWithUserId);
     userData[selectedUserId].userSettings = userSettings;
-    saveDataToESP(userData);
     updateSettings(selectedUserId);
+}
+
+export async function http(method: 'GET' | 'POST' | 'PUT' | 'DELETE', route: string, data?: any): Promise<any> {
+    let options: any = { method };
+    if (data) {
+        options.headers = { 'Content-Type': 'application/json' };
+        options.body = JSON.stringify(data);
+    }
+    const res = await fetch(route, options);
+    if (!res.ok) {
+        throw new Error(`${method} ${res.url} ${res.status} (${res.statusText})`);
+    }
+    if (res.status !== 204) {
+        return await res.json();
+    }
 }
 
 function initialiseViewingModes() {

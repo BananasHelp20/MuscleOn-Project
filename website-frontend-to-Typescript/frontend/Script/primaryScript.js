@@ -109,11 +109,7 @@ function initialiseModes() {
     });
     document.getElementById("dev")?.addEventListener("click", () => {
         devMode = !devMode;
-        if (devMode && document.getElementById("dev")) {
-            document.getElementById("dev").innerText = "devmode";
-        } else if (document.getElementById("dev")) {
-            document.getElementById("dev").innerText = "usermode";
-        }
+        updateUI();
         userSettings.devMode = devMode;
         if (currentProperties.loggedIn) {
             updateSettings(selectedUserId);
@@ -125,6 +121,33 @@ function initialiseModes() {
     if (currentProperties.loggedIn) {
         initialiseViewingModes();
         updateSettings(selectedUserId);
+    }
+}
+
+function updateUI() {
+    currentProperties = (loadPropertiesFromLocalStorage()) || currentProperties;
+    userSettings = (loadUserSettingsFromLocalStorage(currentProperties.loggedInWithUserId)) || userSettings;
+    if (document.getElementById("currentUser") && currentProperties.loggedIn) {
+        document.getElementById("currentUser").innerHTML = `Momentan eingeloggt: ${currentProperties.loggedInAsUser} <button id="logoutButton">Logout</button>`;
+        document.getElementById("logoutButton")?.addEventListener("click", () => {
+            logout();
+        });
+    } else if (document.getElementById("currentUser")) {
+        document.getElementById("currentUser").innerHTML = "Du bist nicht eingeloggt. <a href=\"./login.html\" id=\"loginLink\">Login</a> oder: <a href=\"./signup.html\" id=\"signupLink\">Signup</a>";
+    }
+
+    if (userSettings.mode === "lightmode") {
+        document.getElementById("modeStylesheet").setAttribute("href", "./Css/light.css");
+        document.getElementById("lightSwitch").innerText = "darkmode";
+    } else {
+        document.getElementById("modeStylesheet").setAttribute("href", "./Css/dark.css");
+        document.getElementById("lightSwitch").innerText = "lightmode";
+    }
+
+    if (devMode && document.getElementById("dev")) {
+        document.getElementById("dev").innerText = "devmode";
+    } else if (document.getElementById("dev")) {
+        document.getElementById("dev").innerText = "usermode";
     }
 }
 
@@ -226,18 +249,14 @@ function logout() {
         viewing: [],
         devMode: false
     }
+    console.log("hallo");
     savePropertiesToLocalStorage();
     saveUserSettingsToLocalStorage(-1);
-    initializeUI();
+    updateUI();
     location.reload();
 }
 
 function initializeLoginAndSignup() {
-    if (document.getElementById("logoutButton")) {
-        document.getElementById("logoutButton")?.addEventListener("click", () => {
-            logout();
-        });
-    }
     if (document.getElementById("loginButton")) {
         loadDataFromLocalStorage();
         document.getElementById("loginButton")?.addEventListener("click", async () => {
@@ -340,9 +359,14 @@ function init() {
             if (userData.length > 0 && !currentProperties.loggedIn) {
                 userSettings = userData[0].userSettings;
             }
-            initializeUI();
+            devMode = userSettings.devMode;
+            updateUI();
         }).catch(error => console.error("Error loading data:", error));
     } else {
-        initializeUI();
+        updateUI();
     }
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    init();
+});

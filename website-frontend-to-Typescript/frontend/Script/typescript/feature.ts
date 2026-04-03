@@ -104,7 +104,6 @@ export function login(userId: number) {
 export function logout() {
     let currentProperties = loadPropertiesFromLocalStorage();
     let userSettings = loadUserSettingsFromLocalStorage(currentProperties.loggedInWithUserId);
-    selectedUserId = -1;
     currentProperties.loggedIn = false;
     currentProperties.loggedInAsUser = "";
     currentProperties.loggedInWithUserId = -1;
@@ -114,7 +113,6 @@ export function logout() {
         viewing: [],
         devMode: false
     }
-    let userData = loadDataFromLocalStorage();
     savePropertiesToLocalStorage();
     saveUserSettingsToLocalStorage(-1);
     updateUI();

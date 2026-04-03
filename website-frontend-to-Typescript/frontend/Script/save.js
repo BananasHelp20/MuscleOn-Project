@@ -2,6 +2,14 @@ function savePropertiesToLocalStorage() {
     localStorage.setItem("currentProperties", JSON.stringify(currentProperties));
 }
 
+function loadPropertiesFromLocalStorage() {
+    let savedProperties = localStorage.getItem("currentProperties");
+    if (savedProperties) {
+        currentProperties = JSON.parse(savedProperties);
+    }
+    return currentProperties;
+}
+
 function saveDataToLocalStorage() {
     localStorage.setItem("userData", JSON.stringify(userData));
 }

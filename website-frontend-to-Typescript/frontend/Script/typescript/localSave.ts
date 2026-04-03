@@ -2,6 +2,7 @@ import { getIndexOfUserId } from "./helper";
 import { DeviceProperties, User, UserSettings } from "./model";
 
 export function savePropertiesToLocalStorage() {
+    let currentProperties = loadPropertiesFromLocalStorage().loggedInWithUserId;
     localStorage.setItem("currentProperties", JSON.stringify(currentProperties));
 }
 
@@ -19,6 +20,8 @@ export function loadDataFromLocalStorage(): User[] {
 }
 
 export function saveUserSettingsToLocalStorage(userId: number) {
+    let userData: User[] = loadDataFromLocalStorage();
+    let userSettings = userData[getIndexOfUserId(userId)]?.userSettings;
     localStorage.setItem("userSettings" + userId, JSON.stringify(userSettings));
 }
 
@@ -41,7 +44,7 @@ export function loadUserSettingsFromLocalStorage(userId: number): UserSettings {
     let currentProperties: DeviceProperties = loadPropertiesFromLocalStorage();
     let userSettings = userData[getIndexOfUserId(userId)]?.userSettings;
     if (currentProperties.loggedIn && userData.length > 0) {
-        if (getIndexOfUserId(selectedUserId) !== -1) {
+        if (getIndexOfUserId(userId) !== -1) {
             return userSettings;
         }
     }

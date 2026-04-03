@@ -11,8 +11,10 @@
     "frontend": "npx tsc --watch --project frontend"
   },
   "dependencies": {
-    "@types/node": "^25.3.3",
+    "@types/node": "^25.5.0",
     "express": "^5.2.1",
+    "fs": "^0.0.1-security",
+    "http": "^0.0.1-security",
     "http-status-codes": "^2.3.0",
     "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
