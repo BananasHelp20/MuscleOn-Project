@@ -24,3 +24,20 @@ let mostDoneExerciseDisplay = document.getElementById("mostDoneExercise");
 let longtermStatsSection = document.getElementById("staticDiv");
 let realTimeStatsSection = document.getElementById("realTimeDiv");
 let sessionStatsSection = document.getElementById("dynamicDiv");
+
+function init() {
+    let deviceData = getDeviceData();
+
+    if (deviceData.loggedIn) {
+        
+    }
+}
+
+function getDeviceData() {
+    return localStorage.getItem("deviceData") ? JSON.parse(localStorage.getItem("deviceData")) : {
+        running: false,
+        loggedIn: false,
+        loggedInAsUser: "",
+        loggedInWithUserId: -1
+    };
+}
