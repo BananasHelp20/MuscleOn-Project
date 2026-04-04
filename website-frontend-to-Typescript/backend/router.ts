@@ -4,7 +4,6 @@ import { deleteUser, getUserData, getDeviceProperties, getSupportedExercises, sa
 import { User } from "./model";
 import * as model from "./model";
 
-
 export const muscleRouter = e.Router();
 export let userData: model.User[]; //Hier werden die Daten der User gespeichert
 export let deviceProperties: model.deviceProperties; //Hier werden die Daten der Geräte gespeichert

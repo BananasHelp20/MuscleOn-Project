@@ -317,11 +317,11 @@ function initializeLoginAndSignup() {
 function toggleViewingMode(modeKey) {
     if (!currentProperties.loggedIn) return;
 
-    const idx = userSettings.viewing.indexOf(modeKey);
-    if (idx === -1) {
+    const index = userSettings.viewing.indexOf(modeKey);
+    if (index === -1) {
         userSettings.viewing.push(modeKey);
     } else {
-        userSettings.viewing.splice(idx, 1);
+        userSettings.viewing.splice(index, 1);
     }
     updateSettings(selectedUserId);
 }
@@ -340,6 +340,17 @@ function initialiseViewingModes() {
     }
 }
 
+function getAndUpdateData(userId) {
+    getDataFromJson().then(data => {
+        userData = data;
+        if (userData.length > 0 && !currentProperties.loggedIn) {
+            userSettings = userData[getIndexOfUserId(userId)].userSettings;
+        }
+        devMode = userSettings.devMode;
+        updateUI();
+    }).catch(error => console.error("Error loading data:", error));
+}
+
 
 function init() {
     loadPropertiesFromLocalStorage();
@@ -354,14 +365,7 @@ function init() {
     initializeLoginAndSignup();
 
     if (userData.length === 0) {
-        getDataFromJson().then(data => {
-            userData = data;
-            if (userData.length > 0 && !currentProperties.loggedIn) {
-                userSettings = userData[0].userSettings;
-            }
-            devMode = userSettings.devMode;
-            updateUI();
-        }).catch(error => console.error("Error loading data:", error));
+        getAndUpdateData(selectedUserId);
     } else {
         updateUI();
     }
