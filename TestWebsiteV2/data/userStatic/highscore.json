@@ -1,0 +1,12 @@
+{
+    "maxTimeTrained": "03:41:02",
+    "maxDoneInSetForEachExercise": [
+        {
+            "name": "Curls",
+            "reps": 103,
+            "weight": 30,
+            "equipment": "Dumbbells"
+        }
+    ],
+    "maxHeartRate": 160
+}

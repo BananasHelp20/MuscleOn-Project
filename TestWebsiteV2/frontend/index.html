@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="./Css/style.css">
+    <link rel="stylesheet" type="text/css" href="./Css/light.css" id="modeStylesheet">
+    <script src="./Script/data.js" defer></script>
+    <script src="./Script/primaryScript.js" defer></script>
+    <script src="./Script/helper.js" defer></script>
+    <script src="./Script/save.js" defer></script>
+    <script src="./Script/render.js" defer></script>
+</head>
+<body>
+    <h1>Test</h1>
+    Momentan eingeloggt: <span id="currentUser">Du bist nicht eingeloggt. <a href="./login.html" id="loginLink">Login</a> oder: <a href="./signup.html" id="signupLink">Signup</a></span><br>
+    checkboxes for settings:<br>
+    <input type="checkbox" id="viewingSession">session<br>
+    <input type="checkbox" id="viewingRealTime">real-time<br>
+    <input type="checkbox" id="viewingLongterm">long-term<br>
+    <button id="lightSwitch">lightmode</button><br>
+    <button id="dev">devmode</button>
+    <div id="dynamicHeadline" hidden>
+        <h2>Dynamic data</h2>
+    </div>
+    <div id="dynamicDiv" hidden>
+        <h3>current Session (updated every second)</h3>
+        Average Heart Rate: <span id="averageHeartFrequence"></span><br>
+        Average Oxygen: <span id="averageOxygen"></span><br>
+        Average Muscle Usage: <span id="averageMuscleUsageInPercent"></span><br>
+        Trained Muscles: <span id="trainedMuscles"></span>
+    </div>
+    <div id="realTimeDiv" hidden>
+        <h3>current data (also updated every second)</h3>
+        Heart Rate: <span id="heartFrequence"></span><br>
+        Oxygen: <span id="oxygen"></span><br>
+        Current Muscle Being Trained: <span id="currentMuscleBeingTrained"></span><br>
+        Current Exercise: <span id="currentExercise"></span>
+    </div>
+    <div id="staticDiv" hidden>
+        <h2>Static data</h2>
+        <h3>All-Time Average</h3>
+        Average Time Trained: <span id="averageTimeTrained"></span><br>
+        Average Heart Rate: <span id="averageHeartFrequence"></span><br>
+        Average Oxygen: <span id="averageOxygen"></span><br>
+        Average Muscle Usage In Percent: <span id="averageMuscleUsageInPercent"></span><br>
+        Weekly burned calories: <span id="weeklyBurnedCalories"></span><br>
+        Monthly strength increase: <span id="monthlyStrengthIncrease"></span><br>
+        Average weekly training Time: <span id="weeklyTrainingTime"></span><br>
+        Most trained Muscle ever: <span id="mostTrainedMuscle"></span><br>
+        Most done exercise ever: <span id="mostDoneExercise"></span><br>
+
+        <h3>All-Time Highscores</h3>
+        Max Time Trained: <span id="maxTimeTrained"></span><br>
+        Max Done In One For Each Exercise: <span id="maxDoneInOneForEachExercise"></span><br>
+        Max Heart Rate: <span id="maxHeartRate"></span><br>
+    </div>
+</body>
+</html>

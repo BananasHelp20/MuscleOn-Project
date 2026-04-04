@@ -1,0 +1,9 @@
+{
+    "mode": "darkmode",
+    "viewing": [
+        "session",
+        "longterm",
+        "real-time"
+    ],
+    "devmode": true
+}
