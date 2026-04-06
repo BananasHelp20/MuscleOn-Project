@@ -15,12 +15,12 @@ export async function gatherUserData() {
 }
 
 export async function gatherDeviceData() {
-    let deviceData: model.deviceProperties = await readFile("./data/device/currentProperties.json", 'utf-8').then((data) => JSON.parse(data));
+    let deviceData: model.DeviceProperties = await readFile("./data/device/currentProperties.json", 'utf-8').then((data) => JSON.parse(data));
     return deviceData;
 }
 
 export async function gatherSupportedExercises() {
-    let supportedExercises: model.exercise[] = await readFile("./data/device/supportedExercises.json", 'utf-8').then((data) => JSON.parse(data));
+    let supportedExercises: model.Exercise[] = await readFile("./data/device/supportedExercises.json", 'utf-8').then((data) => JSON.parse(data));
     return supportedExercises;
 }
 
@@ -36,6 +36,10 @@ export async function setUserData(userData: model.User) {
     ]);
 }
 
-export async function setDeviceData(deviceData: model.deviceProperties) {
+export async function setUserSettings(userSettings: model.UserSettings) {
+    await writeFile("./data/userStatic/settings.json", JSON.stringify(userSettings));
+}
+
+export async function setDeviceData(deviceData: model.DeviceProperties) {
     await writeFile("./data/device/currentProperties.json", JSON.stringify(deviceData, null, 2));
 }
