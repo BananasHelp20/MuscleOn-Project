@@ -37,7 +37,7 @@ export async function setUserData(userData: model.User) {
 }
 
 export async function setUserSettings(userSettings: model.UserSettings) {
-    await writeFile("./data/userStatic/settings.json", JSON.stringify(userSettings));
+    await writeFile("./data/userStatic/settings.json", JSON.stringify(userSettings, null, 2));
 }
 
 export async function setDeviceData(deviceData: model.DeviceProperties) {

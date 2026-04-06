@@ -122,7 +122,6 @@ function loadAndInitializeChecked(settings) {
     let realTimeStatsSection = document.getElementById("realTimeDiv");
     let longtermStatsSection = document.getElementById("staticDiv");
     localStorage.setItem("userSettings", JSON.stringify(settings));
-    log(settings);
     if (document.getElementById("viewingRealTime") && document.getElementById("viewingSession") && document.getElementById("viewingLongterm")) {
         if (settings) {
             if (settings.viewing.realTimeStats) {
