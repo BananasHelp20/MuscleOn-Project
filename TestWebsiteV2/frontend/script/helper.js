@@ -33,10 +33,14 @@ function initializeDevMode() {
 }
 
 function initializeLogout() {
-    let logoutButton = document.getElementById("logoutButton");
-    logoutButton.addEventListener("click", () => {
-        logout();
-    });
+    let logoutButton;
+    if (document.getElementById("logoutButton")) {
+        logoutButton = document.getElementById("logoutButton");
+
+        logoutButton.addEventListener("click", () => {
+            logout();
+        });
+    }
 
 }
 
@@ -89,14 +93,9 @@ function logout() {
         loggedInWithUserId: -1,
         loadedUserData: false,
     }
-    let defaultSettings = {
-        mode: "lightmode",
-        viewing: [],
-        devMode: false
-    }
     localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
-    localStorage.setItem("userSettings", JSON.stringify(defaultSettings));
-    location.reload();
+    clearUserData();
+    location.reload(); //seite neu laden
 }
 
 function signUp() {
@@ -330,6 +329,25 @@ async function loadDataFromSpecificUserById(userId) {
             return response.json();
         } else {
             console.error("Fehler beim Abrufen der Benutzerdaten:", response.statusText);
+        }
+    });
+}
+
+async function clearUserData() {
+    let defaultSettings = {
+        mode: "lightmode",
+        viewing: ["nothingToView"],
+        devMode: false
+    }
+    return fetch("/api/clearUserData", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(defaultSettings)
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("Fehler beim ausloggen:", response.statusText);
         }
     });
 }

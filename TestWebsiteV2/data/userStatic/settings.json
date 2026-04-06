@@ -5,6 +5,5 @@
     "sessionStats": true,
     "longtermStats": true
   },
-  "devmode": false,
   "devMode": false
 }

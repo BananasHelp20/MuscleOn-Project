@@ -1,5 +1,5 @@
 import express from 'express';
-import {setUserData, gatherSupportedExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings} from '../read';
+import {setUserData, gatherSupportedExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData} from '../read';
 import { DatabaseAnswer } from '../model/muscleon.model';
 export let muscleRouter = express.Router();
 
@@ -71,4 +71,15 @@ muscleRouter.post('/loadUserDataById', async (req, res) => {
     };
     res.statusCode = 200;
     res.send(answer);
+});
+
+muscleRouter.post('/clearUserData', async (req, res) => {
+    await clearUserData(req.body).catch((err) => {
+        console.error("Error clearing data:", err);
+        res.statusCode = 500;
+        res.send({ message: "Failed to clear data" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "logging out successful!" });
 });

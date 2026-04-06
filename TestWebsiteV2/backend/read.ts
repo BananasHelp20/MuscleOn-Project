@@ -43,3 +43,18 @@ export async function setUserSettings(userSettings: model.UserSettings) {
 export async function setDeviceData(deviceData: model.DeviceProperties) {
     await writeFile("./data/device/currentProperties.json", JSON.stringify(deviceData, null, 2));
 }
+
+export async function clearUserData(userSettings: model.UserSettings) {
+    //save everything user-relevant to database, and clear their files afterwards (and replace current settings with parameter)
+    
+    //saveUserDataFromFilesToDatabase(); //including settings since they are being changed by the user pretty often (lightswitch, devmode, viewstuff)
+    setUserSettings(userSettings);
+    /* dont clear testfiles yet
+    writeFile("./data/userProperties.json", "");
+    writeFile("./data/userStatic/additionalSessions.json", "");
+    writeFile("./data/userDynamic/session.json", "");
+    writeFile("./data/userDynamic/shortTerm.json", "");
+    writeFile("./data/userStatic/highscore.json", "");
+    writeFile("./data/userStatic/average.json", "");
+    */
+}
