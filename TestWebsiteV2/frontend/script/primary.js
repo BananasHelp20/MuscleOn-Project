@@ -29,6 +29,7 @@ function init() {
                 setInterval(() => {
                     getUserData().then((userdata) => {
                         localStorage.setItem("userSettings", JSON.stringify(userdata.userSettings));
+                        syncModes();
                         showRealTimeData(userdata);
                         showSessionData(userdata);
                         showLongtermData(userdata);

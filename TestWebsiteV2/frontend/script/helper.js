@@ -1,3 +1,9 @@
+function syncModes() {
+    if (document.getElementById("dev")) document.getElementById("dev").innerText = getSettingsFromLocalStorage().devMode ? "devmode" : "usermode";
+    document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
+    document.getElementById("modeStylesheet").href = getSettingsFromLocalStorage().mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
+}
+
 function initializeLightSwitch() {
     let on = localStorage.getItem("lightSwitch") | true;
     let lightSwitch = document.getElementById("lightSwitch");
@@ -5,19 +11,24 @@ function initializeLightSwitch() {
     lightSwitch.innerText = on ? "light mode" : "dark mode"
 
     lightSwitch.addEventListener("click", () => {
-        let on = localStorage.getItem("lightSwitch") | true;
-        document.getElementById("modeStylesheet").href = on ? "./css/light.css" : "./css/dark.css";
-        lightSwitch.innerText = on ? "light mode" : "dark mode"
+        let settings = getSettingsFromLocalStorage();
+        settings.mode = settings.mode == "lightmode" ? "darkmode" : "lightmode"
+        document.getElementById("modeStylesheet").href = settings.mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
+        document.getElementById("lightSwitch").innerText = settings.mode;
+        setUserSettings(settings);
     });
 }
 
 function initializeDevMode() {
-    let on = localStorage.getItem("devmode") | false;
+    let on = getSettingsFromLocalStorage().devMode;
     let devModeSwitch = document.getElementById("dev");
     devModeSwitch.innerText = on ? "devmode" : "usermode";
+    
     devModeSwitch.addEventListener("click", () => {
-        let on = localStorage.getItem("devmode") | false;
-        devModeSwitch.innerText = on ? "devmode" : "usermode";
+        let settings = getSettingsFromLocalStorage();
+        settings.devMode = !settings.devMode;
+        devModeSwitch.innerText = settings.devMode ? "devmode" : "usermode";
+        setUserSettings(settings);
     });
 }
 
@@ -271,6 +282,7 @@ async function getUserData() {
 }
 
 async function setUserSettings(settings) {
+    localStorage.setItem("userSettings", JSON.stringify(settings));
     return fetch("/api/setUserSettings", {
         method: "POST",
         headers: {
