@@ -28,6 +28,7 @@ function init() {
             if (longtermStatsSection || realTimeStatsSection || sessionStatsSection) {
                 setInterval(() => {
                     getUserData().then((userdata) => {
+                        localStorage.setItem("userSettings", JSON.stringify(userdata.userSettings));
                         showRealTimeData(userdata);
                         showSessionData(userdata);
                         showLongtermData(userdata);

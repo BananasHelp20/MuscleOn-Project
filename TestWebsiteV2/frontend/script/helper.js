@@ -124,21 +124,9 @@ function loadAndInitializeChecked(settings) {
     localStorage.setItem("userSettings", JSON.stringify(settings));
     if (document.getElementById("viewingRealTime") && document.getElementById("viewingSession") && document.getElementById("viewingLongterm")) {
         if (settings) {
-            if (settings.viewing.realTimeStats) {
-                document.getElementById("viewingRealTime").checked = true;
-            } else {
-                document.getElementById("viewingRealTime").checked = false;
-            }
-            if (settings.viewing.sessionStats) {
-                document.getElementById("viewingSession").checked = true;
-            } else {
-                document.getElementById("viewingSession").checked = false;
-            }
-            if (settings.viewing.longtermStats) {
-                document.getElementById("viewingLongterm").checked = true;
-            } else {
-                document.getElementById("viewingLongterm").checked = false;
-            }
+            document.getElementById("viewingRealTime").checked = settings.viewing.realTimeStats;
+            document.getElementById("viewingSession").checked = settings.viewing.sessionStats;
+            document.getElementById("viewingLongterm").checked = settings.viewing.longtermStats;
         } else {
             document.getElementById("viewingRealTime").checked = true;
             document.getElementById("viewingSession").checked = true;
@@ -203,6 +191,10 @@ function showRealTimeData(userdata) {
     oxygenDisplay.innerText = userdata.userShortTerm.oxygen + " %";
     currentMuscleBeingTrainedDisplay.innerText = userdata.userShortTerm.currentMuscleBeingTrained;
     currentExerciseDisplay.innerText = userdata.userShortTerm.currentExercise;
+
+    document.getElementById("dynamicHeadline").hidden = !(userdata.userSettings.viewing.realTimeStats || userdata.userSettings.viewing.sessionStats);
+    document.getElementById("viewingRealTime").checked = userdata.userSettings.viewing.realTimeStats;
+    document.getElementById("realTimeDiv").hidden = !userdata.userSettings.viewing.realTimeStats;
 }
 
 function showSessionData(userdata) {
@@ -214,6 +206,9 @@ function showSessionData(userdata) {
     avgHeartRateDisplay.innerText = userdata.userSessionData.averageHeartFrequence + " bpm";
     avgOxygenDisplay.innerText = userdata.userSessionData.averageOxygen + " %";
     avgMuscleUsageDisplay.innerText = userdata.userSessionData.averageMuscleUsageInPercent + " %";
+
+    document.getElementById("viewingSession").checked = userdata.userSettings.viewing.sessionStats;
+    document.getElementById("dynamicDiv").hidden = !userdata.userSettings.viewing.sessionStats;
 }
 
 function showLongtermData(userdata) {
@@ -241,6 +236,9 @@ function showLongtermData(userdata) {
     weeklyTrainingTimeDisplay.innerText = userdata.userLongTermAverages.weeklyTrainingTime + " Minuten";
     mostTrainedMuscleDisplay.innerText = userdata.userLongTermAverages.mostTrainedMuscle;
     mostDoneExerciseDisplay.innerText = userdata.userLongTermAverages.mostDoneExercise;
+
+    document.getElementById("viewingLongterm").checked = userdata.userSettings.viewing.longtermStats;
+    document.getElementById("staticDiv").hidden = !userdata.userSettings.viewing.longtermStats;
 }
 
 function getSettingsFromLocalStorage() {

@@ -30,7 +30,6 @@ muscleRouter.post('/setUserData', async (req, res) => {
 });
 
 muscleRouter.post('/setUserSettings', async (req, res) => {
-    console.log("hallo!")
     await setUserSettings(req.body).catch((err) => {
         console.error("Error writing user settings:", err);
         res.statusCode = 500;
