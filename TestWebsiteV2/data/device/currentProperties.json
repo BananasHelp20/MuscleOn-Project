@@ -2,5 +2,6 @@
     "running": true,
     "loggedIn": true,
     "loggedInAsUser": "dev",
-    "loggedInWithUserId": 0
+    "loggedInWithUserId": 0,
+    "loadedUserData": true
 }

@@ -5,7 +5,7 @@
     "averageLongtermMuscleUsageInPercent": 85,
     "monthlyStrengthIncrease": 2,
     "weeklyTrainingTime": "03:43:21",
-    "mostTrainedMuscle": "Biceps",
+    "mostTrainedMuscleGroup": "Biceps",
     "mostDoneExercise": {
         "name": "Curls",
         "weight": 20

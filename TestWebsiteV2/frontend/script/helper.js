@@ -5,10 +5,8 @@ function syncModes() {
 }
 
 function initializeLightSwitch() {
-    let on = localStorage.getItem("lightSwitch") | true;
-    let lightSwitch = document.getElementById("lightSwitch");
-    document.getElementById("modeStylesheet").href = on ? "./css/light.css" : "./css/dark.css";
-    lightSwitch.innerText = on ? "light mode" : "dark mode"
+    document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
+    document.getElementById("modeStylesheet").href = getSettingsFromLocalStorage().mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
 
     lightSwitch.addEventListener("click", () => {
         let settings = getSettingsFromLocalStorage();
@@ -32,16 +30,23 @@ function initializeDevMode() {
     });
 }
 
-function initializeLogout() {
+function initializeLogoutAndDelete() {
     let logoutButton;
+    let deleteButton;
     if (document.getElementById("logoutButton")) {
         logoutButton = document.getElementById("logoutButton");
-
         logoutButton.addEventListener("click", () => {
             logout();
         });
     }
-
+    if (document.getElementById("deleteUserButton")) {
+        deleteButton = document.getElementById("deleteUserButton");
+        deleteButton.addEventListener("click", () => {
+            deleteUser().then(() => {
+                logout();
+            });
+        });
+    }
 }
 
 function initializeLogin() {
@@ -52,9 +57,52 @@ function initializeLogin() {
 }
 
 function initializeSignUp() {
-    let signUpButton = document.getElementById("signupButton");
-    signUpButton.addEventListener("click", () => {
+    document.getElementById("signupButton").addEventListener("click", () => {
         signUp();
+    });
+    document.getElementById("plan").addEventListener("click", (event) => {
+        document.getElementById("plan-section").hidden = !event.target.checked;
+        document.getElementById("plan-table").innerHTML = '<tr><th>Wochentag</th><th>Von</th><th>Bis</th><th>&emsp;</th></tr><tr id="day1"><td><input type="text" id="weekday1" placeholder="Montag"></td><td><input type="text" id="from1" placeholder="08:00"></td><td><input type="text" id="to1" placeholder="09:30"></td><td><button id="delete-day">remove</button></td></tr>';
+        document.getElementById("day1").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
+    });
+
+    document.getElementById("delete-day").addEventListener("click", (event) => {
+        event.target.parentElement.parentElement.remove();
+    });
+
+    document.getElementById("add-weekday").addEventListener("click", () => {
+        let tr = document.createElement("tr");
+        let elemCtr = document.getElementById("plan-table").childNodes.length;
+        if (elemCtr > 7) return; //abbrechen wenn scho 7 tage hinzugefügt worden sind, 8 tage in da woche san jetzt ned so reallistisch
+        tr.setAttribute("id", "day" + elemCtr);
+        let weekday = document.createElement("input");
+        weekday.setAttribute("type", "text");
+        weekday.setAttribute("id", "weekday" + elemCtr);
+        weekday.setAttribute("placeholder", "Montag");
+        let from = document.createElement("input");
+        from.setAttribute("type", "text");
+        from.setAttribute("id", "from" + elemCtr);
+        from.setAttribute("placeholder", "08:00");
+        let to = document.createElement("input");
+        to.setAttribute("type", "text");
+        to.setAttribute("id", "to" + elemCtr);
+        to.setAttribute("placeholder", "09:30");
+        let delButton = document.createElement("button");
+        delButton.setAttribute("id", "delete-day");
+        delButton.innerText = "remove";
+        delButton.addEventListener("click", (event) => {
+            event.target.parentElement.parentElement.remove();
+        });
+        let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
+        tds[0].appendChild(weekday);
+        tds[1].appendChild(from);
+        tds[2].appendChild(to);
+        tds[3].appendChild(delButton);
+        tr.appendChild(tds[0]);
+        tr.appendChild(tds[1]);
+        tr.appendChild(tds[2]);
+        tr.appendChild(tds[3]);
+        document.getElementById("plan-table").appendChild(tr);
     });
 }
 
@@ -68,6 +116,7 @@ function login() { //test this
     }
     loadDataFromSpecificUser(email, password).then((answer) => { //do will i, dass, wenn nix gefunden worden is, a Json objekt mit argumente "found", "userId" und "username" returned wird.
         if (answer.found) {
+            log("Loggend in, and USER EXISTS");
             //user existiert (mit passwort)
             let newDeviceData = {
                 running: false,
@@ -77,7 +126,9 @@ function login() { //test this
                 loadedUserData: true
             }
             localStorage.setItem("deviceData", JSON.stringify(newDeviceData));
+            showLoggedIn(newDeviceData);
             location.href = "./index.html";
+            initializeLogoutAndDelete();
         } else {
             alert("Email oder Passwort falsch!");
             return;
@@ -93,19 +144,117 @@ function logout() {
         loggedInWithUserId: -1,
         loadedUserData: false,
     }
+    log("LOGOUT!")
     localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
     clearUserData();
+    showLoggedIn(defaultDeviceData);
     location.reload(); //seite neu laden
 }
 
 function signUp() {
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    let email = document.getElementById("email").value;
+    let weight = document.getElementById("weight").value;
+    let size = document.getElementById("size").value;
+    let birthday = document.getElementById("birthday").value;
+    if (!(username && email && email.includes("@") && email.includes(".") && weight && size && birthday)) {
+        alert("Data in fields not right")
+        return;
+    }
+    let data;
+    if (document.getElementById("plan").checked) {
+        data = {
+            userId: -1, //temporär ungültige id, weil i jo ned was wos für a id in da Datenbank nu frei is
+            userName: password,
+            email: email,
+            weight: weight,
+            size: size,
+            birthday: birthday,
+            currentlyTraining: false,
+            usualSessionTime: getSessionTimes()
+        }
+        log(data.usualSessionTime)
+        if (!validateSessionTimes(data.usualSessionTime)) {
+            alert("Days must be real weekdays, times must be real times: xx:xx");
+            return;
+        }
+    } else {
+        data = {
+            userId: -1, //temporär ungültige id, weil i jo ned was wos für a id in da Datenbank nu frei is
+            userName: password,
+            email: email,
+            weight: weight,
+            size: size,
+            birthday: birthday,
+            currentlyTraining: false,
+        }
+    }
+    let completeUserData = {
+        userProperties: data,
+        userSessionData: null,
+        userShortTerm: null,
+        userHighscores: null,
+        userLongTermAverages: null,
+        userSettings: {
+            mode: "lightmode",
+            viewing: {
+                realTimeStats: true,
+                sessionStats: true,
+                longtermStats: true
+            },
+            devMode: false
+        }
+    }
+    createNewUser(completeUserData).then(() => {
+        login();
+    });
+}
+
+function getSessionTimes() {
+    let table = document.getElementById("plan-table");
+    let plan = [];
+    let plantime = [];
+    for (let i = 0; i < table.children.item(0).children.length; i++) {
+        let row = table.children.item(0).children.item(i);
+        console.log(row)
+        if (row.getAttribute("id") != null) {
+            for (let j = 0; j < row.children.length; j++) {
+                let data = row.childNodes.item(j);
+                if (data.nodeName != "#text") plantime.push(data.firstChild.value);
+            }
+            plan.push(plantime);
+            plantime = [];
+        }
+    }
+    return plantime;
+}
+
+function validateSessionTimes(times) {
+    times.forEach((time) => {
+        if (!(
+            time[0] && 
+            (
+                time[0].includes("Montag") || 
+                time[0].includes("Dienstag") || 
+                time[0].includes("Mittwoch") || 
+                time[0].includes("Donnerstag") || 
+                time[0].includes("Freitag") || 
+                time[0].includes("Samstag") || 
+                time[0].includes("Sonntag")
+            ) && 
+            time[1] && 
+            time[2]
+        )) return false;
+    });
+    return true;
 }
 
 function showLoggedIn(deviceData) {
     let loggedInAsDisplay = document.getElementById("currentUser");
-    if (deviceData.loggedIn) {
-        loggedInAsDisplay.innerHTML = "Eingeloggt als: " + deviceData.loggedInAsUser + " <button id='logoutButton'>Logout</button>";
-    } else {
+    if (deviceData.loggedIn && loggedInAsDisplay) {
+        loggedInAsDisplay.innerHTML = deviceData.loggedInAsUser + " <button id='logoutButton'>Logout</button><br><button id='deleteUserButton'>Delete Account</button>";
+    } else if (loggedInAsDisplay) {
         loggedInAsDisplay.innerHTML = "Du bist nicht eingeloggt. <a href='./login.html'>Login</a> <br>Du hast noch keinen Account? <a href='./signup.html'>Signup</a>";
     }
 }
@@ -124,7 +273,7 @@ function setModes(data) {
     document.getElementById("modeStylesheet").href = on ? "./css/light.css" : "./css/dark.css";
     lightSwitch.innerText = on ? "light mode" : "dark mode"
     on = localStorage.getItem("devmode");
-    devModeSwitch.innerText = on ? "devmode" : "usermode";
+    if (devModeSwitch) devModeSwitch.innerText = on ? "devmode" : "usermode";
 }
 
 function loadAndInitializeChecked(settings) {
@@ -252,7 +401,16 @@ function showLongtermData(userdata) {
 }
 
 function getSettingsFromLocalStorage() {
-    return JSON.parse(localStorage.getItem("userSettings"));
+    let settings = JSON.parse(localStorage.getItem("userSettings"));
+    if (settings == null) {
+        log("loading site with default settings...");
+        settings = {
+            mode: "lightmode",
+            viewing: ["nothingToView"],
+            devMode: false
+        }
+    }
+    return settings;
 }
 
 function getDeviceData() {
@@ -348,6 +506,34 @@ async function clearUserData() {
     }).then((response) => {
         if (!response.ok) {
             console.error("Fehler beim ausloggen:", response.statusText);
+        }
+    });
+}
+
+async function deleteUser() {
+    return fetch("/api/deleteUser", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(getDeviceData())
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("Fehler beim ausloggen:", response.statusText);
+        }
+    });
+}
+
+async function createNewUser(userData) {
+    return fetch("/api/addUser", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("Fehler beim erstellen eines neuen Users:", response.statusText);
         }
     });
 }

@@ -1,7 +1,7 @@
 function init() {
     let logoutButton = document.getElementById("logoutButton");
     let loginButton = document.getElementById("loginButton");
-    let signUpButton = document.getElementById("signUpButton");
+    let signUpButton = document.getElementById("signupButton");
 
     let devModeButton = document.getElementById("dev");
 
@@ -9,14 +9,17 @@ function init() {
     if (devModeButton) initializeDevMode();
 
     let deviceData = getDeviceData();
+    showLoggedIn(deviceData); //
+
     if (deviceData.loggedIn) {
+        log("LOGGED IN!")
         if (!deviceData.loadedUserData) loadDataFromSpecificUserById(deviceData.loggedInWithUserId).then(answer => {
             if (!answer.found) {
-                alert("userdata might have been deleted or doesn't exist");
+                alert("requested userdata might have been deleted or doesn't exist");
             }
         });
         showLoggedIn(deviceData);
-        if (logoutButton) initializeLogout(); //wenn logout -> login und signup initialisieren // oder eventuell ned?
+        initializeLogoutAndDelete(); //wenn logout -> login und signup initialisieren // oder eventuell ned?
 
         getUserData().then((data) => {
             setModes(data.userSettings); //des im localstorage is nur placeholdermäßig bis zum Einloggen, des wos im json steht is des wos braucht wird
