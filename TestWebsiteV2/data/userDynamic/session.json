@@ -3,7 +3,7 @@
     "averageOxygen": 98,
     "alreadyTrained": [
         {
-            "muscle": "Biceps",
+            "primaryMuscleGroup": "Biceps",
             "exercise": [
                 {
                     "name": "Biceps Curls",

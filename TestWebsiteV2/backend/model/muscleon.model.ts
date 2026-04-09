@@ -1,7 +1,7 @@
 //Alle Zeitangaben: st:min:sec -> 00:00:00
 export interface User {
     userProperties: UserProperties,                         //ois wos ma ned errechnen kann, bzw woraus ma sochn berechnet
-    additionalSessions?: string[][],                        //anders wie usualSessionTimes, san des sessions de ned regelmäßig passieren. (außerhalb von dem Trainingsplan (wenns an gibt)) [[tag, startzeit, endzeit], [...]]
+    additionalSessions?: Time[],                            //anders wie usualSessionTimes, san des sessions de ned regelmäßig passieren. (außerhalb von dem Trainingsplan (wenns an gibt)) [[tag, startzeit, endzeit], [...]]
     userSessionData: UserSessionData | null,                //des san de sessiondaten (werden aus de Shorttermdaten ausgerechnet)
     userShortTerm: UserShortTermData | null,                //des de, de de gaunze Zeit aktuallisiert werden
     userHighscores: UserHighscoreData | null,               //teilweise longterm, teilweise shortterm, san statisch, oba werden laufend aktuallisert auf da Website, falls da User Sekunde für Sekunde sein Highscore bricht oda so.
@@ -19,7 +19,7 @@ export interface UserProperties {
     size: number;
     birthday: string;
     currentlyTraining: boolean
-    usualSessionTimes?: string[][];                         //Eingestellter Trainingsplan, sofern eingestellt [[tag, startzeit, endzeit], [...]]
+    usualSessionTimes?: ExerciseSelection[];                         //Eingestellter Trainingsplan, sofern eingestellt [[tag, startzeit, endzeit], [...]]
 }
 
 export interface UserSessionData {
@@ -67,6 +67,7 @@ export interface DeviceProperties {
     loggedIn: boolean,
     loggedInAsUser?: string,
     loggedInWithUserId?: number,
+    loadedUserData?: boolean,
 }
 
 export interface SupportedExercises {
@@ -75,7 +76,15 @@ export interface SupportedExercises {
 
 export interface ExerciseSelection {
     primaryMuscleGroup: string,                                         // da Muskel, den da User trainieren möchte
-    excercisesForMuscle: Exercise[]
+    excercises: Exercise[],
+    times?: Time
+}
+
+export interface Time {
+    date?: string,
+    weekday: string,
+    fromTime: string,
+    toTime: string
 }
 
 export interface Exercise {

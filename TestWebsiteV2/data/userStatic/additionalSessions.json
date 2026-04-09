@@ -1,8 +1,21 @@
 [
-    [
-        "Dienstag",
-        "30.2.2026",
-        "9:30",
-        "12:30"
-    ]
+    {
+        "primaryMuscleGroup": "Biceps",
+        "exercises": [
+            {
+                "name": "Biceps Curls",
+                "targetedMuscleGroups": ["Biceps"],
+                "equipment": "Dumbbells",
+                "reps": 10,
+                "sets": 3,
+                "weight": 20
+            }
+        ],
+        "times": [
+            "Dienstag",
+            "30.2.2026",
+            "9:30",
+            "12:30"
+        ]
+    }
 ]

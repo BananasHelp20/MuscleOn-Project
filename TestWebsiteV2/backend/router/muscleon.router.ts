@@ -1,6 +1,6 @@
 import express from 'express';
 import {setUserData, gatherSupportedExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData} from '../fileManagement/muscleon.read';
-import { DatabaseAnswer } from '../model/muscleon.model';
+import * as model from '../model/muscleon.model';
 export let muscleRouter = express.Router();
 
 muscleRouter.get('/getUserData', async (req, res) => {
@@ -53,7 +53,7 @@ muscleRouter.post('/setDeviceData', async (req, res) => {
 
 muscleRouter.post('/loadUserData', async (req, res) => {
     // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und username="", found=false}
-    let answer: DatabaseAnswer = {
+    let answer: model.DatabaseAnswer = {
         found: true,
         userId: 0,
         email: "willi@a.at",
@@ -65,7 +65,7 @@ muscleRouter.post('/loadUserData', async (req, res) => {
 
 muscleRouter.post('/loadUserDataById', async (req, res) => {
     // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und username="", found=false}
-    let answer: DatabaseAnswer = {
+    let answer: model.DatabaseAnswer = {
         found: true,
         userId: 0,
         email: "willi@a.at",
@@ -94,13 +94,13 @@ muscleRouter.post('/addUser', async (req, res) => {
 });
 
 muscleRouter.post('/deleteUser', async (req, res) => {
-    let answer: DatabaseAnswer = { //Daten des gelöschten Users zurückgeben
+    let answer: model.DatabaseAnswer = { //Daten des gelöschten Users zurückgeben
         found: true,
         userId: 0,
         email: "willi@a.at",
         username: "William"
     };
-    let userToDelete = req.body.loggedInWithUserId; //notwendige Daten vom Users zur löschung stengan im body drin
+    let userToDelete: model.DeviceProperties = req.body; //notwendige Daten vom Users zur löschung stengan im body drin
     res.statusCode = 200;
     res.send(answer);
 });

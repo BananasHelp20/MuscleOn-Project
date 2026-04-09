@@ -7,21 +7,61 @@
     "size": 175,
     "birthday": "1990-01-01",
     "currentlyTraining": false,
+    "currentlyInExercise": false,
     "usualSessionTimes": [
-        [
-            "Saturday",
-            "9:30",
-            "11:30"
-        ],
-        [
-            "Wednesday",
-            "15:30",
-            "17:00"
-        ],
-        [
-            "Thursday",
-            "13:30",
-            "15:00"
-        ]
+        {
+            "primaryMuscleGroup": "Biceps",
+            "exercises": [
+                {
+                    "name": "Biceps Curls",
+                    "targetedMuscleGroups": ["Biceps"],
+                    "equipment": "Dumbbells",
+                    "reps": 10,
+                    "sets": 3,
+                    "weight": 20
+                }
+            ],
+            "times": [
+                "Saturday",
+                "9:30",
+                "11:30"
+            ]
+        },
+        {
+            "primaryMuscleGroup": "Biceps",
+            "exercises": [
+                {
+                    "name": "Biceps Curls",
+                    "targetedMuscleGroups": ["Biceps"],
+                    "equipment": "Dumbbells",
+                    "reps": 10,
+                    "sets": 3,
+                    "weight": 20
+                }
+            ],
+            "times": [
+                "Wednesday",
+                "15:30",
+                "17:00"
+            ]
+        },
+        {
+            "primaryMuscleGroup": "Biceps",
+            "exercises": [
+                {
+                    "name": "Biceps Curls",
+                    "targetedMuscleGroups": ["Biceps"],
+                    "equipment": "Dumbbells",
+                    "reps": 10,
+                    "sets": 3,
+                    "weight": 20
+                }
+            ],
+            "times": [
+                "Thursday",
+                "13:30",
+                "15:00"
+            ]
+        }
     ]
 }
