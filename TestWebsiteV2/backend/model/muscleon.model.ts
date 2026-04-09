@@ -71,11 +71,11 @@ export interface DeviceProperties {
 }
 
 export interface SupportedExercises {
-    excercises: Exercise[]                                    //do gibts keine reps/sets, weil jo nur de sochn aufgelistet werden
+    excercises: Exercise[]                                  //do gibts keine reps/sets, weil jo nur de sochn aufgelistet werden
 }
 
 export interface ExerciseSelection {
-    primaryMuscleGroup: string,                                         // da Muskel, den da User trainieren möchte
+    primaryMuscleGroup: string,                             // da Muskel, den da User trainieren möchte
     excercises: Exercise[],
     times?: Time
 }
