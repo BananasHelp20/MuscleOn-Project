@@ -21,11 +21,11 @@
                     "weight": 20
                 }
             ],
-            "times": [
-                "Saturday",
-                "9:30",
-                "11:30"
-            ]
+            "times": {
+                "weekday": "Saturday",
+                "fromTime": "9:30",
+                "toTime": "11:30"
+            }
         },
         {
             "primaryMuscleGroup": "Biceps",
@@ -39,11 +39,11 @@
                     "weight": 20
                 }
             ],
-            "times": [
-                "Wednesday",
-                "15:30",
-                "17:00"
-            ]
+            "times": {
+                "weekday": "Thursday",
+                "fromTime": "9:31",
+                "toTime": "11:31"
+            }
         },
         {
             "primaryMuscleGroup": "Biceps",
@@ -57,11 +57,11 @@
                     "weight": 20
                 }
             ],
-            "times": [
-                "Thursday",
-                "13:30",
-                "15:00"
-            ]
+            "times": {
+                "weekday": "Monday",
+                "fromTime": "9:32",
+                "toTime": "11:32"
+            }
         }
     ]
 }

@@ -62,7 +62,7 @@ function initializeSignUp() {
     });
     document.getElementById("plan").addEventListener("click", (event) => {
         document.getElementById("plan-section").hidden = !event.target.checked;
-        document.getElementById("plan-table").innerHTML = '<tr><th>Wochentag</th><th>Von</th><th>Bis</th><th>&emsp;</th></tr><tr id="day1"><td><input type="text" id="weekday1" placeholder="Montag"></td><td><input type="text" id="from1" placeholder="08:00"></td><td><input type="text" id="to1" placeholder="09:30"></td><td><button id="delete-day">remove</button></td></tr>';
+        document.getElementById("plan-table").innerHTML = '<tr><th>Weekday</th><th>From</th><th>To</th><th>&emsp;</th></tr><tr id="day1"><td><input type="text" id="weekday1" placeholder="Monday"></td><td><input type="text" id="from1" placeholder="08:00"></td><td><input type="text" id="to1" placeholder="09:30"></td><td><button id="delete-day">Remove Weekday</button></td></tr>';
         document.getElementById("day1").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
     });
 
@@ -111,12 +111,11 @@ function login() { //test this
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
     if (!email) {
-        alert("Bitte fülle das Email-Feld aus!");
+        alert("Please fill out E-Mail field!");
         return;
     }
     loadDataFromSpecificUser(email, password).then((answer) => { //do will i, dass, wenn nix gefunden worden is, a Json objekt mit argumente "found", "userId" und "username" returned wird.
         if (answer.found) {
-            log("Loggend in, and USER EXISTS");
             //user existiert (mit passwort)
             let newDeviceData = {
                 running: false,
@@ -144,7 +143,6 @@ function logout() {
         loggedInWithUserId: -1,
         loadedUserData: false,
     }
-    log("LOGOUT!")
     localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
     clearUserData();
     showLoggedIn(defaultDeviceData);
@@ -159,7 +157,7 @@ function signUp() {
     let size = document.getElementById("size").value;
     let birthday = document.getElementById("birthday").value;
     if (!(username && email && email.includes("@") && email.includes(".") && weight && size && birthday)) {
-        alert("Data in fields not right")
+        alert("fill in the fields rightously")
         return;
     }
     let data;
@@ -174,7 +172,6 @@ function signUp() {
             currentlyTraining: false,
             usualSessionTime: getSessionTimes()
         }
-        log(data.usualSessionTime)
         if (!validateSessionTimes(data.usualSessionTime)) {
             alert("Days must be real weekdays, times must be real times: xx:xx");
             return;
@@ -217,7 +214,6 @@ function getSessionTimes() {
     let plantime = [];
     for (let i = 0; i < table.children.item(0).children.length; i++) {
         let row = table.children.item(0).children.item(i);
-        console.log(row)
         if (row.getAttribute("id") != null) {
             for (let j = 0; j < row.children.length; j++) {
                 let data = row.childNodes.item(j);
@@ -227,24 +223,33 @@ function getSessionTimes() {
             plantime = [];
         }
     }
-    return plantime;
+
+    let plantimeObjects = []
+    plantime.forEach((time) => {
+        plantimeObjects.push({
+            weekday: time[0],
+            fromTime: time[1],
+            toTime: time[2]
+        });
+    });
+    return plantimeObjects;
 }
 
 function validateSessionTimes(times) {
     times.forEach((time) => {
         if (!(
-            time[0] && 
-            (
-                time[0].includes("Montag") || 
-                time[0].includes("Dienstag") || 
-                time[0].includes("Mittwoch") || 
-                time[0].includes("Donnerstag") || 
-                time[0].includes("Freitag") || 
-                time[0].includes("Samstag") || 
-                time[0].includes("Sonntag")
-            ) && 
-            time[1] && 
-            time[2]
+            time.weekday &&
+            ( 
+                time.weekday.includes("Montag") || 
+                time.weekday.includes("Dienstag") || 
+                time.weekday.includes("Mittwoch") || 
+                time.weekday.includes("Donnerstag") || 
+                time.weekday.includes("Freitag") || 
+                time.weekday.includes("Samstag") || 
+                time.weekday.includes("Sonntag")
+            ) &&
+            time.fromTime &&
+            time.toTime
         )) return false;
     });
     return true;
@@ -255,7 +260,7 @@ function showLoggedIn(deviceData) {
     if (deviceData.loggedIn && loggedInAsDisplay) {
         loggedInAsDisplay.innerHTML = deviceData.loggedInAsUser + " <button id='logoutButton'>Logout</button><br><button id='deleteUserButton'>Delete Account</button>";
     } else if (loggedInAsDisplay) {
-        loggedInAsDisplay.innerHTML = "Du bist nicht eingeloggt. <a href='./login.html'>Login</a> <br>Du hast noch keinen Account? <a href='./signup.html'>Signup</a>";
+        loggedInAsDisplay.innerHTML = "You are logged out. <a href='./login.html'>Login</a> <br>Don't have an account? <a href='./signup.html'>Signup Now</a>";
     }
 }
 
@@ -409,6 +414,8 @@ function getSettingsFromLocalStorage() {
             viewing: ["nothingToView"],
             devMode: false
         }
+    } else {
+        log("loading settings with settings of user \"" + getDeviceData().loggedInAsUser + "\"")
     }
     return settings;
 }
@@ -433,7 +440,7 @@ async function getUserData() {
         if (response.ok) {
             return response.json();
         } else {
-            console.error("Fehler beim Abrufen der Benutzerdaten:", response.statusText);
+            console.error("An error ocured while requesting data from backend:", response.statusText);
         }
     });
 }
@@ -448,12 +455,13 @@ async function setUserSettings(settings) {
         body: JSON.stringify(settings)
     }).then((response) => {
         if (!response.ok) {
-            console.error("Fehler beim aktualliseren der Settings im JSON:", response.statusText);
+            console.error("An error occured while updating settings", response.statusText);
         }
     });
 }
 
 async function loadDataFromSpecificUser(email, password) {
+    log("loading Data from Database into JSON");
     return fetch("/api/loadUserData", {
         method: "POST",
         headers: {
@@ -467,12 +475,13 @@ async function loadDataFromSpecificUser(email, password) {
             localStorage.setItem("deviceData", JSON.stringify(deviceData));
             return response.json();
         } else {
-            console.error("Fehler beim Abrufen der Benutzerdaten:", response.statusText);
+            console.error("An error occured while loading data into JSON:", response.statusText);
         }
     });
 }
 
 async function loadDataFromSpecificUserById(userId) {
+    log("loading Data from Database into JSON");
     return fetch("/api/loadUserDataById", {
         method: "POST",
         headers: {
@@ -486,12 +495,13 @@ async function loadDataFromSpecificUserById(userId) {
             localStorage.setItem("deviceData", JSON.stringify(deviceData));
             return response.json();
         } else {
-            console.error("Fehler beim Abrufen der Benutzerdaten:", response.statusText);
+            console.error("An error occured while loading data into JSON:", response.statusText);
         }
     });
 }
 
 async function clearUserData() {
+    log("saving Data to Database and logging out");
     let defaultSettings = {
         mode: "lightmode",
         viewing: ["nothingToView"],
@@ -505,7 +515,7 @@ async function clearUserData() {
         body: JSON.stringify(defaultSettings)
     }).then((response) => {
         if (!response.ok) {
-            console.error("Fehler beim ausloggen:", response.statusText);
+            console.error("An error occured while logging out:", response.statusText);
         }
     });
 }
@@ -519,7 +529,7 @@ async function deleteUser() {
         body: JSON.stringify(getDeviceData())
     }).then((response) => {
         if (!response.ok) {
-            console.error("Fehler beim ausloggen:", response.statusText);
+            console.error("An error occured while logging out:", response.statusText);
         }
     });
 }
@@ -533,7 +543,7 @@ async function createNewUser(userData) {
         body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
     }).then((response) => {
         if (!response.ok) {
-            console.error("Fehler beim erstellen eines neuen Users:", response.statusText);
+            console.error("An error occured when trying to create a new user:", response.statusText);
         }
     });
 }

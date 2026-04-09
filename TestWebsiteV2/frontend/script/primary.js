@@ -9,10 +9,9 @@ function init() {
     if (devModeButton) initializeDevMode();
 
     let deviceData = getDeviceData();
-    showLoggedIn(deviceData); //
+    showLoggedIn(deviceData);
 
     if (deviceData.loggedIn) {
-        log("LOGGED IN!")
         if (!deviceData.loadedUserData) loadDataFromSpecificUserById(deviceData.loggedInWithUserId).then(answer => {
             if (!answer.found) {
                 alert("requested userdata might have been deleted or doesn't exist");

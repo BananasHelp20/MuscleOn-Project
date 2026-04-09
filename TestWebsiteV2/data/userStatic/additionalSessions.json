@@ -11,11 +11,11 @@
                 "weight": 20
             }
         ],
-        "times": [
-            "Dienstag",
-            "30.2.2026",
-            "9:30",
-            "12:30"
-        ]
+        "times": {
+            "weekday": "Dienstag",
+            "date": "30.2.2026",
+            "fromTime": "9:30",
+            "toTime": "12:30"
+        }
     }
 ]
