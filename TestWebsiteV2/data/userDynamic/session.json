@@ -1,0 +1,19 @@
+{
+    "averageHeartFrequence": 120,
+    "averageOxygen": 98,
+    "alreadyTrained": [
+        {
+            "muscle": "Biceps",
+            "exercise": [
+                {
+                    "name": "Biceps Curls",
+                    "targetedMuscleGroups": ["Biceps"],
+                    "equipment": "Dumbbells",
+                    "reps": 10,
+                    "sets": 3,
+                    "weight": 20
+                }
+            ]
+        }
+    ]
+}

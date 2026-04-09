@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="./Css/style.css">
+    <link rel="stylesheet" type="text/css" href="./Css/light.css" id="modeStylesheet">
+    <script src="./Script/helper.js" defer></script>
+    <script src="./Script/primary.js" defer></script>
+</head>
+<body>
+    <h1>Signup</h1>
+    <label for="username">Benutzername:</label>
+    <input type="text" id="username" name="username"><br><br>
+    <label for="password">Passwort</label>
+    <input type="password" id="password" name="password"><br><br>
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email"><br><br>
+    <label for="weight">Gewicht:</label>
+    <input type="number" id="weight" name="weight"><br><br>
+    <label for="size">Größe:</label>
+    <input type="number" id="size" name="size"><br><br>
+    <label for="birthday">Geburtstag:</label>
+    <input type="date" id="birthday" name="birthday"><br><br>
+    <label for="plan">Wollen Sie einen Trainingsplan?</label>
+    <input type="checkbox" id="plan" name="plan"><br><br>
+    <!--wenn plan geklickt, sollen darunter 7 checkboxen für jeden Tag erscheinen, und für jeden Tag eine Zeitangabe von wann bis wann.-->
+    <div id="plan-section">
+        <button id="add-weekday">Wochentag hinzufügen</button>
+        <table id="plan-table">
+            <tr>
+                <th>Wochentag</th>
+                <th>Von</th>
+                <th>Bis</th>
+                <th>&emsp;</th>
+            </tr>
+            <tr id="day1">
+                <td><input type="text" id="weekday1" placeholder="Montag"></td>
+                <td><input type="text" id="from1" placeholder="08:00"></td>
+                <td><input type="text" id="to1" placeholder="09:30"></td>
+                <td><button id="delete-day">remove</button></td>
+            </tr>
+        </table>
+    </div>
+    <button id="signupButton">Signup</button><br>
+    <a href="./index.html">Go Back</a>
+    <button id="lightSwitch">lightmode</button><br>
+</body>
+</html>

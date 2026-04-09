@@ -1,0 +1,27 @@
+{
+    "userId": 0,
+    "userName": "dev",
+    "password": "",
+    "email": "hallo@test.com",
+    "weight": 70,
+    "size": 175,
+    "birthday": "1990-01-01",
+    "currentlyTraining": false,
+    "usualSessionTimes": [
+        [
+            "Saturday",
+            "9:30",
+            "11:30"
+        ],
+        [
+            "Wednesday",
+            "15:30",
+            "17:00"
+        ],
+        [
+            "Thursday",
+            "13:30",
+            "15:00"
+        ]
+    ]
+}
