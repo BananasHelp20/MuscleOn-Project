@@ -49,6 +49,68 @@ function initializeLogoutAndDelete() {
     }
 }
 
+function sessionButtonCheck() {
+    let deviceProperties = getDeviceData();
+    if (deviceProperties.createdPlan && document.getElementById("createTrainingsPlan")) {
+        document.getElementById("createTrainingsPlan").innerText = "Alter Trainings Plan";
+        document.getElementById("createTrainingsPlan").setAttribute("id", "alterTrainingsPlan");
+    } else if (document.getElementById("alterTrainingsPlan")) {
+        document.getElementById("alterTrainingsPlan").innerText = "Create Trainings Plan";
+        document.getElementById("alterTrainingsPlan").setAttribute("id", "createTrainingsPlan");
+    }
+}
+
+function initializeSession() {
+    if (!document.getElementById("sessionDiv")) {//wenn des session zeigs existiert
+        return;
+    }
+
+    sessionButtonCheck();
+    let startStopSession;
+    if (startStopSession = document.getElementById("startSession")) startStopSession.addEventListener("click", () => {
+        startStopSession.innerText = "End Session";
+        startStopSession.setAttribute("id", "endSession");
+        document.getElementById("id", () => {
+            document.getElementById("sessionDiv").hidden = false;
+        });
+    });
+
+    if (startStopSession = document.getElementById("endSession")) startStopSession.addEventListener("click", () => {
+        startStopSession.innerText = "Start Session";
+        startStopSession.setAttribute("id", "startSession");
+        document.getElementById("id", () => {
+            document.getElementById("sessionDiv").hidden = true;
+        });
+    });
+
+    let startStopExercise;
+    if (startStopExercise = document.getElementById("startExercise")) startStopExercise.addEventListener("click", () => {
+        startStopExercise.innerText = "End Exercise";
+        startStopExercise.setAttribute("id", "endExercise");
+    });
+
+    if (startStopExercise = document.getElementById("endExercise")) startStopExercise.addEventListener("click", () => {
+        startStopExercise.innerText = "Start Exercise";
+        startStopExercise.setAttribute("id", "startExercise");
+    });
+
+    let createAlterSavePlan;
+    if (createAlterSavePlan = document.getElementById("saveTrainingsPlan")) createAlterSavePlan.addEventListener("click", () => {
+        document.getElementById("saveTrainingsPlan").setAttribute("id", "createTrainingsPlan");
+        sessionButtonCheck();
+    });
+
+    if (createAlterSavePlan = document.getElementById("createTrainingsPlan")) createAlterSavePlan.addEventListener("click", () => {
+        
+    });
+
+    if (createAlterSavePlan = document.getElementById("alterTrainingsPlan")) createAlterSavePlan.addEventListener("click", () => {
+
+    });
+
+    initializePlanTable();
+}
+
 function initializeLogin() {
     let loginButton = document.getElementById("loginButton");
     loginButton.addEventListener("click", () => {
@@ -60,7 +122,11 @@ function initializeSignUp() {
     document.getElementById("signupButton").addEventListener("click", () => {
         signUp();
     });
-    document.getElementById("plan").addEventListener("click", (event) => {
+    initializePlanTable();
+}
+
+function initializePlanTable() {
+    if (document.getElementById("plan")) document.getElementById("plan").addEventListener("click", (event) => {
         document.getElementById("plan-section").hidden = !event.target.checked;
         document.getElementById("plan-table").innerHTML = '<tr><th>Weekday</th><th>From</th><th>To</th><th>&emsp;</th></tr><tr id="day1"><td><input type="text" id="weekday1" placeholder="Monday"></td><td><input type="text" id="from1" placeholder="08:00"></td><td><input type="text" id="to1" placeholder="09:30"></td><td><button id="delete-day">Remove Weekday</button></td></tr>';
         document.getElementById("day1").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
