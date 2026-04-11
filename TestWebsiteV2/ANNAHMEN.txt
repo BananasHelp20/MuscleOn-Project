@@ -1,0 +1,7 @@
+ma klickt auf Start Session, dann wird eine Session gestarted, das heißt, die erste Definierte Exercise soll gemacht werden
+Während diese gemacht wird, werden reps und sets gezählt.
+ein set ist zuende, wenn über einen längeren Zeitraum hin (z.B. 10-20 sec) kein rep mehr gemacht wurde, und das rep ziel erreicht wurde
+der Zähler zählt live die reps mit (überschussreps mit + x (z.B. Ziel von 5 reps, und 2 extra gemacht, Angezeigt wird: 5 + 2))
+die exercise ist zuende, wenn das setziel erreicht wurde, extrasets können nicht gemacht werden.
+dann startet die nächste exercise, bei bedarf kann eine exercise geskippt (zur nächsten aufgabe gehen), oder gestoppt (pause machen) werden.
+eine Session kann frühzeitig beendet werden wenn der user das möchte.

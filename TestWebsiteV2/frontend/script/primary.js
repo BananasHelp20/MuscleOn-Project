@@ -8,10 +8,19 @@ function init() {
     initializeLightSwitch();
     if (devModeButton) initializeDevMode();
 
+    if (document.getElementById("check")) document.getElementById("check").addEventListener("click", () => { //TESTBUTTON
+        let prop = getUserPropertiesFromLocalStorage();
+        prop.currentlyInExercise = !prop.currentlyInExercise;
+        setUserProperties(prop);
+    })
+
     let deviceData = getDeviceData();
     showLoggedIn(deviceData);
+    deviceData.editingPlanSection = false;
+    localStorage.setItem("deviceData", JSON.stringify(deviceData));
 
     if (deviceData.loggedIn) {
+        if (document.getElementById("lockedFromLogin")) document.getElementById("lockedFromLogin").hidden = false;
         if (!deviceData.loadedUserData) loadDataFromSpecificUserById(deviceData.loggedInWithUserId).then(answer => {
             if (!answer.found) {
                 alert("requested userdata might have been deleted or doesn't exist");
@@ -19,6 +28,7 @@ function init() {
         });
         showLoggedIn(deviceData);
         initializeLogoutAndDelete(); //wenn logout -> login und signup initialisieren // oder eventuell ned?
+        initializeSession();
 
         getUserData().then((data) => {
             setModes(data.userSettings); //des im localstorage is nur placeholdermäßig bis zum Einloggen, des wos im json steht is des wos braucht wird
@@ -30,13 +40,15 @@ function init() {
             if (longtermStatsSection || realTimeStatsSection || sessionStatsSection) {
                 setInterval(() => {
                     getUserData().then((userdata) => {
+                        localStorage.setItem("userProperties", JSON.stringify(userdata.userProperties));
                         localStorage.setItem("userSettings", JSON.stringify(userdata.userSettings));
+                        localStorage.setItem("userData", JSON.stringify(userdata));
                         syncModes();
                         showRealTimeData(userdata);
                         showSessionData(userdata);
                         showLongtermData(userdata);
                     });
-                }, 1000);
+                }, interval);
             }
         });
     } else {

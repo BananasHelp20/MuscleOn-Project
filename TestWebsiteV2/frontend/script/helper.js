@@ -1,3 +1,5 @@
+let interval = 250;
+
 function syncModes() {
     if (document.getElementById("dev")) document.getElementById("dev").innerText = getSettingsFromLocalStorage().devMode ? "devmode" : "usermode";
     document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
@@ -21,7 +23,7 @@ function initializeDevMode() {
     let on = getSettingsFromLocalStorage().devMode;
     let devModeSwitch = document.getElementById("dev");
     devModeSwitch.innerText = on ? "devmode" : "usermode";
-    
+
     devModeSwitch.addEventListener("click", () => {
         let settings = getSettingsFromLocalStorage();
         settings.devMode = !settings.devMode;
@@ -51,12 +53,27 @@ function initializeLogoutAndDelete() {
 
 function sessionButtonCheck() {
     let deviceProperties = getDeviceData();
-    if (deviceProperties.createdPlan && document.getElementById("createTrainingsPlan")) {
+    if (getSettingsFromLocalStorage().createdPlan && !deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
         document.getElementById("createTrainingsPlan").innerText = "Alter Trainings Plan";
-        document.getElementById("createTrainingsPlan").setAttribute("id", "alterTrainingsPlan");
-    } else if (document.getElementById("alterTrainingsPlan")) {
-        document.getElementById("alterTrainingsPlan").innerText = "Create Trainings Plan";
-        document.getElementById("alterTrainingsPlan").setAttribute("id", "createTrainingsPlan");
+    } else if (!deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
+        document.getElementById("createTrainingsPlan").innerText = "Create Trainings Plan";
+    } else if (document.getElementById("createTrainingsPlan")) {
+        document.getElementById("createTrainingsPlan").innerText = "Save Trainings Plan";
+    }
+    if (document.getElementById("plan-section")) document.getElementById("plan-section").hidden = !deviceProperties.editingPlanSection;
+
+    if (deviceProperties.inExercise && document.getElementById("startStopExercise")) {
+        document.getElementById("startStopExercise").innerText = "End Exercise";
+    } else if (document.getElementById("startStopExercise")) {
+        document.getElementById("startStopExercise").innerText = "Start Exercise";
+    }
+
+    if (deviceProperties.sessionRunning && document.getElementById("startStopSession")) {
+        document.getElementById("startStopSession").innerText = "End Session";
+        if (document.getElementById("sessionDiv")) document.getElementById("sessionDiv").hidden = false;
+    } else if (document.getElementById("startStopSession")) {
+        document.getElementById("startStopSession").innerText = "Start Session";
+        if (document.getElementById("sessionDiv")) document.getElementById("sessionDiv").hidden = true;
     }
 }
 
@@ -66,48 +83,50 @@ function initializeSession() {
     }
 
     sessionButtonCheck();
-    let startStopSession;
-    if (startStopSession = document.getElementById("startSession")) startStopSession.addEventListener("click", () => {
-        startStopSession.innerText = "End Session";
-        startStopSession.setAttribute("id", "endSession");
-        document.getElementById("id", () => {
-            document.getElementById("sessionDiv").hidden = false;
-        });
-    });
-
-    if (startStopSession = document.getElementById("endSession")) startStopSession.addEventListener("click", () => {
-        startStopSession.innerText = "Start Session";
-        startStopSession.setAttribute("id", "startSession");
-        document.getElementById("id", () => {
-            document.getElementById("sessionDiv").hidden = true;
-        });
-    });
-
-    let startStopExercise;
-    if (startStopExercise = document.getElementById("startExercise")) startStopExercise.addEventListener("click", () => {
-        startStopExercise.innerText = "End Exercise";
-        startStopExercise.setAttribute("id", "endExercise");
-    });
-
-    if (startStopExercise = document.getElementById("endExercise")) startStopExercise.addEventListener("click", () => {
-        startStopExercise.innerText = "Start Exercise";
-        startStopExercise.setAttribute("id", "startExercise");
-    });
-
-    let createAlterSavePlan;
-    if (createAlterSavePlan = document.getElementById("saveTrainingsPlan")) createAlterSavePlan.addEventListener("click", () => {
-        document.getElementById("saveTrainingsPlan").setAttribute("id", "createTrainingsPlan");
+    if (document.getElementById("startStopSession")) document.getElementById("startStopSession").addEventListener("click", () => {
+        let device = getDeviceData();
+        device.sessionRunning = !device.sessionRunning;
+        if (device.sessionRunning) {
+            startSession();
+        } else {
+            stopSession();
+        }
+        localStorage.setItem("deviceData", JSON.stringify(device));
         sessionButtonCheck();
     });
 
-    if (createAlterSavePlan = document.getElementById("createTrainingsPlan")) createAlterSavePlan.addEventListener("click", () => {
-        
+    if (document.getElementById("startStopExercise")) document.getElementById("startStopExercise").addEventListener("click", () => {
+        let device = getDeviceData();
+        device.inExercise = !device.inExercise;
+        if (device.inExercise) {
+            startExercise();
+        } else {
+            stopExercise();
+        }
+        localStorage.setItem("deviceData", JSON.stringify(device));
+        sessionButtonCheck();
     });
 
-    if (createAlterSavePlan = document.getElementById("alterTrainingsPlan")) createAlterSavePlan.addEventListener("click", () => {
-
+    if (document.getElementById("createTrainingsPlan")) document.getElementById("createTrainingsPlan").addEventListener("click", () => {
+        let device = getDeviceData();
+        let properties = getUserPropertiesFromLocalStorage();
+        device.editingPlanSection = !device.editingPlanSection;
+        if (!device.editingPlanSection) { //on save
+            let times = getSessionTimes();
+            if (validateSessionTimes(times)) {
+                saveTimes(times);
+                properties.createdPlan = true;
+            }
+        } else { //on activation
+            if (properties.createdPlan) {
+                for (time of properties.usualSessionTimes) {
+                    addWeekday(time);
+                }
+            }
+        }
+        localStorage.setItem("deviceData", JSON.stringify(device));
+        sessionButtonCheck();
     });
-
     initializePlanTable();
 }
 
@@ -125,6 +144,129 @@ function initializeSignUp() {
     initializePlanTable();
 }
 
+function getRealChildren(children) {
+    let real = [];
+    for (i in children) {
+        let child = children.item(i);
+        if (child.nodeName != "#text") real.push(child);
+    }
+    return real;
+}
+
+function getRealChildrenWithId(children) {
+    let real = [];
+    for (i in children) {
+        let child = children.item(i);
+        if (child.nodeName != "#text" && child.getAttribute("id") != null) real.push(child);
+    }
+    return real;
+}
+
+function getMuscleGroups() {
+    return [
+        "Chest",
+        "Upper Back (Traps & Rhomboids)",
+        "Mid-Back (Lats)",
+        "Lower Back (Erector Spinae)",
+        "Shoulders (Deltoids)",
+        "Biceps",
+        "Triceps",
+        "Core (Abs & Obliques)",
+        "Glutes",
+        "Quadriceps",
+        "Hamstrings",
+        "Calves, (Gastrocnemius & Soleus)"
+    ]
+}
+
+function setMuscleGroupOptions(elem) {
+    let muscleGroups = getMuscleGroups();
+    for (let group of muscleGroups) {
+        let option = document.createElement("option");
+        option.text = group;
+        elem.add(option);
+    }
+}
+
+function setExerciseOptions(elem) {
+    let exerciseTypeExercises = [getSupportedExercises(), getUnsupportedExercises(), getUserDefinedExercises()];
+    let exerciseTypes = [document.createElement("optgroup"), document.createElement("optgroup"), document.createElement("optgroup")];
+    exerciseTypes[0].label = "Supported Exercises";
+    exerciseTypes[1].label = "Unsupported Exercises";
+    exerciseTypes[2].label = "Own Exercises";
+    let muscleGroups = getMuscleGroups();
+    for (let exerciseType in exerciseTypes) {
+        if (exerciseType == 1 && exerciseTypeExercises[1].length == 0) return;
+        if (exerciseType == 2 && exerciseTypeExercises[2].length == 0) return;
+        elem.appendChild(exerciseTypes[exerciseType]);
+        for (let group of muscleGroups) {
+            let groupGroup = document.createElement("optgroup");
+            groupGroup.label = group.name;
+            elem.appendChild(groupGroup);
+            for (let exercise of exerciseTypeExercises[exerciseType]) {
+                let option = document.createElement("option");
+                option.text = exercise.name;
+                elem.add(option);
+            }
+        }
+    }
+}
+
+function addWeekday(data) {
+    let weekdayData = (data) ? data.times : null;
+    let elemCtr = document.getElementById("plan-table").children.length;
+    
+    let weekday = document.createElement("input");
+    weekday.setAttribute("type", "text");
+    weekday.setAttribute("id", "weekday" + elemCtr);
+    weekday.setAttribute("placeholder", "Montag");
+    if (weekdayData) weekday.value = weekdayData.weekday;
+
+    let from = document.createElement("input");
+    from.setAttribute("type", "text");
+    from.setAttribute("id", "from" + elemCtr);
+    from.setAttribute("placeholder", "08:00");
+    if (weekdayData) from.value = weekdayData.fromTime;
+
+    let to = document.createElement("input");
+    to.setAttribute("type", "text");
+    to.setAttribute("id", "to" + elemCtr);
+    to.setAttribute("placeholder", "09:30");
+    if (weekdayData) to.value = weekdayData.toTime;
+
+    let primaryMuscleGroup = document.createElement("select");
+    primaryMuscleGroup.setAttribute("name","selectMuscleGroup");
+    primaryMuscleGroup.setAttribute("id", "selectMuscleGroup");
+    setMuscleGroupOptions(primaryMuscleGroup);
+    if (data) primaryMuscleGroup.value = data.primaryMuscleGroup;
+
+    let delButton = document.createElement("button");
+    delButton.setAttribute("id", "delete-day");
+    delButton.innerText = "remove";
+    delButton.addEventListener("click", (event) => {
+        if (document.getElementById("plan-table").children.length > 1) event.target.parentElement.parentElement.remove();
+    });
+
+    let addExercisesButton = document.createElement("button");
+    let removeExercisesButton = document.createElement("button");
+    
+    let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
+    tds[0].appendChild(weekday);
+    tds[1].appendChild(from);
+    tds[2].appendChild(to);
+    tds[3].appendChild(primaryMuscleGroup);
+    tds[4].appendChild(delButton);
+
+    let tr = document.createElement("tr");
+    tr.setAttribute("id", "day" + elemCtr);
+    tr.appendChild(tds[0]);
+    tr.appendChild(tds[1]);
+    tr.appendChild(tds[2]);
+    tr.appendChild(tds[3]);
+    tr.appendChild(tds[4])
+    document.getElementById("plan-table").appendChild(tr);
+}
+
 function initializePlanTable() {
     if (document.getElementById("plan")) document.getElementById("plan").addEventListener("click", (event) => {
         document.getElementById("plan-section").hidden = !event.target.checked;
@@ -132,46 +274,14 @@ function initializePlanTable() {
         document.getElementById("day1").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
     });
 
-    document.getElementById("delete-day").addEventListener("click", (event) => {
-        event.target.parentElement.parentElement.remove();
+    if (document.getElementById("delete-day")) document.getElementById("delete-day").addEventListener("click", (event) => {
+        if (document.getElementById("plan-table").children.length > 1) event.target.parentElement.parentElement.remove();
     });
 
-    document.getElementById("add-weekday").addEventListener("click", () => {
-        let tr = document.createElement("tr");
-        let elemCtr = document.getElementById("plan-table").childNodes.length;
-        if (elemCtr > 7) return; //abbrechen wenn scho 7 tage hinzugefügt worden sind, 8 tage in da woche san jetzt ned so reallistisch
-        tr.setAttribute("id", "day" + elemCtr);
-        let weekday = document.createElement("input");
-        weekday.setAttribute("type", "text");
-        weekday.setAttribute("id", "weekday" + elemCtr);
-        weekday.setAttribute("placeholder", "Montag");
-        let from = document.createElement("input");
-        from.setAttribute("type", "text");
-        from.setAttribute("id", "from" + elemCtr);
-        from.setAttribute("placeholder", "08:00");
-        let to = document.createElement("input");
-        to.setAttribute("type", "text");
-        to.setAttribute("id", "to" + elemCtr);
-        to.setAttribute("placeholder", "09:30");
-        let delButton = document.createElement("button");
-        delButton.setAttribute("id", "delete-day");
-        delButton.innerText = "remove";
-        delButton.addEventListener("click", (event) => {
-            event.target.parentElement.parentElement.remove();
-        });
-        let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
-        tds[0].appendChild(weekday);
-        tds[1].appendChild(from);
-        tds[2].appendChild(to);
-        tds[3].appendChild(delButton);
-        tr.appendChild(tds[0]);
-        tr.appendChild(tds[1]);
-        tr.appendChild(tds[2]);
-        tr.appendChild(tds[3]);
-        document.getElementById("plan-table").appendChild(tr);
+    if (document.getElementById("add-weekday")) document.getElementById("add-weekday").addEventListener("click", () => {
+        addWeekday(null);
     });
 }
-
 
 function login() { //test this
     let email = document.getElementById("email").value;
@@ -188,7 +298,10 @@ function login() { //test this
                 loggedIn: true,
                 loggedInAsUser: answer.username,
                 loggedInWithUserId: answer.userId,
-                loadedUserData: true
+                loadedUserData: true,
+                sessionRunning: false,
+                inExercise: false,
+                editingPlanSection: false
             }
             localStorage.setItem("deviceData", JSON.stringify(newDeviceData));
             showLoggedIn(newDeviceData);
@@ -208,6 +321,9 @@ function logout() {
         loggedInAsUser: "",
         loggedInWithUserId: -1,
         loadedUserData: false,
+        sessionRunning: false,
+        inExercise: false,
+        editingPlanSection: false
     }
     localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
     clearUserData();
@@ -227,6 +343,7 @@ function signUp() {
         return;
     }
     let data;
+    let createdPlan = false;
     if (document.getElementById("plan").checked) {
         data = {
             userId: -1, //temporär ungültige id, weil i jo ned was wos für a id in da Datenbank nu frei is
@@ -238,6 +355,7 @@ function signUp() {
             currentlyTraining: false,
             usualSessionTime: getSessionTimes()
         }
+        createdPlan = true;
         if (!validateSessionTimes(data.usualSessionTime)) {
             alert("Days must be real weekdays, times must be real times: xx:xx");
             return;
@@ -266,6 +384,7 @@ function signUp() {
                 sessionStats: true,
                 longtermStats: true
             },
+            createdPlan: createdPlan,
             devMode: false
         }
     }
@@ -276,22 +395,20 @@ function signUp() {
 
 function getSessionTimes() {
     let table = document.getElementById("plan-table");
-    let plan = [];
+    let plan = []
     let plantime = [];
-    for (let i = 0; i < table.children.item(0).children.length; i++) {
-        let row = table.children.item(0).children.item(i);
-        if (row.getAttribute("id") != null) {
-            for (let j = 0; j < row.children.length; j++) {
-                let data = row.childNodes.item(j);
-                if (data.nodeName != "#text") plantime.push(data.firstChild.value);
+    for (let i = 0; i < table.children.length; i++) {
+        for (let j = 0; j < table.children.item(i).children.length; j++) {
+            let row = table.children.item(i).children.item(j).children.item(0);
+            if (row.getAttribute("id") != null && row.getAttribute("type") != null) {
+                plantime.push(row.value);
             }
-            plan.push(plantime);
-            plantime = [];
         }
+        plan.push(plantime);
+        plantime = [];
     }
-
-    let plantimeObjects = []
-    plantime.forEach((time) => {
+    let plantimeObjects = [];
+    plan.forEach((time) => {
         plantimeObjects.push({
             weekday: time[0],
             fromTime: time[1],
@@ -302,22 +419,32 @@ function getSessionTimes() {
 }
 
 function validateSessionTimes(times) {
-    times.forEach((time) => {
+    if (times.length == 0) return false;
+    for (index in times) {
+        let time = times[index]
         if (!(
             time.weekday &&
-            ( 
-                time.weekday.includes("Montag") || 
-                time.weekday.includes("Dienstag") || 
-                time.weekday.includes("Mittwoch") || 
-                time.weekday.includes("Donnerstag") || 
-                time.weekday.includes("Freitag") || 
-                time.weekday.includes("Samstag") || 
-                time.weekday.includes("Sonntag")
+            (
+                time.weekday == "Montag" || "Monday" ||
+                time.weekday == "Dienstag" || "Tuesday" ||
+                time.weekday == "Mittwoch" || "Wednesday" ||
+                time.weekday == "Donnerstag" || "Thursday" ||
+                time.weekday == "Freitag" || "Friday" ||
+                time.weekday == "Samstag" || "Saturday" ||
+                time.weekday == "Sonntag" || "Sunday"
             ) &&
             time.fromTime &&
-            time.toTime
-        )) return false;
-    });
+            (
+                time.fromTime.length == 5 || time.fromTime.length == 4
+            ) &&
+            time.toTime &&
+            (
+                time.toTime.length == 5 || time.toTime.length == 4
+            )
+        )) {
+            return false
+        };
+    };
     return true;
 }
 
@@ -459,7 +586,7 @@ function showLongtermData(userdata) {
     maxHeartRateDisplay.innerText = userdata.userHighscores.maxHeartRate + " bpm";
     averageTimeTrainedDisplay.innerText = userdata.userLongTermAverages.averageTimeTrained + " Minuten";
     averageHeartFrequenceDisplay.innerText = userdata.userLongTermAverages.averageHeartFrequence + " bpm";
-    averageOxygenDisplay.innerText =  userdata.userLongTermAverages.averageOxygen + " %";
+    averageOxygenDisplay.innerText = userdata.userLongTermAverages.averageOxygen + " %";
     averageMuscleUsageInPercentDisplay.innerText = userdata.userLongTermAverages.averageMuscleUsageInPercent + " %";
     weeklyBurnedCaloriesDisplay.innerText = userdata.userLongTermAverages.weeklyBurnedCalories + " kcal";
     monthlyStrengthIncreaseDisplay.innerText = userdata.userLongTermAverages.monthlyStrengthIncrease + " %";
@@ -469,6 +596,20 @@ function showLongtermData(userdata) {
 
     document.getElementById("viewingLongterm").checked = userdata.userSettings.viewing.longtermStats;
     document.getElementById("staticDiv").hidden = !userdata.userSettings.viewing.longtermStats;
+}
+
+function getUserDataFromLocalStorage() {
+    return JSON.parse(localStorage.getItem("userData"));
+}
+
+function getUserPropertiesFromLocalStorage() {
+    let properties = JSON.parse(localStorage.getItem("userProperties"));
+    if (properties == null) {
+        alert("userproperties are NULL!");
+    } else {
+        //log("loading settings of user \"" + getDeviceData().loggedInAsUser + "\"")
+    }
+    return properties;
 }
 
 function getSettingsFromLocalStorage() {
@@ -481,7 +622,7 @@ function getSettingsFromLocalStorage() {
             devMode: false
         }
     } else {
-        log("loading settings with settings of user \"" + getDeviceData().loggedInAsUser + "\"")
+        //log("loading settings of user \"" + getDeviceData().loggedInAsUser + "\"")
     }
     return settings;
 }
@@ -493,6 +634,9 @@ function getDeviceData() {
         loggedInAsUser: "",
         loggedInWithUserId: -1,
         loadedUserData: false,
+        sessionRunning: false,
+        inExercise: false,
+        editingPlanSection: false
     };
 }
 
@@ -522,6 +666,21 @@ async function setUserSettings(settings) {
     }).then((response) => {
         if (!response.ok) {
             console.error("An error occured while updating settings", response.statusText);
+        }
+    });
+}
+
+async function setUserProperties(properties) {
+    localStorage.setItem("userProperties", JSON.stringify(properties));
+    return fetch("/api/setUserProperties", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(properties)
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured while updating user properties", response.statusText);
         }
     });
 }
@@ -610,6 +769,136 @@ async function createNewUser(userData) {
     }).then((response) => {
         if (!response.ok) {
             console.error("An error occured when trying to create a new user:", response.statusText);
+        }
+    });
+}
+
+async function startSession() {
+    return fetch("/api/session/start", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to create a new user:", response.statusText);
+        }
+    });
+}
+
+async function stopSession() {
+    return fetch("/api/session/stop", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to create a new user:", response.statusText);
+        }
+    });
+}
+
+async function startExercise() {
+    return fetch("/api/exercise/start", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to create a new user:", response.statusText);
+        }
+    });
+}
+
+async function stopExercise() {
+    return fetch("/api/exercise/stop", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to create a new user:", response.statusText);
+        }
+    });
+}
+
+async function saveTimes(times) {
+    return fetch("/api/saveTimes", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(times) //userid muss von der Datenbank verliehen werden
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to alter or create the trainingsplan:", response.statusText);
+        }
+    });
+}
+
+async function getAllExercises() {
+    return fetch("/api/getExercises/all", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error("An error ocured while requesting data from backend:", response.statusText);
+        }
+    });
+}
+
+async function getSupportedExercises() {
+    return fetch("/api/getExercises/supported", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error("An error ocured while requesting data from backend:", response.statusText);
+        }
+    });
+}
+
+async function getUnsupportedExercises() {
+    return fetch("/api/getExercises/unsupported", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error("An error ocured while requesting data from backend:", response.statusText);
+        }
+    });
+}
+
+async function getUserDefinedExercises() {
+    return fetch("/api/getExercises/user", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error("An error ocured while requesting data from backend:", response.statusText);
         }
     });
 }

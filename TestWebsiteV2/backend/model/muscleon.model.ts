@@ -19,6 +19,7 @@ export interface UserProperties {
     size: number;
     birthday: string;
     currentlyTraining: boolean
+    createdPlan: boolean;
     usualSessionTimes?: ExerciseSelection[];                         //Eingestellter Trainingsplan, sofern eingestellt [[tag, startzeit, endzeit], [...]]
 }
 

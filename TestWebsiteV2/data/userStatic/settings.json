@@ -1,9 +1,9 @@
 {
   "mode": "darkmode",
   "viewing": {
-    "realTimeStats": true,
-    "sessionStats": true,
-    "longtermStats": true
+    "realTimeStats": false,
+    "sessionStats": false,
+    "longtermStats": false
   },
   "devMode": false
 }

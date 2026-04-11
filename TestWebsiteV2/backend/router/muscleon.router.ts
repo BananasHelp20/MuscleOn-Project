@@ -1,5 +1,5 @@
 import express from 'express';
-import {setUserData, gatherSupportedExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData} from '../fileManagement/muscleon.read';
+import {setUserData, gatherSupportedExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties} from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 export let muscleRouter = express.Router();
 
@@ -12,7 +12,7 @@ muscleRouter.get('/getSupportedExercises', async (req, res) => {
     res.statusCode = 200;
     res.send(await gatherSupportedExercises());
 });
-
+6
 muscleRouter.get('/getDeviceData', async (req, res) => {
     res.statusCode = 200;
     res.send(await gatherDeviceData());
@@ -38,6 +38,17 @@ muscleRouter.post('/setUserSettings', async (req, res) => {
     });
     res.statusCode = 200;
     res.send({ message: "User settings updated successfully" });
+});
+
+muscleRouter.post('/setUserProperties', async (req, res) => {
+    await setUserProperties(req.body).catch((err) => {
+        console.error("Error writing user propertis:", err);
+        res.statusCode = 500;
+        res.send({ message: "Failed to update user properties" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "User properties updated successfully" });
 });
 
 muscleRouter.post('/setDeviceData', async (req, res) => {

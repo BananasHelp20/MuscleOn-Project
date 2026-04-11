@@ -1,0 +1,12 @@
+[
+    {
+        "userIdCreated": 1,
+        "name": "Backflip",
+        "description": "DO A FLIP!",
+        "targetetMuscleGroups": [
+            "Body"
+        ],
+        "equipment": "None",
+        "public": true
+    }
+]

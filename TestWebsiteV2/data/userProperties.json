@@ -1,67 +1,74 @@
 {
-    "userId": 0,
-    "userName": "dev",
-    "password": "",
-    "email": "hallo@test.com",
-    "weight": 70,
-    "size": 175,
-    "birthday": "1990-01-01",
-    "currentlyTraining": false,
-    "currentlyInExercise": false,
-    "usualSessionTimes": [
+  "userId": 0,
+  "userName": "dev",
+  "password": "",
+  "email": "hallo@test.com",
+  "weight": 70,
+  "size": 175,
+  "birthday": "1990-01-01",
+  "currentlyTraining": false,
+  "currentlyInExercise": false,
+  "createdPlan": true,
+  "usualSessionTimes": [
+    {
+      "primaryMuscleGroup": "Biceps",
+      "exercises": [
         {
-            "primaryMuscleGroup": "Biceps",
-            "exercises": [
-                {
-                    "name": "Biceps Curls",
-                    "targetedMuscleGroups": ["Biceps"],
-                    "equipment": "Dumbbells",
-                    "reps": 10,
-                    "sets": 3,
-                    "weight": 20
-                }
-            ],
-            "times": {
-                "weekday": "Saturday",
-                "fromTime": "9:30",
-                "toTime": "11:30"
-            }
-        },
-        {
-            "primaryMuscleGroup": "Biceps",
-            "exercises": [
-                {
-                    "name": "Biceps Curls",
-                    "targetedMuscleGroups": ["Biceps"],
-                    "equipment": "Dumbbells",
-                    "reps": 10,
-                    "sets": 3,
-                    "weight": 20
-                }
-            ],
-            "times": {
-                "weekday": "Thursday",
-                "fromTime": "9:31",
-                "toTime": "11:31"
-            }
-        },
-        {
-            "primaryMuscleGroup": "Biceps",
-            "exercises": [
-                {
-                    "name": "Biceps Curls",
-                    "targetedMuscleGroups": ["Biceps"],
-                    "equipment": "Dumbbells",
-                    "reps": 10,
-                    "sets": 3,
-                    "weight": 20
-                }
-            ],
-            "times": {
-                "weekday": "Monday",
-                "fromTime": "9:32",
-                "toTime": "11:32"
-            }
+          "name": "Biceps Curls",
+          "targetedMuscleGroups": [
+            "Biceps"
+          ],
+          "equipment": "Dumbbells",
+          "reps": 10,
+          "sets": 3,
+          "weight": 20
         }
-    ]
+      ],
+      "times": {
+        "weekday": "Saturday",
+        "fromTime": "9:30",
+        "toTime": "11:30"
+      }
+    },
+    {
+      "primaryMuscleGroup": "Biceps",
+      "exercises": [
+        {
+          "name": "Biceps Curls",
+          "targetedMuscleGroups": [
+            "Biceps"
+          ],
+          "equipment": "Dumbbells",
+          "reps": 10,
+          "sets": 3,
+          "weight": 20
+        }
+      ],
+      "times": {
+        "weekday": "Thursday",
+        "fromTime": "9:31",
+        "toTime": "11:31"
+      }
+    },
+    {
+      "primaryMuscleGroup": "Triceps",
+      "exercises": [
+        {
+          "name": "Biceps Curls",
+          "targetedMuscleGroups": [
+            "Biceps"
+          ],
+          "equipment": "Dumbbells",
+          "reps": 10,
+          "sets": 3,
+          "weight": 20
+        }
+      ],
+      "times": {
+        "weekday": "Monday",
+        "fromTime": "9:32",
+        "toTime": "11:32"
+      }
+    }
+  ]
 }
