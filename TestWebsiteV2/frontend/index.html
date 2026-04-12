@@ -17,9 +17,9 @@
     <input type="checkbox" id="viewingRealTime">real-time<br>
     <input type="checkbox" id="viewingLongterm">long-term<br>
     <button id="lightSwitch">lightmode</button><br>
-    <button id="check">CHECK</button>
     <div id="lockedFromLogin" hidden>
         <button id="dev">devmode</button><br>
+        <button id="check">CHECK</button><br id="checkbr">
         <button id="startStopSession">Start Session</button><br>
         <div id="sessionDiv" hidden>
             Current Exercise: <span id="currentExercise">Curls</span><br>
@@ -28,17 +28,38 @@
         <button id="createTrainingsPlan">Create Trainings Plan</button> <!--oder wenn ma scho an hat: "alterTrainingsPlan"-->
         <div id="plan-section" hidden>
             <button id="add-weekday">Wochentag hinzufügen</button>
+            <button id="add-exercises">Add exercises</button>
             <table>
                 <thead>
                     <tr>
-                        <th>Wochentag</th>
-                        <th>Von</th>
-                        <th>Bis</th>
-                        <th>Muskelgruppe</th>
+                        <th>Day of Week</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Muscle Group</th>
+                        <th>&emsp;</th>
                         <th>&emsp;</th>
                     </tr>
                 </thead>
                 <tbody id="plan-table">
+                    <!-- <tr id="day1">
+                        <td><input type="text" id="weekday1" placeholder="Montag"></td>
+                        <td><input type="text" id="from1" placeholder="08:00"></td>
+                        <td><input type="text" id="to1" placeholder="09:30"></td>
+                        <td><button id="delete-day">remove</button></td>
+                    </tr> -->
+                </tbody>
+            </table>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th>Required Equipment</th>
+                        <th>Reps</th>
+                        <th>Sets</th>
+                        <th>Weight</th>
+                    </tr>
+                </thead>
+                <tbody id="exercise-table">
                     <!-- <tr id="day1">
                         <td><input type="text" id="weekday1" placeholder="Montag"></td>
                         <td><input type="text" id="from1" placeholder="08:00"></td>

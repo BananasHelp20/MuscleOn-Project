@@ -3,126 +3,147 @@
         "name": "Push-Up",
         "description": "A bodyweight exercise that primarily targets the chest, shoulders, and triceps.",
         "targetetMuscleGroups": ["Chest", "Shoulders", "Triceps"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Squat",
         "description": "A lower body exercise that targets the quadriceps, hamstrings, glutes, and calves.",
         "targetetMuscleGroups": ["Quadriceps", "Hamstrings", "Glutes", "Calves"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Plank",
         "description": "An isometric core exercise that strengthens the abdominal muscles and lower back.",
         "targetetMuscleGroups": ["Abdominals", "Lower Back"],
-        "equipment": "None"
+        "equipment": false,
+        "weight": false
     },
     {
         "name": "Bicep Curl",
         "description": "An isolation exercise that targets the biceps muscles in the upper arm.",
         "targetetMuscleGroups": ["Biceps"],
-        "equipment": "Dumbbells"
+        "equipment": "Dumbbells",
+        "weight": false
     },
     {
         "name": "Lunges",
         "description": "A lower body exercise that targets the quadriceps, hamstrings, glutes, and calves.",
         "targetetMuscleGroups": ["Quadriceps", "Hamstrings", "Glutes", "Calves"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Deadlift",
         "description": "A compound exercise that targets the lower back, glutes, hamstrings, and core.",
         "targetetMuscleGroups": ["Lower Back", "Glutes", "Hamstrings", "Core"],
-        "equipment": "Barbell"
+        "equipment": "Barbell",
+        "weight": true
     },
     {
         "name": "Bench Press",
         "description": "A compound exercise that primarily targets the chest, shoulders, and triceps.",
         "targetetMuscleGroups": ["Chest", "Shoulders", "Triceps"],
-        "equipment": "Barbell or Dumbbells"
+        "equipment": "Barbell or Dumbbells",
+        "weight": true
     },
     {
         "name": "Pull-Up",
         "description": "An upper body exercise that targets the back, shoulders, and biceps.",
         "targetetMuscleGroups": ["Back", "Shoulders", "Biceps"],
-        "equipment": "Pull-Up Bar"
+        "equipment": "Pull-Up Bar",
+        "weight": false
     },
     {
         "name": "Shoulder Press",
         "description": "An upper body exercise that targets the shoulders and triceps.",
         "targetetMuscleGroups": ["Shoulders", "Triceps"],
-        "equipment": "Dumbbells or Barbell"
+        "equipment": "Dumbbells or Barbell",
+        "weight": false
     },
     {
         "name": "Leg Press",
         "description": "A lower body exercise that targets the quadriceps, hamstrings, and glutes.",
         "targetetMuscleGroups": ["Quadriceps", "Hamstrings", "Glutes"],
-        "equipment": "Leg Press Machine"
+        "equipment": "Leg Press Machine",
+        "weight": true
     },
     {
         "name": "Tricep Dips",
         "description": "An upper body exercise that targets the triceps muscles.",
         "targetetMuscleGroups": ["Triceps"],
-        "equipment": "Dip Bars or Bench"
+        "equipment": "Dip Bars or Bench",
+        "weight": false
     },
     {
         "name": "Russian Twist",
         "description": "A core exercise that targets the oblique muscles.",
         "targetetMuscleGroups": ["Obliques"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Mountain Climbers",
         "description": "A full-body exercise that targets the core, shoulders, and legs.",
         "targetetMuscleGroups": ["Core", "Shoulders", "Legs"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Burpees",
         "description": "A full-body exercise that combines a squat, push-up, and jump.",
         "targetetMuscleGroups": ["Full Body"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Jumping Jacks",
         "description": "A cardiovascular exercise that targets the whole body.",
         "targetetMuscleGroups": ["Full Body"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Sit-Ups",
         "description": "A core exercise that targets the abdominal muscles.",
         "targetetMuscleGroups": ["Abdominals"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Leg Raises",
         "description": "A core exercise that targets the lower abdominal muscles.",
         "targetetMuscleGroups": ["Lower Abdominals"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Calf Raises",
         "description": "An isolation exercise that targets the calf muscles.",
         "targetetMuscleGroups": ["Calves"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Glute Bridge",
         "description": "A lower body exercise that targets the glutes and hamstrings.",
         "targetetMuscleGroups": ["Glutes", "Hamstrings"],
-        "equipment": "None"
+        "equipment": "None",
+        "weight": false
     },
     {
         "name": "Dumbbell Rows",
         "description": "An upper body exercise that targets the back muscles.",
         "targetetMuscleGroups": ["Back"],
-        "equipment": "Dumbbells"
+        "equipment": "Dumbbells",
+        "weight": true
     },
     {
         "name": "Kettlebell Swings",
         "description": "A full-body exercise that targets the glutes, hamstrings, and core.",
         "targetetMuscleGroups": ["Glutes", "Hamstrings", "Core"],
-        "equipment": "Kettlebell"
+        "equipment": "Kettlebell",
+        "weight": true
     }
 ]

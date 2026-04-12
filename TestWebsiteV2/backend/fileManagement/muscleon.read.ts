@@ -26,6 +26,11 @@ export async function gatherSupportedExercises() {
     return supportedExercises;
 }
 
+export async function gatherUserPropertiess() {
+    let userProperties: model.UserProperties = await readFile("./data/userProperties.json", 'utf-8').then((data) => JSON.parse(data));
+    return userProperties;
+}
+
 export async function setUserData(userData: model.User) {
     await Promise.all([
         writeFile("./data/userProperties.json", JSON.stringify(userData.userProperties, null, 2)),
@@ -48,6 +53,24 @@ export async function setUserProperties(userProperties: model.UserProperties) {
 
 export async function setDeviceData(deviceData: model.DeviceProperties) {
     await writeFile("./data/device/currentProperties.json", JSON.stringify(deviceData, null, 2));
+}
+
+export async function saveTrainingsPlan(times: model.ExerciseSelection[]) {
+    let userProperties: model.UserProperties = await gatherUserPropertiess();
+    let newUserProperties: model.UserProperties = {
+        userId: userProperties.userId,
+        userName: userProperties.userName,
+        password: userProperties.password,
+        email: userProperties.email,
+        weight: userProperties.weight,
+        size: userProperties.size,
+        birthday: userProperties.birthday,
+        currentlyTraining: userProperties.currentlyTraining,
+        createdPlan: userProperties.createdPlan,
+        currentlyInExercise: userProperties.currentlyInExercise,
+        usualSessionTimes: times 
+    };
+    await writeFile("./data/userProperties.json", JSON.stringify(newUserProperties, null, 2));
 }
 
 export async function clearUserData(userSettings: model.UserSettings) {

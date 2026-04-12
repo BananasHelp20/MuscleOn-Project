@@ -5,6 +5,7 @@
         "description": "DO A FLIP!",
         "targetetMuscleGroups": ["Body"],
         "equipment": "None",
-        "public": true
+        "public": true,
+        "weight": false
     }
 ]

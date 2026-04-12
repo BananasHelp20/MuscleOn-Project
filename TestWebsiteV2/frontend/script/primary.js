@@ -8,18 +8,16 @@ function init() {
     initializeLightSwitch();
     if (devModeButton) initializeDevMode();
 
-    if (document.getElementById("check")) document.getElementById("check").addEventListener("click", () => { //TESTBUTTON
-        let prop = getUserPropertiesFromLocalStorage();
-        prop.currentlyInExercise = !prop.currentlyInExercise;
-        setUserProperties(prop);
-    })
-
     let deviceData = getDeviceData();
+
     showLoggedIn(deviceData);
     deviceData.editingPlanSection = false;
     localStorage.setItem("deviceData", JSON.stringify(deviceData));
 
     if (deviceData.loggedIn) {
+        if (document.getElementById("check") && getSettingsFromLocalStorage().devMode) document.getElementById("check").addEventListener("click", () => { //TESTBUTTON
+        })
+
         if (document.getElementById("lockedFromLogin")) document.getElementById("lockedFromLogin").hidden = false;
         if (!deviceData.loadedUserData) loadDataFromSpecificUserById(deviceData.loggedInWithUserId).then(answer => {
             if (!answer.found) {

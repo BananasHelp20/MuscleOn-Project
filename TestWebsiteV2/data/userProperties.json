@@ -7,10 +7,11 @@
   "size": 175,
   "birthday": "1990-01-01",
   "currentlyTraining": false,
-  "currentlyInExercise": false,
+  "currentlyInExercise": true,
   "createdPlan": true,
   "usualSessionTimes": [
     {
+      "sessionId": 0,
       "primaryMuscleGroup": "Biceps",
       "exercises": [
         {
@@ -31,6 +32,7 @@
       }
     },
     {
+      "sessionId": 1,
       "primaryMuscleGroup": "Biceps",
       "exercises": [
         {
@@ -51,6 +53,7 @@
       }
     },
     {
+      "sessionId": 2,
       "primaryMuscleGroup": "Triceps",
       "exercises": [
         {

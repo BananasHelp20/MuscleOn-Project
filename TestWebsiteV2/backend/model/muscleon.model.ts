@@ -18,8 +18,9 @@ export interface UserProperties {
     weight: number;
     size: number;
     birthday: string;
-    currentlyTraining: boolean
+    currentlyTraining: boolean;
     createdPlan: boolean;
+    currentlyInExercise: boolean;
     usualSessionTimes?: ExerciseSelection[];                         //Eingestellter Trainingsplan, sofern eingestellt [[tag, startzeit, endzeit], [...]]
 }
 
@@ -76,6 +77,7 @@ export interface SupportedExercises {
 }
 
 export interface ExerciseSelection {
+    sessionId: number,
     primaryMuscleGroup: string,                                         // da Muskel, den da User trainieren möchte
     excercises: Exercise[],
     times?: Time

@@ -1,5 +1,5 @@
 import express from 'express';
-import {setUserData, gatherSupportedExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties} from '../fileManagement/muscleon.read';
+import {setUserData, gatherSupportedExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan} from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 export let muscleRouter = express.Router();
 
@@ -114,4 +114,15 @@ muscleRouter.post('/deleteUser', async (req, res) => {
     let userToDelete: model.DeviceProperties = req.body; //notwendige Daten vom Users zur löschung stengan im body drin
     res.statusCode = 200;
     res.send(answer);
+});
+
+muscleRouter.post('/saveTimesNOPE', async (req, res) => {
+    await saveTrainingsPlan(req.body).catch((err) => {
+        console.error("Error clearing data:", err);
+        res.statusCode = 500;
+        res.send({ message: "Failed to clear data" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "logging out successful!" });
 });

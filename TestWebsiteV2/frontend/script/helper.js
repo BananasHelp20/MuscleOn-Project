@@ -1,9 +1,17 @@
-let interval = 250;
+let interval = 250; //globale Variable für de Aktuallisierung in Millisekunden
 
 function syncModes() {
     if (document.getElementById("dev")) document.getElementById("dev").innerText = getSettingsFromLocalStorage().devMode ? "devmode" : "usermode";
     document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
     document.getElementById("modeStylesheet").href = getSettingsFromLocalStorage().mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
+
+    if (getSettingsFromLocalStorage().devMode && document.getElementById("check")) {
+        document.getElementById("check").hidden = false;
+        document.getElementById("checkbr").hidden = false;
+    } else if (document.getElementById("check")) {
+        document.getElementById("check").hidden = true;
+        document.getElementById("checkbr").hidden = true;
+    }
 }
 
 function initializeLightSwitch() {
@@ -110,17 +118,22 @@ function initializeSession() {
     if (document.getElementById("createTrainingsPlan")) document.getElementById("createTrainingsPlan").addEventListener("click", () => {
         let device = getDeviceData();
         let properties = getUserPropertiesFromLocalStorage();
-        device.editingPlanSection = !device.editingPlanSection;
-        if (!device.editingPlanSection) { //on save
+        if (device.editingPlanSection) { //on trying to save
             let times = getSessionTimes();
             if (validateSessionTimes(times)) {
+                device.editingPlanSection = false;
+                document.getElementById("plan-table").innerHTML = "";
                 saveTimes(times);
                 properties.createdPlan = true;
+            } else {
+                alert("Training days not valid");
             }
         } else { //on activation
+            device.editingPlanSection = true;
             if (properties.createdPlan) {
                 for (time of properties.usualSessionTimes) {
                     addWeekday(time);
+                    // addExercise(time);
                 }
             }
         }
@@ -212,25 +225,44 @@ function setExerciseOptions(elem) {
     }
 }
 
+function getFreeSessionId() {
+    let ids = [];
+    let table = document.getElementById("plan-table");
+    for (i in table.children) {
+        let row = table.children.item(i);
+        ids.push(Number(row.getAttribute("id")));
+    }
+    ids.sort();
+    for (let i = 0; i <= 2000000 && ids.includes(id); i++) {
+        id = i;
+    }
+
+    if (id > 2000000) {
+        alert("you can only have 2,000,000 Sessions! (if you see this, you're absolutely based)");
+        return null;
+    }
+    return id;
+}
+
 function addWeekday(data) {
     let weekdayData = (data) ? data.times : null;
-    let elemCtr = document.getElementById("plan-table").children.length;
+    let sessionId = getFreeSessionId();
     
     let weekday = document.createElement("input");
     weekday.setAttribute("type", "text");
-    weekday.setAttribute("id", "weekday" + elemCtr);
-    weekday.setAttribute("placeholder", "Montag");
+    weekday.setAttribute("id", "weekday" + (data) ? data.sessionId : sessionId);
+    weekday.setAttribute("placeholder", "Monday");
     if (weekdayData) weekday.value = weekdayData.weekday;
 
     let from = document.createElement("input");
     from.setAttribute("type", "text");
-    from.setAttribute("id", "from" + elemCtr);
+    from.setAttribute("id", "from" + (data) ? data.sessionId : sessionId);
     from.setAttribute("placeholder", "08:00");
     if (weekdayData) from.value = weekdayData.fromTime;
 
     let to = document.createElement("input");
     to.setAttribute("type", "text");
-    to.setAttribute("id", "to" + elemCtr);
+    to.setAttribute("id", "to" + (data) ? data.sessionId : sessionId);
     to.setAttribute("placeholder", "09:30");
     if (weekdayData) to.value = weekdayData.toTime;
 
@@ -242,35 +274,88 @@ function addWeekday(data) {
 
     let delButton = document.createElement("button");
     delButton.setAttribute("id", "delete-day");
-    delButton.innerText = "remove";
+    delButton.innerText = "remove day";
     delButton.addEventListener("click", (event) => {
         if (document.getElementById("plan-table").children.length > 1) event.target.parentElement.parentElement.remove();
     });
 
-    let addExercisesButton = document.createElement("button");
-    let removeExercisesButton = document.createElement("button");
+    let removeExercisesForDayButton = document.createElement("button");
+    removeExercisesForDayButton.setAttribute("id", "remove-exercises");
+    removeExercisesForDayButton.innerText = "remove exercises";
+    removeExercisesForDayButton.addEventListener("click", (event) => {
+        if (document.getElementById("exercise-table")) removeExercise(event.target.parentElement.parentElement.getAttribute("id"));
+    });
     
-    let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
+    let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
     tds[0].appendChild(weekday);
     tds[1].appendChild(from);
     tds[2].appendChild(to);
     tds[3].appendChild(primaryMuscleGroup);
     tds[4].appendChild(delButton);
+    tds[5].appendChild(removeExercisesForDayButton)
 
     let tr = document.createElement("tr");
-    tr.setAttribute("id", "day" + elemCtr);
-    tr.appendChild(tds[0]);
-    tr.appendChild(tds[1]);
-    tr.appendChild(tds[2]);
-    tr.appendChild(tds[3]);
-    tr.appendChild(tds[4])
+    tr.setAttribute("id", "" + (data) ? data.sessionId : sessionId);
+    tds.forEach((td) => {
+        tr.appendChild(td);
+    });
     document.getElementById("plan-table").appendChild(tr);
+}
+//TODO: add exercises for each weekday (mapped by table row id)
+
+//parameter data: de bisherigen Sessiondaten, von einem Tag (moch des so, das du beim add exercises button a input host, wost in tag dazuschreibst oda so) mit leerem exercises element (optional))
+function addExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table aus tables mochn, oder dynamisch tables zu an div adden
+    let elemCtr = document.getElementById("plan-table").children.length;
+    let exerciseData = (data) ? data.exercises : null;
+    if (data && !data.exercises) return;
+
+    let day = document.getElementById("plan-table").children.item(elemCtr);
+    let table = getEmptyExerciseTable(data);
+}
+
+function getEmptyExerciseTable(time) {
+    let table = document.createElement("table");
+    let ths = [document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th")]
+
+    ths[0].innerText = "Exercise";
+    ths[1].innerText = "Required Equipment";
+    ths[2].innerText = "Reps";
+    ths[3].innerText = "Sets";
+    ths[4].innerText = "Weight";
+
+    let mainTh = document.createElement("th");
+    mainTh.innerText = "Day: " + time.times.weekday + " from " + time.times.fromTime + " to " + time.times.toTime;
+    mainTh.setAttribute("colspan", ths.length);
+
+    let headerRow = document.createElement("tr");
+    headerRow.appendChild(mainTh);
+
+    let headersRow = document.createElement("tr");
+    ths.forEach((th) => {
+        headersRow.appendChild(th);
+    })
+
+    let thead = document.createElement("thead");
+    thead.appendChild(headerRow);
+    thead.appendChild(headersRow);
+
+    let tbody = document.createElement("tbody");
+    tbody.setAttribute("id", "exercise-table" + time.sessionId);
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+
+    return table;
 }
 
 function initializePlanTable() {
     if (document.getElementById("plan")) document.getElementById("plan").addEventListener("click", (event) => {
         document.getElementById("plan-section").hidden = !event.target.checked;
-        document.getElementById("plan-table").innerHTML = '<tr><th>Weekday</th><th>From</th><th>To</th><th>&emsp;</th></tr><tr id="day1"><td><input type="text" id="weekday1" placeholder="Monday"></td><td><input type="text" id="from1" placeholder="08:00"></td><td><input type="text" id="to1" placeholder="09:30"></td><td><button id="delete-day">Remove Weekday</button></td></tr>';
+        if (document.getElementById("plan-section").hidden) {
+            document.getElementById("plan-table").innerHTML = '';
+        } else {
+            addWeekday(null);
+        }
         document.getElementById("day1").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
     });
 
@@ -394,27 +479,40 @@ function signUp() {
 }
 
 function getSessionTimes() {
+    if (!document.getElementById("plan-table") || !document.getElementById("exercise-table")) return;
+    
     let table = document.getElementById("plan-table");
+    let exerciseTable = document.getElementById("exercise-table");
     let plan = []
     let plantime = [];
+    let primaryMuscleGroups = [];
+    let exercises = [[]];
+
     for (let i = 0; i < table.children.length; i++) {
         for (let j = 0; j < table.children.item(i).children.length; j++) {
             let row = table.children.item(i).children.item(j).children.item(0);
-            if (row.getAttribute("id") != null && row.getAttribute("type") != null) {
+            if (row.getAttribute("id") != null && row.getAttribute("type") != null && row.nodeName != "select") {
                 plantime.push(row.value);
+            } else if (row.getAttribute("id") != null && row.nodeName == "select") {
+                primaryMuscleGroups.push(row.value);
             }
         }
         plan.push(plantime);
         plantime = [];
     }
     let plantimeObjects = [];
-    plan.forEach((time) => {
+    for (index in plan) {
+        let time = plan[i];
         plantimeObjects.push({
-            weekday: time[0],
-            fromTime: time[1],
-            toTime: time[2]
+            primaryMuscleGroup: primaryMuscleGroups[i],
+            exercises: exercises[i],
+            times: {
+                weekday: time[0],
+                fromTime: time[1],
+                toTime: time[2]
+            }
         });
-    });
+    }
     return plantimeObjects;
 }
 
