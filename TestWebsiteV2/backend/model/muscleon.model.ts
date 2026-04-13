@@ -90,15 +90,23 @@ export interface Time {
     toTime: string
 }
 
-export interface Exercise {
+/**
+ * Ok, so des Interface Exercise kann folgendermaßen benutzt werden:
+ * - Exercises aufzählen (name, description, equipment, (userNameCreated, userIdCreated))
+ * - Exercises anlegen (name, description, equipment, public, targetedMuscleGroups, (unc und uic kommen automatisch))
+ * - Exercises definieren (im trainingsplan) (name, targetedMuscleGroups, equipment, reps, sets, (weight))#
+ * und i glaub nu anders iwie, musst da bissi durchlesen srry
+ */
+export interface Exercise {                                 //a interface, wos quasi überall eingesetzt werden kann, je noch dem wos eingesetzt wird, werden unterschiedliche properties benötigt
     name: string
     description?: string,
-    targetetMuscleGroups?: string[],                        //gaunz simpel: rechter arm, linker arm, rücken, bauchmuskeln, beine...
+    targetedMuscleGroups?: string[],                        //gaunz simpel: rechter arm, linker arm, rücken, bauchmuskeln, beine...
     equipment?: string[],                                   //nur falls ma de Übung mit am Gerät oda sowos macht, sonst is des irrelevant
     reps?: number,
     sets?: number,
     weight?: number,                                        //nur falls ma de Übung mit Gewicht macht, sonst is des irrelevant
-    userIdCreated?: number,                                 //nur wenn de übung vom User defined wordn is
+    userNameCreated?: string,                               //wichtig für usercredit
+    userIdCreated?: number,                                 //nur wenn de übung vom User defined wordn is (tendentiell wird userNameCreated a braucht wenn des braucht wird)
     public?: boolean,                                       //wenn da user will, das de custom übung von andere ersichtlich is
 }
 

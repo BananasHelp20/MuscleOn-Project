@@ -1,5 +1,5 @@
 import express from 'express';
-import {setUserData, gatherSupportedExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan} from '../fileManagement/muscleon.read';
+import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan} from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 export let muscleRouter = express.Router();
 
@@ -125,4 +125,20 @@ muscleRouter.post('/saveTimesNOPE', async (req, res) => {
     });
     res.statusCode = 200;
     res.send({ message: "logging out successful!" });
+});
+
+
+muscleRouter.get('/getExercises/supported', async (req, res) => {
+    res.statusCode = 200;
+    res.send(await gatherSupportedExercises());
+});
+
+muscleRouter.get('/getExercises/unsupported', async (req, res) => {
+    res.statusCode = 200;
+    res.send(await gatherUnsupportedExercises());
+});
+
+muscleRouter.get('/getExercises/user', async (req, res) => {
+    res.statusCode = 200;
+    res.send(await gatherUserExercises());
 });

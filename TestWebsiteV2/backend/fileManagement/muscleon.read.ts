@@ -26,6 +26,16 @@ export async function gatherSupportedExercises() {
     return supportedExercises;
 }
 
+export async function gatherUnsupportedExercises() {
+    let supportedExercises: model.Exercise[] = await readFile("./data/device/unsupportedExercises.json", 'utf-8').then((data) => JSON.parse(data));
+    return supportedExercises;
+}
+
+export async function gatherUserExercises() {
+    let supportedExercises: model.Exercise[] = await readFile("./data/userStatic/userdefinedExercises.json", 'utf-8').then((data) => JSON.parse(data));
+    return supportedExercises;
+}
+
 export async function gatherUserPropertiess() {
     let userProperties: model.UserProperties = await readFile("./data/userProperties.json", 'utf-8').then((data) => JSON.parse(data));
     return userProperties;

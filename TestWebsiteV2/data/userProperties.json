@@ -21,8 +21,7 @@
           ],
           "equipment": "Dumbbells",
           "reps": 10,
-          "sets": 3,
-          "weight": 20
+          "sets": 3
         }
       ],
       "times": {
@@ -40,7 +39,7 @@
           "targetedMuscleGroups": [
             "Biceps"
           ],
-          "equipment": "Dumbbells",
+          "equipment": "Idk",
           "reps": 10,
           "sets": 3,
           "weight": 20
