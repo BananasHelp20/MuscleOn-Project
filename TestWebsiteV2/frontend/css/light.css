@@ -2,3 +2,11 @@ body {
     background-color: white;
     color: black;
 }
+
+table,
+tbody,
+th,
+td,
+tr {
+    border: black;
+}

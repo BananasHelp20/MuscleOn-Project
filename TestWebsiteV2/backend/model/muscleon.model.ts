@@ -104,7 +104,7 @@ export interface Exercise {                                 //a interface, wos q
     equipment?: string[],                                   //nur falls ma de Übung mit am Gerät oda sowos macht, sonst is des irrelevant
     reps?: number,
     sets?: number,
-    weight?: number,                                        //nur falls ma de Übung mit Gewicht macht, sonst is des irrelevant
+    weight?: number | boolean,                                        //nur falls ma de Übung mit Gewicht macht, sonst is des irrelevant // ACHTUNG: WEIGHT KANN BOOLEAN UND NUMBER SEI, depending on use hoid
     userNameCreated?: string,                               //wichtig für usercredit
     userIdCreated?: number,                                 //nur wenn de übung vom User defined wordn is (tendentiell wird userNameCreated a braucht wenn des braucht wird)
     public?: boolean,                                       //wenn da user will, das de custom übung von andere ersichtlich is

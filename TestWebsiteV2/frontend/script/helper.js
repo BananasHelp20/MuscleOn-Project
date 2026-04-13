@@ -199,6 +199,12 @@ function getMuscleGroups() {
 
 function setMuscleGroupOptions(elem) {
     let muscleGroups = getMuscleGroups();
+
+    let NULL = document.createElement("option");
+    NULL.value = -1;
+    NULL.label = "Select Muscle Group";
+    elem.add(NULL);
+
     for (let group of muscleGroups) {
         let option = document.createElement("option");
         option.text = group;
@@ -213,24 +219,32 @@ function setExerciseOptions(elem) {
     exerciseTypes[2].label = "Own Exercises";
     let muscleGroups = getMuscleGroups();
     
+    let NULL = document.createElement("option");
+    NULL.value = -1;
+    NULL.label = "Select Exercise";
+    elem.add(NULL);
+
     getSupportedExercises().then((exercises) => {
+        let value = 0;
         if (exercises.length > 0) {
-            elem.appendChild(exerciseTypes[0]);
+            elem.add(exerciseTypes[0]);
             for (let i = 0; i < muscleGroups.length; i++) {
                 let options = [];
                 for (let j = 0; j < exercises.length; j++) {
                     if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
                         let opt = document.createElement("option");
                         opt.label = exercises[j].name;
+                        opt.value = "s" + j;                                            //s (supported) + index is de optionvalue
+                        value++;
                         options.push(opt);
                     }
                 }
                 if (options.length > 0) {
                     let optGr = document.createElement("optgroup");
                     optGr.label = muscleGroups[i];
-                    elem.appendChild(optGr);
+                    elem.add(optGr);
                     options.forEach((opt) => {
-                        elem.appendChild(opt);
+                        elem.add(opt);
                     })
                 }
             }
@@ -238,23 +252,26 @@ function setExerciseOptions(elem) {
     })
 
     getUnsupportedExercises().then((exercises) => {
+        let value = 0;
         if (exercises.length > 0) {
-            elem.appendChild(exerciseTypes[1]);
+            elem.add(exerciseTypes[1]);
             for (let i = 0; i < muscleGroups.length; i++) {
                 let options = [];
                 for (let j = 0; j < exercises.length; j++) {
                     if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
                         let opt = document.createElement("option");
                         opt.label = exercises[j].name;
+                        opt.value = "u" + j;
+                        value++;
                         options.push(opt);
                     }
                 }
                 if (options.length > 0) {
                     let optGr = document.createElement("optgroup");
                     optGr.label = muscleGroups[i];
-                    elem.appendChild(optGr);
+                    elem.add(optGr);
                     options.forEach((opt) => {
-                        elem.appendChild(opt);
+                        elem.add(opt);
                     })
                 }
             }
@@ -262,23 +279,26 @@ function setExerciseOptions(elem) {
     })
 
     getUserDefinedExercises().then((exercises) => {
+        let value = 0;
         if (exercises.length > 0) {
-            elem.appendChild(exerciseTypes[2]);
+            elem.add(exerciseTypes[2]);
             for (let i = 0; i < muscleGroups.length; i++) {
                 let options = [];
                 for (let j = 0; j < exercises.length; j++) {
                     if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
                         let opt = document.createElement("option");
                         opt.label = exercises[j].name;
+                        opt.value = "d" + j;
+                        value++;
                         options.push(opt);
                     }
                 }
                 if (options.length > 0) {
                     let optGr = document.createElement("optgroup");
                     optGr.label = muscleGroups[i];
-                    elem.appendChild(optGr);
+                    elem.add(optGr);
                     options.forEach((opt) => {
-                        elem.appendChild(opt);
+                        elem.add(opt);
                     })
                 }
             }
@@ -315,7 +335,6 @@ function findExerciseTableById(sessionId) {
         for (let j = 0; j < document.getElementById("exercise-tables").children.item(i).children.length; j++) {
             if (document.getElementById("exercise-tables").children.item(i).children.item(j).getAttribute("id")) tbodyIndex = j;
         }
-        log(document.getElementById("exercise-tables").children.item(i).children.item(tbodyIndex).getAttribute("id"));
         if (document.getElementById("exercise-tables").children.item(i).children.item(tbodyIndex).getAttribute("id") == "exercise-table" + sessionId) return i;
     }
     return -1;
@@ -337,19 +356,19 @@ function addWeekday(data) {
     
     let weekday = document.createElement("input");
     weekday.setAttribute("type", "text");
-    weekday.setAttribute("id", "weekday" + (data) ? data.sessionId : sessionId);
+    weekday.setAttribute("id", "weekday" + (data == null) ? data.sessionId : sessionId);
     weekday.setAttribute("placeholder", "Monday");
     if (weekdayData) weekday.value = weekdayData.weekday;
 
     let from = document.createElement("input");
     from.setAttribute("type", "text");
-    from.setAttribute("id", "from" + (data) ? data.sessionId : sessionId);
+    from.setAttribute("id", "from" + (data == null) ? data.sessionId : sessionId);
     from.setAttribute("placeholder", "08:00");
     if (weekdayData) from.value = weekdayData.fromTime;
 
     let to = document.createElement("input");
     to.setAttribute("type", "text");
-    to.setAttribute("id", "to" + (data) ? data.sessionId : sessionId);
+    to.setAttribute("id", "to" + (data == null) ? data.sessionId : sessionId);
     to.setAttribute("placeholder", "09:30");
     if (weekdayData) to.value = weekdayData.toTime;
 
@@ -365,6 +384,7 @@ function addWeekday(data) {
     delButton.addEventListener("click", (event) => {
         if (document.getElementById("plan-table").children.length > 1) event.target.parentElement.parentElement.remove();
         if (document.getElementById("plan-table").children.length <= 1) event.target.parentElement.parentElement.parentElement.parentElement.remove();
+        if (findExerciseTableById(Number(event.target.parentElement.parentElement.getAttribute("id"))) != -1) removeExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
     });
 
     let removeExercisesForDayButton = document.createElement("button");
@@ -395,7 +415,59 @@ function addWeekday(data) {
     });
     document.getElementById("plan-table").appendChild(tr);
 }
-//TODO: add exercises for each weekday (mapped by table row id)
+
+function setSelectedExercise(elem) {
+    let id = elem.value;
+    if (id.startsWith("s")) {
+        id = Number(id.replace("s", ""));
+        getSupportedExercises().then(data => {
+            elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
+
+            elem.parentElement.parentElement.children.item(4).innerHTML = "";
+            if (data[id].weight == true) {
+                let input = document.createElement("input");
+                input.placeholder = "15";
+                input.id = "weight" + elem.parentElement.parentElement.getAttribute("id");
+                elem.parentElement.parentElement.children.item(4).appendChild(input);
+            } else {
+                elem.parentElement.parentElement.children.item(4).innerHTML = " - ";
+            }
+        });
+    } else if (id.startsWith("u")) {
+        id = Number(id.replace("u", ""));
+        getUnsupportedExercises().then(data => {
+            elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
+
+            elem.parentElement.parentElement.children.item(4).innerHTML = "";
+            if (data[id].weight == true) {
+                let input = document.createElement("input");
+                input.placeholder = "15";
+                input.id = "weight" + elem.parentElement.parentElement.getAttribute("id");
+                elem.parentElement.parentElement.children.item(4).appendChild(input);
+            } else {
+                elem.parentElement.parentElement.children.item(4).innerHTML = " - ";
+            }
+        });
+    } else { //starts with d
+        id = Number(id.replace("d", ""));
+        getUserDefinedExercises().then(data => {
+            elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
+
+            elem.parentElement.parentElement.children.item(4).innerHTML = "";
+            if (data[id].weight == true) {
+                let input = document.createElement("input");
+                input.placeholder = "15";
+                input.id = "weight" + elem.parentElement.parentElement.getAttribute("id");
+                elem.parentElement.parentElement.children.item(4).appendChild(input);
+            } else {
+                elem.parentElement.parentElement.children.item(4).innerHTML = " - ";
+            }
+        });
+    }
+
+
+    
+}
 
 //parameter data: de bisherigen Sessiondaten, von einem Tag (moch des so, das du beim add exercises button a input host, wost in tag dazuschreibst oda so) mit leerem exercises element (optional))
 function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table aus tables mochn, oder dynamisch tables zu an div adden
@@ -420,8 +492,9 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
 
     let select = document.createElement("select");
     setExerciseOptions(select);
-    select.addEventListener("selectionchange", (event) => {
-        event.target.parentElement.children.item(1).innerText = event.target.value;
+    select.addEventListener("change", (event) => {
+        setSelectedExercise(event.target);
+        
     });
     for (i in exerciseData) {
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
@@ -479,8 +552,8 @@ function getEmptyExerciseTable(time) {
         
         let select = document.createElement("select");
         setExerciseOptions(select);
-        select.addEventListener("selectionchange", (event) => {
-            event.target.parentElement.children.item(1).innerText = event.target.value;
+        select.addEventListener("change", (event) => {
+            setSelectedExercise(event.target);
         });
         select.value = "Select Exercise";
         tds[0].appendChild(select);

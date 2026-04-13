@@ -23,3 +23,8 @@ a {
 #loginLink, #signupLink, #returnLink {
     color: rgb(0, 145, 255);
 }
+
+table, tbody, tr {
+    border-collapse: collapse;
+    border: 2px solid;
+}
