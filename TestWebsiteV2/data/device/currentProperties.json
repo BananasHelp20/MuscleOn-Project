@@ -3,5 +3,6 @@
     "loggedIn": true,
     "loggedInAsUser": "dev",
     "loggedInWithUserId": 0,
-    "loadedUserData": true
+    "loadedUserData": true,
+    "editingPlanSection": false
 }

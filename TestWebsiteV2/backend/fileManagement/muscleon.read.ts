@@ -50,6 +50,7 @@ export async function setUserData(userData: model.User) {
         writeFile("./data/userStatic/highscore.json", JSON.stringify(userData.userHighscores, null, 2)),
         writeFile("./data/userStatic/average.json", JSON.stringify(userData.userLongTermAverages, null, 2)),
         writeFile("./data/userStatic/settings.json", JSON.stringify(userData.userSettings, null, 2)),
+        writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(userData.userDefinedExercises, null, 2))
     ]);
 }
 

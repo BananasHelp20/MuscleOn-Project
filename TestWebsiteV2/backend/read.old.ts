@@ -10,6 +10,7 @@ export async function gatherUserData() {
         userHighscores: await readFile("./data/userStatic/highscore.json", 'utf-8').then((data) => JSON.parse(data)),
         userLongTermAverages: await readFile("./data/userStatic/average.json", 'utf-8').then((data) => JSON.parse(data)),
         userSettings: await readFile("./data/userStatic/settings.json", 'utf-8').then((data) => JSON.parse(data)),
+        userDefinedExercises: await readFile("./data/userStatic/userdefinedExercises.json", 'utf-8').then((data) => JSON.parse(data))
     };
     return userData;
 }
@@ -33,6 +34,7 @@ export async function setUserData(userData: model.User) {
         writeFile("./data/userStatic/highscore.json", JSON.stringify(userData.userHighscores, null, 2)),
         writeFile("./data/userStatic/average.json", JSON.stringify(userData.userLongTermAverages, null, 2)),
         writeFile("./data/userStatic/settings.json", JSON.stringify(userData.userSettings, null, 2)),
+        writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(userData.userDefinedExercises, null, 2))
     ]);
 }
 

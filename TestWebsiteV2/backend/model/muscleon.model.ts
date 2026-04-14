@@ -70,6 +70,7 @@ export interface DeviceProperties {
     loggedInAsUser?: string,
     loggedInWithUserId?: number,
     loadedUserData?: boolean,
+    editingPlanSection: boolean
 }
 
 export interface SupportedExercises {
@@ -99,6 +100,7 @@ export interface Time {
  */
 export interface Exercise {                                 //a interface, wos quasi überall eingesetzt werden kann, je noch dem wos eingesetzt wird, werden unterschiedliche properties benötigt
     name: string
+    exerciseType: string,                                   //supported / unsupported / user-defined
     description?: string,
     targetedMuscleGroups?: string[],                        //gaunz simpel: rechter arm, linker arm, rücken, bauchmuskeln, beine...
     equipment?: string[],                                   //nur falls ma de Übung mit am Gerät oda sowos macht, sonst is des irrelevant

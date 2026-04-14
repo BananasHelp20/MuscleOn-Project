@@ -1,8 +1,9 @@
 [
     {
         "userIdCreated": 1,
-        "name": "Backflip",
-        "description": "DO A FLIP!",
+        "name": "Frontflip",
+        "exerciseType": "user-defined",
+        "description": "!PILF A OD",
         "targetedMuscleGroups": ["Biceps"],
         "equipment": "None",
         "public": true,

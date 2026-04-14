@@ -1,6 +1,7 @@
 [
     {
         "userIdCreated": 1,
+        "exerciseType": "unsupported",
         "name": "Backflip",
         "description": "DO A FLIP!",
         "targetedMuscleGroups": [

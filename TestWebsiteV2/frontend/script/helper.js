@@ -61,7 +61,8 @@ function initializeLogoutAndDelete() {
 
 function sessionButtonCheck() {
     let deviceProperties = getDeviceData();
-    if (getSettingsFromLocalStorage().createdPlan && !deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
+    let properties = getUserPropertiesFromLocalStorage();
+    if (properties.createdPlan && !deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
         document.getElementById("createTrainingsPlan").innerText = "Alter Trainings Plan";
     } else if (!deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
         document.getElementById("createTrainingsPlan").innerText = "Create Trainings Plan";
@@ -70,7 +71,7 @@ function sessionButtonCheck() {
     }
     if (document.getElementById("plan-section")) document.getElementById("plan-section").hidden = !deviceProperties.editingPlanSection;
 
-    if (deviceProperties.inExercise && document.getElementById("startStopExercise")) {
+    if (properties.currentlyInExercise && document.getElementById("startStopExercise")) {
         document.getElementById("startStopExercise").innerText = "End Exercise";
     } else if (document.getElementById("startStopExercise")) {
         document.getElementById("startStopExercise").innerText = "Start Exercise";
@@ -92,9 +93,9 @@ function initializeSession() {
 
     sessionButtonCheck();
     if (document.getElementById("startStopSession")) document.getElementById("startStopSession").addEventListener("click", () => {
-        let device = getDeviceData();
-        device.sessionRunning = !device.sessionRunning;
-        if (device.sessionRunning) {
+        let device = getUserPropertiesFromLocalStorage();
+        device.currentlyInExercise = !device.currentlyTraining;
+        if (device.currentExercise) {
             startSession();
         } else {
             stopSession();
@@ -104,14 +105,14 @@ function initializeSession() {
     });
 
     if (document.getElementById("startStopExercise")) document.getElementById("startStopExercise").addEventListener("click", () => {
-        let device = getDeviceData();
-        device.inExercise = !device.inExercise;
-        if (device.inExercise) {
+        let device = getUserPropertiesFromLocalStorage();
+        device.currentlyInExercise = !device.currentlyInExercise;
+        if (device.currentlyInExercise) {
             startExercise();
         } else {
             stopExercise();
         }
-        localStorage.setItem("deviceData", JSON.stringify(device));
+        localStorage.setItem("userProperties", JSON.stringify(device));
         sessionButtonCheck();
     });
 
@@ -123,8 +124,10 @@ function initializeSession() {
             if (validateSessionTimes(times)) {
                 device.editingPlanSection = false;
                 document.getElementById("plan-table").innerHTML = "";
-                saveTimes(times);
+                document.getElementById("exercise-tables").innerHTML = "";
+                properties.userSessionTimes = times;
                 properties.createdPlan = true;
+                setUserProperties(properties);
             } else {
                 alert("Training days not valid");
             }
@@ -220,12 +223,11 @@ function setExerciseOptions(elem) {
     let muscleGroups = getMuscleGroups();
     
     let NULL = document.createElement("option");
-    NULL.value = -1;
+    NULL.value = "Select Exercise";
     NULL.label = "Select Exercise";
     elem.add(NULL);
 
     getSupportedExercises().then((exercises) => {
-        let value = 0;
         if (exercises.length > 0) {
             elem.add(exerciseTypes[0]);
             for (let i = 0; i < muscleGroups.length; i++) {
@@ -234,8 +236,7 @@ function setExerciseOptions(elem) {
                     if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
                         let opt = document.createElement("option");
                         opt.label = exercises[j].name;
-                        opt.value = "s" + j;                                            //s (supported) + index is de optionvalue
-                        value++;
+                        opt.value = "s" + exercises[j].name;
                         options.push(opt);
                     }
                 }
@@ -249,10 +250,9 @@ function setExerciseOptions(elem) {
                 }
             }
         }
-    })
+    });
 
     getUnsupportedExercises().then((exercises) => {
-        let value = 0;
         if (exercises.length > 0) {
             elem.add(exerciseTypes[1]);
             for (let i = 0; i < muscleGroups.length; i++) {
@@ -261,8 +261,7 @@ function setExerciseOptions(elem) {
                     if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
                         let opt = document.createElement("option");
                         opt.label = exercises[j].name;
-                        opt.value = "u" + j;
-                        value++;
+                        opt.value = "u" + exercises[j].name;
                         options.push(opt);
                     }
                 }
@@ -279,7 +278,6 @@ function setExerciseOptions(elem) {
     })
 
     getUserDefinedExercises().then((exercises) => {
-        let value = 0;
         if (exercises.length > 0) {
             elem.add(exerciseTypes[2]);
             for (let i = 0; i < muscleGroups.length; i++) {
@@ -288,8 +286,7 @@ function setExerciseOptions(elem) {
                     if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
                         let opt = document.createElement("option");
                         opt.label = exercises[j].name;
-                        opt.value = "d" + j;
-                        value++;
+                        opt.value = "d" + exercises[j].name;
                         options.push(opt);
                     }
                 }
@@ -309,16 +306,17 @@ function setExerciseOptions(elem) {
 function getFreeSessionId() {
     let ids = [];
     let table = document.getElementById("plan-table");
-    let id;
-    
+    let id = 0;
+
     if (table.children.length != 0) {
-        for (i in table.children) {
+        for (let i = 0; i < table.children.length; i++) {
             let row = table.children.item(i);
             ids.push(Number(row.getAttribute("id")));
         }
         ids.sort();
     }
-    for (let i = 0; i <= 2000000 && ids.includes(id); i++) {
+
+    for (let i = 1; i <= 2000000 && ids.includes(id); i++) {
         id = i;
     }
 
@@ -326,7 +324,7 @@ function getFreeSessionId() {
         alert("you can only have 2,000,000 Sessions! (if you see this, you're absolutely based)");
         return null;
     }
-    return id;
+    return id == -1? null : id;
 }
 
 function findExerciseTableById(sessionId) {
@@ -352,23 +350,23 @@ function removeExercises(sessionId) {
 
 function addWeekday(data) {
     let weekdayData = (data) ? data.times : null;
-    let sessionId = getFreeSessionId();
+    let sessionId = data? data.sessionId : getFreeSessionId();
     
     let weekday = document.createElement("input");
     weekday.setAttribute("type", "text");
-    weekday.setAttribute("id", "weekday" + (data == null) ? data.sessionId : sessionId);
+    weekday.setAttribute("id", "weekday" + sessionId);
     weekday.setAttribute("placeholder", "Monday");
     if (weekdayData) weekday.value = weekdayData.weekday;
 
     let from = document.createElement("input");
     from.setAttribute("type", "text");
-    from.setAttribute("id", "from" + (data == null) ? data.sessionId : sessionId);
+    from.setAttribute("id", "from" + sessionId);
     from.setAttribute("placeholder", "08:00");
     if (weekdayData) from.value = weekdayData.fromTime;
 
     let to = document.createElement("input");
     to.setAttribute("type", "text");
-    to.setAttribute("id", "to" + (data == null) ? data.sessionId : sessionId);
+    to.setAttribute("id", "to" + sessionId);
     to.setAttribute("placeholder", "09:30");
     if (weekdayData) to.value = weekdayData.toTime;
 
@@ -409,64 +407,55 @@ function addWeekday(data) {
     tds[5].appendChild(removeExercisesForDayButton)
 
     let tr = document.createElement("tr");
-    tr.setAttribute("id", "" + (data) ? data.sessionId : sessionId);
+    tr.setAttribute("id", "" + sessionId);
     tds.forEach((td) => {
         tr.appendChild(td);
     });
     document.getElementById("plan-table").appendChild(tr);
 }
 
+function initSelectExercise(elem, id, data) {
+    log(id);
+    elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
+    elem.parentElement.parentElement.children.item(4).innerHTML = "";
+    if (data[id].weight == true) {
+        let input = document.createElement("input");
+        input.placeholder = "15";
+        input.id = "weight" + elem.parentElement.parentElement.getAttribute("id");
+        elem.parentElement.parentElement.children.item(4).appendChild(input);
+    } else {
+        elem.parentElement.parentElement.children.item(4).innerHTML = " - ";
+    }
+}
+
 function setSelectedExercise(elem) {
     let id = elem.value;
+    log(elem.value);
     if (id.startsWith("s")) {
-        id = Number(id.replace("s", ""));
+        id = id.substring(1);
+        log(id)
         getSupportedExercises().then(data => {
-            elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
-
-            elem.parentElement.parentElement.children.item(4).innerHTML = "";
-            if (data[id].weight == true) {
-                let input = document.createElement("input");
-                input.placeholder = "15";
-                input.id = "weight" + elem.parentElement.parentElement.getAttribute("id");
-                elem.parentElement.parentElement.children.item(4).appendChild(input);
-            } else {
-                elem.parentElement.parentElement.children.item(4).innerHTML = " - ";
-            }
+            initSelectExercise(elem, getIndexOfName(data, id), data);
         });
     } else if (id.startsWith("u")) {
-        id = Number(id.replace("u", ""));
+        id = id.substring(1);
         getUnsupportedExercises().then(data => {
-            elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
-
-            elem.parentElement.parentElement.children.item(4).innerHTML = "";
-            if (data[id].weight == true) {
-                let input = document.createElement("input");
-                input.placeholder = "15";
-                input.id = "weight" + elem.parentElement.parentElement.getAttribute("id");
-                elem.parentElement.parentElement.children.item(4).appendChild(input);
-            } else {
-                elem.parentElement.parentElement.children.item(4).innerHTML = " - ";
-            }
+            initSelectExercise(elem, getIndexOfName(data, id), data);
         });
     } else { //starts with d
-        id = Number(id.replace("d", ""));
+        id = id.substring(1);
         getUserDefinedExercises().then(data => {
-            elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
-
-            elem.parentElement.parentElement.children.item(4).innerHTML = "";
-            if (data[id].weight == true) {
-                let input = document.createElement("input");
-                input.placeholder = "15";
-                input.id = "weight" + elem.parentElement.parentElement.getAttribute("id");
-                elem.parentElement.parentElement.children.item(4).appendChild(input);
-            } else {
-                elem.parentElement.parentElement.children.item(4).innerHTML = " - ";
-            }
+            initSelectExercise(elem, getIndexOfName(data, id), data);
         });
     }
+}
 
-
-    
+function getIndexOfName(array, name) {
+    array.forEach((arElem) => {
+        log(arElem.name);
+        log(name);
+        if (arElem.name == name) return array.indexOf(arElem);
+    })
 }
 
 //parameter data: de bisherigen Sessiondaten, von einem Tag (moch des so, das du beim add exercises button a input host, wost in tag dazuschreibst oda so) mit leerem exercises element (optional))
@@ -476,7 +465,6 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
     if (data && !data.exercises) return;
 
     let exerciseDiv = document.getElementById("exercise-tables");
-    let dayRow = document.getElementById("plan-table").children.item(sessionId);
     let exerciseTable = getEmptyExerciseTable(data);
 
     let delButton = document.createElement("button");
@@ -493,13 +481,12 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
     let select = document.createElement("select");
     setExerciseOptions(select);
     select.addEventListener("change", (event) => {
-        setSelectedExercise(event.target);
-        
+        setSelectedExercise(event.target); 
     });
     for (i in exerciseData) {
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
         let inputs = [document.createElement("input"), document.createElement("input"), document.createElement("input")];
-        select.value = exerciseData[i].name;
+        select.value = exerciseData[i].exerciseType.charAt(0) + exerciseData[i].name;
         tds[0].appendChild(select);
         tds[1].innerText = exerciseData[i].equipment;
         inputs[0].setAttribute("id", "reps" + i);
@@ -645,8 +632,6 @@ function login() { //test this
                 loggedInWithUserId: answer.userId,
                 loadedUserData: true,
                 sessionRunning: false,
-                inExercise: false,
-                editingPlanSection: false
             }
             localStorage.setItem("deviceData", JSON.stringify(newDeviceData));
             showLoggedIn(newDeviceData);
@@ -667,8 +652,6 @@ function logout() {
         loggedInWithUserId: -1,
         loadedUserData: false,
         sessionRunning: false,
-        inExercise: false,
-        editingPlanSection: false
     }
     localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
     clearUserData();
@@ -742,13 +725,15 @@ function getSessionTimes() {
     if (!document.getElementById("plan-table") || !document.getElementById("exercise-table")) return;
     
     let table = document.getElementById("plan-table");
-    let exerciseTable = document.getElementById("exercise-table");
+    let exerciseTables = document.getElementById("exercise-tables");
     let plan = []
     let plantime = [];
     let primaryMuscleGroups = [];
     let exercises = [[]];
+    let ids = [];
 
     for (let i = 0; i < table.children.length; i++) {
+        ids.push(table.children.item(i).getAttribute("id"));
         for (let j = 0; j < table.children.item(i).children.length; j++) {
             let row = table.children.item(i).children.item(j).children.item(0);
             if (row.getAttribute("id") != null && row.getAttribute("type") != null && row.nodeName != "select") {
@@ -760,12 +745,46 @@ function getSessionTimes() {
         plan.push(plantime);
         plantime = [];
     }
+
+    for (let i = 0; i < exerciseTables.children.length; i++) {
+        let tbodyIndex;
+        for (let j = 0; j < exerciseTables.children.item(i).children.length; j++) { //tables durchgeh
+            if (exerciseTables.children.item(i).children.item(j).getAttribute("id")) tbodyIndex = j;
+        }
+
+        for (let j = 0; j < exerciseTables.children.item(i).children.item(tbodyIndex).children.length; j++) { //rows durchgehen
+            let row = exerciseTables.children.item(i).children.item(tbodyIndex).children.item(j);
+            let allExercises;
+            let thisExercise;
+            if (row.children.item(0).children.item(0).value.charAt(0) == "s") {
+                allExercises = getSupportedExercisesFromLS();
+                thisExercise = allExercises[allExercises.indexOf(row.children.item(0).children.item(0).value.substring(1))];
+            } else if (row.children.item(0).children.item(0).value.charAt(0) == "u") {
+                allExercises = getUnsupportedExercises();
+                thisExercise = allExercises[allExercises.indexOf(row.children.item(0).children.item(0).value.substring(1))];
+            } else {
+                allExercises = getUserdefinedExercisesFromLS();
+                thisExercise = allExercises[allExercises.indexOf(row.children.item(0).children.item(0).value.substring(1))];
+            }
+            exercises[i].push({
+                exerciseType: row.children.item(0).children.item(0).value.substring(1),
+                name: thisExercise.name,
+                targetedMuscleGroups: thisExercise.targetedMuscleGroups,
+                equipment: thisExercise.equipment,
+                reps: row.children.item(2).children.item(0).value,
+                sets: row.children.item(3).children.item(0).value,
+                weight: (row.children.item(4).children.item(0)) ? row.children.item().children.item(0).value : null
+            })
+        }
+    }
+
     let plantimeObjects = [];
     for (index in plan) {
-        let time = plan[i];
+        let time = plan[index];
         plantimeObjects.push({
-            primaryMuscleGroup: primaryMuscleGroups[i],
-            exercises: exercises[i],
+            sessionId: ids[index],
+            primaryMuscleGroup: primaryMuscleGroups[index],
+            exercises: exercises[getExerciseWithId(ids[index])], //des mit da id is so a gschicht, finde de exercisetabelle mit da passenden id, und füg de daten davon ein
             times: {
                 weekday: time[0],
                 fromTime: time[1],
@@ -776,8 +795,10 @@ function getSessionTimes() {
     return plantimeObjects;
 }
 
-function validateSessionTimes(times) {
-    if (times.length == 0) return false;
+function validateSessionTimes(data) {
+    let exercises = data.exercises;
+    let times = data.times;
+    if (times.length == 0 || data.primaryMuscleGroup == "" || data.sessionId == -1) return false;
     for (index in times) {
         let time = times[index]
         if (!(
@@ -802,7 +823,24 @@ function validateSessionTimes(times) {
         )) {
             return false
         };
-    };
+    }
+    if (exercises) {
+        for (let exercise of exercises) {
+            if (!(
+                exercise.exerciseType &&
+                exercise.name &&
+                exercise.targetedMuscleGroups &&
+                exercise.targetedMuscleGroups.length != 0 &&
+                exercise.equipment &&
+                exercise.reps &&
+                exercise.sets &&
+                !isNaN(Number(exercise.reps)) &&
+                !isNaN(Number(exercise.sets))
+            )) {
+                return false;
+            }
+        }
+    }
     return true;
 }
 
@@ -985,6 +1023,21 @@ function getSettingsFromLocalStorage() {
     return settings;
 }
 
+function getSupportedExercisesFromLS() {
+    let ex = localStorage.getItem("supportedExercises");
+    return ex? ex : [];
+}
+
+function getUnsupportedExercisesFromLS() {
+    let ex = localStorage.getItem("unsupportedExercises");
+    return ex? ex : [];
+}
+
+function getUserdefinedExercisesFromLS() {
+    let ex = localStorage.getItem("userdefinedExercises");
+    return ex? ex : [];
+}
+
 function getDeviceData() {
     return localStorage.getItem("deviceData") ? JSON.parse(localStorage.getItem("deviceData")) : {
         running: false,
@@ -993,8 +1046,6 @@ function getDeviceData() {
         loggedInWithUserId: -1,
         loadedUserData: false,
         sessionRunning: false,
-        inExercise: false,
-        editingPlanSection: false
     };
 }
 
@@ -1224,6 +1275,7 @@ async function getSupportedExercises() {
         },
     }).then((response) => {
         if (response.ok) {
+            localStorage.setItem("supportedExercises", JSON.stringify(response.json));
             return response.json();
         } else {
             console.error("An error ocured while requesting data from backend:", response.statusText);
@@ -1239,6 +1291,7 @@ async function getUnsupportedExercises() {
         },
     }).then((response) => {
         if (response.ok) {
+            localStorage.setItem("unsupportedExercises", JSON.stringify(response.json));
             return response.json();
         } else {
             console.error("An error ocured while requesting data from backend:", response.statusText);
@@ -1254,6 +1307,7 @@ async function getUserDefinedExercises() {
         },
     }).then((response) => {
         if (response.ok) {
+            localStorage.setItem("userdefinedExercises", JSON.stringify(response.json));
             return response.json();
         } else {
             console.error("An error ocured while requesting data from backend:", response.statusText);
