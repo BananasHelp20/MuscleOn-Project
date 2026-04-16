@@ -11,18 +11,35 @@
   "createdPlan": true,
   "usualSessionTimes": [
     {
-      "sessionId": 0,
+      "sessionId": "0",
       "primaryMuscleGroup": "Biceps",
       "exercises": [
         {
           "exerciseType": "supported",
-          "name": "Biceps Curls",
+          "name": "Kettlebell Swings",
           "targetedMuscleGroups": [
-            "Biceps"
+            "Glutes",
+            "Hamstrings",
+            "Core"
           ],
-          "equipment": "Dumbbells",
-          "reps": 10,
-          "sets": 3
+          "equipment": "Kettlebell",
+          "reps": "10",
+          "sets": "3",
+          "weight": "1234"
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Lunges",
+          "targetedMuscleGroups": [
+            "Quadriceps",
+            "Hamstrings",
+            "Glutes",
+            "Calves"
+          ],
+          "equipment": "None",
+          "reps": "15",
+          "sets": "3",
+          "weight": null
         }
       ],
       "times": {
@@ -32,19 +49,21 @@
       }
     },
     {
-      "sessionId": 1,
+      "sessionId": "1",
       "primaryMuscleGroup": "Biceps",
       "exercises": [
         {
           "exerciseType": "supported",
-          "name": "Biceps Curls",
+          "name": "Bench Press",
           "targetedMuscleGroups": [
-            "Biceps"
+            "Chest",
+            "Shoulders",
+            "Triceps"
           ],
-          "equipment": "Idk",
-          "reps": 10,
-          "sets": 3,
-          "weight": 20
+          "equipment": "Barbell or Dumbbells",
+          "reps": "10",
+          "sets": "3",
+          "weight": null
         }
       ],
       "times": {
@@ -54,19 +73,20 @@
       }
     },
     {
-      "sessionId": 2,
+      "sessionId": "2",
       "primaryMuscleGroup": "Triceps",
       "exercises": [
         {
           "exerciseType": "supported",
-          "name": "Biceps Curls",
+          "name": "Glute Bridge",
           "targetedMuscleGroups": [
-            "Biceps"
+            "Glutes",
+            "Hamstrings"
           ],
-          "equipment": "Dumbbells",
-          "reps": 10,
-          "sets": 3,
-          "weight": 20
+          "equipment": "None",
+          "reps": "10",
+          "sets": "3",
+          "weight": null
         }
       ],
       "times": {

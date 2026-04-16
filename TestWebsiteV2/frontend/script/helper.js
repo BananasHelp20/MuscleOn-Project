@@ -1,4 +1,4 @@
-let interval = 250; //globale Variable für de Aktuallisierung in Millisekunden
+let interval = 1000; //globale Variable für de Aktuallisierung in Millisekunden
 
 function syncModes() {
     if (document.getElementById("dev")) document.getElementById("dev").innerText = getSettingsFromLocalStorage().devMode ? "devmode" : "usermode";
@@ -121,12 +121,11 @@ function initializeSession() {
         let properties = getUserPropertiesFromLocalStorage();
         if (device.editingPlanSection) { //on trying to save
             let times = getSessionTimes();
-            log(times);
             if (validateSessionTimes(times)) {
                 device.editingPlanSection = false;
                 document.getElementById("plan-table").innerHTML = "";
                 document.getElementById("exercise-tables").innerHTML = "";
-                properties.userSessionTimes = times;
+                properties.usualSessionTimes = times;
                 properties.createdPlan = true;
                 setUserProperties(properties);
             } else {
@@ -222,47 +221,25 @@ function setExerciseOptions(elem) {
     exerciseTypes[1].label = "Unsupported Exercises";
     exerciseTypes[2].label = "Own Exercises";
     let muscleGroups = getMuscleGroups();
-    
+
     let NULL = document.createElement("option");
-    NULL.value = "Select Exercise";
-    NULL.label = "Select Exercise";
+    NULL.value = "Select Exercises";
+    NULL.label = "Select Exercises";
     elem.add(NULL);
 
-    getSupportedExercises().then((exercises) => {
-        if (exercises.length > 0) {
-            elem.add(exerciseTypes[0]);
-            for (let i = 0; i < muscleGroups.length; i++) {
-                let options = [];
-                for (let j = 0; j < exercises.length; j++) {
-                    if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
-                        let opt = document.createElement("option");
-                        opt.label = exercises[j].name;
-                        opt.value = "s" + exercises[j].name;
-                        options.push(opt);
-                    }
-                }
-                if (options.length > 0) {
-                    let optGr = document.createElement("optgroup");
-                    optGr.label = muscleGroups[i];
-                    elem.add(optGr);
-                    options.forEach((opt) => {
-                        elem.add(opt);
-                    })
-                }
-            }
-        }
-    });
+    let exercises = [getSupportedExercisesFromLS(), getUnsupportedExercisesFromLS(), getUserdefinedExercisesFromLS()]
+    let prefixes = ["s", "u", "d"];
 
-    getUnsupportedExercises().then((exercises) => {
-        if (exercises.length > 0) {
-            elem.add(exerciseTypes[1]);
+    for (let k = 0; k < exercises.length; k++) { //des wor fü denkoabeit
+        if (exercises[k].length > 0) {
+            elem.add(exerciseTypes[k]);
             for (let i = 0; i < muscleGroups.length; i++) {
                 let options = [];
-                for (let j = 0; j < exercises.length; j++) {
-                    if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
+                for (let j = 0; j < exercises[k].length; j++) {
+                    if (exercises[k][j].targetedMuscleGroups.includes(muscleGroups[i])) {
                         let opt = document.createElement("option");
-                        opt.label = exercises[j].name;
-                        opt.value = "u" + exercises[j].name;
+                        opt.label = exercises[k][j].name;
+                        opt.value = prefixes[k] + exercises[k][j].name;
                         options.push(opt);
                     }
                 }
@@ -276,32 +253,7 @@ function setExerciseOptions(elem) {
                 }
             }
         }
-    })
-
-    getUserDefinedExercises().then((exercises) => {
-        if (exercises.length > 0) {
-            elem.add(exerciseTypes[2]);
-            for (let i = 0; i < muscleGroups.length; i++) {
-                let options = [];
-                for (let j = 0; j < exercises.length; j++) {
-                    if (exercises[j].targetedMuscleGroups.includes(muscleGroups[i])) {
-                        let opt = document.createElement("option");
-                        opt.label = exercises[j].name;
-                        opt.value = "d" + exercises[j].name;
-                        options.push(opt);
-                    }
-                }
-                if (options.length > 0) {
-                    let optGr = document.createElement("optgroup");
-                    optGr.label = muscleGroups[i];
-                    elem.add(optGr);
-                    options.forEach((opt) => {
-                        elem.add(opt);
-                    })
-                }
-            }
-        }
-    })
+    }
 }
 
 function getFreeSessionId() {
@@ -325,7 +277,7 @@ function getFreeSessionId() {
         alert("you can only have 2,000,000 Sessions! (if you see this, you're absolutely based)");
         return null;
     }
-    return id == -1? null : id;
+    return id == -1 ? null : id;
 }
 
 function findExerciseTableById(sessionId) {
@@ -351,8 +303,8 @@ function removeExercises(sessionId) {
 
 function addWeekday(data) {
     let weekdayData = (data) ? data.times : null;
-    let sessionId = data? data.sessionId : getFreeSessionId();
-    
+    let sessionId = data ? data.sessionId : getFreeSessionId();
+
     let weekday = document.createElement("input");
     weekday.setAttribute("type", "text");
     weekday.setAttribute("id", "weekday" + sessionId);
@@ -372,7 +324,7 @@ function addWeekday(data) {
     if (weekdayData) to.value = weekdayData.toTime;
 
     let primaryMuscleGroup = document.createElement("select");
-    primaryMuscleGroup.setAttribute("name","selectMuscleGroup");
+    primaryMuscleGroup.setAttribute("name", "selectMuscleGroup");
     primaryMuscleGroup.setAttribute("id", "selectMuscleGroup");
     setMuscleGroupOptions(primaryMuscleGroup);
     if (data) primaryMuscleGroup.value = data.primaryMuscleGroup;
@@ -398,7 +350,7 @@ function addWeekday(data) {
             event.target.innerText = "remove exercises";
         }
     });
-    
+
     let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
     tds[0].appendChild(weekday);
     tds[1].appendChild(from);
@@ -475,15 +427,16 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
     let tbody = document.createElement("tbody");
     tbody.setAttribute("id", "exercise-table" + sessionId);
 
-    let select = document.createElement("select");
-    setExerciseOptions(select);
-    select.addEventListener("change", (event) => {
-        setSelectedExercise(event.target); 
-    });
+    
     for (i in exerciseData) {
+        let select = document.createElement("select");
+        setExerciseOptions(select);
+        select.addEventListener("change", (event) => {
+            setSelectedExercise(event.target);
+        });
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
         let inputs = [document.createElement("input"), document.createElement("input"), document.createElement("input")];
-        select.value = exerciseData[i].exerciseType.charAt(0) + exerciseData[i].name;
+        select.value = exerciseData[i].exerciseType.charAt(0) + exerciseData[i].name; //problems here (select value is empty string after assignment)
         tds[0].appendChild(select);
         tds[1].innerText = exerciseData[i].equipment;
         inputs[0].setAttribute("id", "reps" + i);
@@ -526,14 +479,14 @@ function getEmptyExerciseTable(time) {
 
     let mainTh = document.createElement("th");
     mainTh.innerText = "Day: " + time.times.weekday + " from " + time.times.fromTime + " to " + time.times.toTime;
-    mainTh.setAttribute("colspan", ths.length-1);
+    mainTh.setAttribute("colspan", ths.length - 1);
 
     let addButton = document.createElement("button");
     addButton.innerText = "Add new Exercise";
     addButton.addEventListener("click", (event) => {
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
         let inputs = [document.createElement("input"), document.createElement("input"), document.createElement("input")];
-        
+
         let select = document.createElement("select");
         setExerciseOptions(select);
         select.addEventListener("change", (event) => {
@@ -720,7 +673,7 @@ function signUp() {
 
 function getSessionTimes() {
     if (!document.getElementById("plan-table") || !document.getElementById("exercise-tables")) return;
-    
+
     let table = document.getElementById("plan-table");
     let exerciseTables = document.getElementById("exercise-tables");
     let plan = []
@@ -737,7 +690,6 @@ function getSessionTimes() {
                 plantime.push(row.value);
             }
             if (row.getAttribute("id") != null && row.nodeName == "SELECT") {
-                log(row);
                 primaryMuscleGroups.push(row.value);
             }
         }
@@ -757,7 +709,7 @@ function getSessionTimes() {
             let thisExercise;
             if (row.children.item(0).children.item(0).value.charAt(0) == "s") {
                 allExercises = getSupportedExercisesFromLS();
-                thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))]; //geht (außer wenn Select Exercise)
+                thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
             } else if (row.children.item(0).children.item(0).value.charAt(0) == "u") {
                 allExercises = getUnsupportedExercisesFromLS();
                 thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
@@ -766,37 +718,47 @@ function getSessionTimes() {
                 thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
             }
             if (!exercises[i]) exercises.push([]);
+            if (!thisExercise) return null;
             exercises[i].push({
-                exerciseType: row.children.item(0).children.item(0).value.substring(1),
+                exerciseType: row.children.item(0).children.item(0).value.charAt(0) == "s" ? "supported" : row.children.item(0).children.item(0).value.charAt(0) == "u" ? "unsupported" : "defined-by-user",
                 name: thisExercise.name,
                 targetedMuscleGroups: thisExercise.targetedMuscleGroups,
                 equipment: thisExercise.equipment,
                 reps: row.children.item(2).children.item(0).value,
                 sets: row.children.item(3).children.item(0).value,
                 weight: (row.children.item(4).children.item(0)) ? row.children.item(4).children.item(0).value : null
-            })
+            });
         }
     }
-    log(primaryMuscleGroups)
-    log(plan);
-    log(exercises);
     let plantimeObjects = [];
-    for (let index = 0; i < plan.length; index++) {
+    for (let index = 0; index < plan.length; index++) {
         let time = plan[index];
         let object = {
             sessionId: ids[index],
             primaryMuscleGroup: primaryMuscleGroups[index],
-            exercises: exercises[getExerciseWithId(ids[index])], //des mit da id is so a gschicht, finde de exercisetabelle mit da passenden id, und füg de daten davon ein
+            exercises: exercises[getIndexOfSessionId(ids[index])] != null ? exercises[getIndexOfSessionId(ids[index])] : [], //des mit da id is so a gschicht, finde de exercisetabelle mit da passenden id, und füg de daten davon ein
             times: {
                 weekday: time[0],
                 fromTime: time[1],
                 toTime: time[2]
             }
         };
-        log(object);
         plantimeObjects.push(object);
     }
-    return plantimeObjects;
+    return plantimeObjects; //geht
+}
+
+function getIndexOfSessionId(id) {
+    let exerciseTables = document.getElementById("exercise-tables");
+    for (let i = 0; i < exerciseTables.children.length; i++) {
+        let table = exerciseTables.children.item(i);
+        let tbodyIndex;
+        for (let j = 0; j < table.children.length; j++) {
+            if (table.children.item(j).getAttribute("id")) tbodyIndex = j;
+        }
+        if (id == Number(table.children.item(tbodyIndex).getAttribute("id").charAt(table.children.item(tbodyIndex).getAttribute("id").length - 1))) return i;
+    }
+    return -1;
 }
 
 function getExerciseWithId(id) {
@@ -826,14 +788,18 @@ function getExerciseWithId(id) {
             }
         }
     }
+    return null;
 }
 
 function validateSessionTimes(data) {
-    let exercises = data.exercies? data.exercises : null;
-    let times = data.times;
-    if (times.length == 0 || data.primaryMuscleGroup == "" || data.sessionId == -1) return false;
-    for (index in times) {
-        let time = times[index]
+    if (!data) return false;
+    for (let i = 0; i < data.length; i++) {
+        let exercises = data[i].exercies ? data[i].exercises : null;
+        let time = data[i].times;
+        if (!time || data[i].primaryMuscleGroup == "" || data[i].sessionId == -1) {
+            console.error("if 1");
+            return false;
+        }
         if (!(
             time.weekday &&
             (
@@ -854,23 +820,25 @@ function validateSessionTimes(data) {
                 time.toTime.length == 5 || time.toTime.length == 4
             )
         )) {
-            return false
-        };
-    }
-    if (exercises) {
-        for (let exercise of exercises) {
-            if (!(
-                exercise.exerciseType &&
-                exercise.name &&
-                exercise.targetedMuscleGroups &&
-                exercise.targetedMuscleGroups.length != 0 &&
-                exercise.equipment &&
-                exercise.reps &&
-                exercise.sets &&
-                !isNaN(Number(exercise.reps)) &&
-                !isNaN(Number(exercise.sets))
-            )) {
-                return false;
+            console.error("if 2");
+            return false;
+        }
+        if (exercises) {
+            for (let exercise of exercises) {
+                if (!(
+                    exercise.exerciseType &&
+                    exercise.name &&
+                    exercise.targetedMuscleGroups &&
+                    exercise.targetedMuscleGroups.length != 0 &&
+                    exercise.equipment &&
+                    exercise.reps &&
+                    exercise.sets &&
+                    !isNaN(Number(exercise.reps)) &&
+                    !isNaN(Number(exercise.sets))
+                )) {
+                    console.error("if 3 (" + exercise + ")");
+                    return false;
+                }
             }
         }
     }
@@ -1034,7 +1002,20 @@ function getUserDataFromLocalStorage() {
 function getUserPropertiesFromLocalStorage() {
     let properties = JSON.parse(localStorage.getItem("userProperties"));
     if (properties == null) {
-        alert("userproperties are NULL!");
+        properties = {
+            userId: 0,
+            userName: "dev",
+            password: "",
+            email: "dave@dev.com",
+            weight: 70,
+            size: 175,
+            birthday: "1980-01-01",
+            currentlyTraining: false,
+            currentlyInExercise: false,
+            createdPlan: false,
+            usualSessionTimes: []
+        }
+        log("userproperties are NULL!");
     } else {
         //log("loading settings of user \"" + getDeviceData().loggedInAsUser + "\"")
     }
@@ -1058,17 +1039,17 @@ function getSettingsFromLocalStorage() {
 
 function getSupportedExercisesFromLS() {
     let ex = JSON.parse(localStorage.getItem("supportedExercises"));
-    return ex? ex : [];
+    return ex ? ex : [];
 }
 
 function getUnsupportedExercisesFromLS() {
     let ex = JSON.parse(localStorage.getItem("unsupportedExercises"));
-    return ex? ex : [];
+    return ex ? ex : [];
 }
 
 function getUserdefinedExercisesFromLS() {
     let ex = JSON.parse(localStorage.getItem("userdefinedExercises"));
-    return ex? ex : [];
+    return ex ? ex : [];
 }
 
 function getDeviceData() {

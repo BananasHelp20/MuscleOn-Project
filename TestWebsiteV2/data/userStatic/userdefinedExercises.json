@@ -2,7 +2,7 @@
     {
         "userIdCreated": 1,
         "name": "Frontflip",
-        "exerciseType": "user-defined",
+        "exerciseType": "defined",
         "description": "!PILF A OD",
         "targetedMuscleGroups": ["Biceps"],
         "equipment": "None",
