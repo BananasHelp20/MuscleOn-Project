@@ -121,6 +121,7 @@ function initializeSession() {
         let properties = getUserPropertiesFromLocalStorage();
         if (device.editingPlanSection) { //on trying to save
             let times = getSessionTimes();
+            log(times);
             if (validateSessionTimes(times)) {
                 device.editingPlanSection = false;
                 document.getElementById("plan-table").innerHTML = "";
@@ -415,7 +416,6 @@ function addWeekday(data) {
 }
 
 function initSelectExercise(elem, id, data) {
-    log(id);
     elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
     elem.parentElement.parentElement.children.item(4).innerHTML = "";
     if (data[id].weight == true) {
@@ -430,10 +430,8 @@ function initSelectExercise(elem, id, data) {
 
 function setSelectedExercise(elem) {
     let id = elem.value;
-    log(elem.value);
     if (id.startsWith("s")) {
         id = id.substring(1);
-        log(id)
         getSupportedExercises().then(data => {
             initSelectExercise(elem, getIndexOfName(data, id), data);
         });
@@ -451,11 +449,10 @@ function setSelectedExercise(elem) {
 }
 
 function getIndexOfName(array, name) {
-    array.forEach((arElem) => {
-        log(arElem.name);
-        log(name);
-        if (arElem.name == name) return array.indexOf(arElem);
-    })
+    for (let i = 0; i < array.length; i++) {
+        if (array[i].name == name) return i;
+    }
+    return -1;
 }
 
 //parameter data: de bisherigen Sessiondaten, von einem Tag (moch des so, das du beim add exercises button a input host, wost in tag dazuschreibst oda so) mit leerem exercises element (optional))
@@ -722,7 +719,7 @@ function signUp() {
 }
 
 function getSessionTimes() {
-    if (!document.getElementById("plan-table") || !document.getElementById("exercise-table")) return;
+    if (!document.getElementById("plan-table") || !document.getElementById("exercise-tables")) return;
     
     let table = document.getElementById("plan-table");
     let exerciseTables = document.getElementById("exercise-tables");
@@ -736,9 +733,11 @@ function getSessionTimes() {
         ids.push(table.children.item(i).getAttribute("id"));
         for (let j = 0; j < table.children.item(i).children.length; j++) {
             let row = table.children.item(i).children.item(j).children.item(0);
-            if (row.getAttribute("id") != null && row.getAttribute("type") != null && row.nodeName != "select") {
+            if (row.getAttribute("id") != null && row.getAttribute("type") != null && row.nodeName != "SELECT") {
                 plantime.push(row.value);
-            } else if (row.getAttribute("id") != null && row.nodeName == "select") {
+            }
+            if (row.getAttribute("id") != null && row.nodeName == "SELECT") {
+                log(row);
                 primaryMuscleGroups.push(row.value);
             }
         }
@@ -754,18 +753,19 @@ function getSessionTimes() {
 
         for (let j = 0; j < exerciseTables.children.item(i).children.item(tbodyIndex).children.length; j++) { //rows durchgehen
             let row = exerciseTables.children.item(i).children.item(tbodyIndex).children.item(j);
-            let allExercises;
+            let allExercises = [];
             let thisExercise;
             if (row.children.item(0).children.item(0).value.charAt(0) == "s") {
                 allExercises = getSupportedExercisesFromLS();
-                thisExercise = allExercises[allExercises.indexOf(row.children.item(0).children.item(0).value.substring(1))];
+                thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))]; //geht (außer wenn Select Exercise)
             } else if (row.children.item(0).children.item(0).value.charAt(0) == "u") {
-                allExercises = getUnsupportedExercises();
-                thisExercise = allExercises[allExercises.indexOf(row.children.item(0).children.item(0).value.substring(1))];
+                allExercises = getUnsupportedExercisesFromLS();
+                thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
             } else {
                 allExercises = getUserdefinedExercisesFromLS();
-                thisExercise = allExercises[allExercises.indexOf(row.children.item(0).children.item(0).value.substring(1))];
+                thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
             }
+            if (!exercises[i]) exercises.push([]);
             exercises[i].push({
                 exerciseType: row.children.item(0).children.item(0).value.substring(1),
                 name: thisExercise.name,
@@ -773,15 +773,17 @@ function getSessionTimes() {
                 equipment: thisExercise.equipment,
                 reps: row.children.item(2).children.item(0).value,
                 sets: row.children.item(3).children.item(0).value,
-                weight: (row.children.item(4).children.item(0)) ? row.children.item().children.item(0).value : null
+                weight: (row.children.item(4).children.item(0)) ? row.children.item(4).children.item(0).value : null
             })
         }
     }
-
+    log(primaryMuscleGroups)
+    log(plan);
+    log(exercises);
     let plantimeObjects = [];
-    for (index in plan) {
+    for (let index = 0; i < plan.length; index++) {
         let time = plan[index];
-        plantimeObjects.push({
+        let object = {
             sessionId: ids[index],
             primaryMuscleGroup: primaryMuscleGroups[index],
             exercises: exercises[getExerciseWithId(ids[index])], //des mit da id is so a gschicht, finde de exercisetabelle mit da passenden id, und füg de daten davon ein
@@ -790,13 +792,44 @@ function getSessionTimes() {
                 fromTime: time[1],
                 toTime: time[2]
             }
-        });
+        };
+        log(object);
+        plantimeObjects.push(object);
     }
     return plantimeObjects;
 }
 
+function getExerciseWithId(id) {
+    let exercises;
+    if (id.startsWith("s")) {
+        id = id.substring(1);
+        exercises = getSupportedExercisesFromLS();
+        for (let i = 0; i < exercises.length; i++) {
+            if (id == exercises[i].name) {
+                return exercises[i];
+            }
+        }
+    } else if (id.startsWith("u")) {
+        id = id.substring(1);
+        exercises = getUnsupportedExercisesFromLS();
+        for (let i = 0; i < exercises.length; i++) {
+            if (id == exercises[i].name) {
+                return exercises[i];
+            }
+        }
+    } else {
+        id = id.substring(1);
+        exercises = getUserdefinedExercisesFromLS();
+        for (let i = 0; i < exercises.length; i++) {
+            if (id == exercises[i].name) {
+                return exercises[i];
+            }
+        }
+    }
+}
+
 function validateSessionTimes(data) {
-    let exercises = data.exercises;
+    let exercises = data.exercies? data.exercises : null;
     let times = data.times;
     if (times.length == 0 || data.primaryMuscleGroup == "" || data.sessionId == -1) return false;
     for (index in times) {
@@ -1024,17 +1057,17 @@ function getSettingsFromLocalStorage() {
 }
 
 function getSupportedExercisesFromLS() {
-    let ex = localStorage.getItem("supportedExercises");
+    let ex = JSON.parse(localStorage.getItem("supportedExercises"));
     return ex? ex : [];
 }
 
 function getUnsupportedExercisesFromLS() {
-    let ex = localStorage.getItem("unsupportedExercises");
+    let ex = JSON.parse(localStorage.getItem("unsupportedExercises"));
     return ex? ex : [];
 }
 
 function getUserdefinedExercisesFromLS() {
-    let ex = localStorage.getItem("userdefinedExercises");
+    let ex = JSON.parse(localStorage.getItem("userdefinedExercises"));
     return ex? ex : [];
 }
 

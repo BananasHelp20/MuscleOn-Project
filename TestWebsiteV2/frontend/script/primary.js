@@ -46,6 +46,15 @@ function init() {
                         showSessionData(userdata);
                         showLongtermData(userdata);
                     });
+                    getSupportedExercises().then(exercises => {
+                        localStorage.setItem("supportedExercises", JSON.stringify(exercises));
+                    })
+                    getUnsupportedExercises().then(exercises => {
+                        localStorage.setItem("unsupportedExercises", JSON.stringify(exercises));
+                    })
+                    getUserDefinedExercises().then(exercises => {
+                        localStorage.setItem("userdefinedExercises", JSON.stringify(exercises));
+                    }) 
                 }, interval);
             }
         });
@@ -54,5 +63,4 @@ function init() {
         if (signUpButton) initializeSignUp(); //nach signup -> login() // oder eventuell ned?
     }
 }
-
 init();
