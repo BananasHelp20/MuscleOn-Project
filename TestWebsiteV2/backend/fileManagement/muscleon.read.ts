@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "fs/promises";
 import * as model from "../model/muscleon.model";
-import { log } from "console";
+import { error, log } from "console";
 
 export async function gatherUserData() {
     let userData: model.User = {
@@ -55,7 +55,7 @@ export async function setUserData(userData: model.User) {
 }
 
 export async function setUserSettings(userSettings: model.UserSettings) {
-    await writeFile("./data/userStatic/settings.json", JSON.stringify(userSettings, null, 2));
+    await writeFile("./data/userStatic/settings.json", JSON.stringify(userSettings, null, 2)).catch(error => {console.error(error)});
 }
 
 export async function setUserProperties(userProperties: model.UserProperties) {

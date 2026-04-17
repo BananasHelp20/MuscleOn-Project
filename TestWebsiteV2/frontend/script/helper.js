@@ -1,4 +1,4 @@
-let interval = 1000; //globale Variable für de Aktuallisierung in Millisekunden
+let interval = 250; //globale Variable für de Aktuallisierung in Millisekunden
 
 function syncModes() {
     if (document.getElementById("dev")) document.getElementById("dev").innerText = getSettingsFromLocalStorage().devMode ? "devmode" : "usermode";
@@ -291,6 +291,33 @@ function findExerciseTableById(sessionId) {
     return -1;
 }
 
+function addExercises(sessionId) {
+    let foundIndex = findTimeTableById(sessionId);
+    if (foundIndex == -1) {
+        log("something went wrong: " + foundIndex);
+        return;
+    }
+    let row = document.getElementById("plan-table").children.item(foundIndex);
+    let times = {
+        sessionId: sessionId,
+        times: {
+            weekday: row.children.item(0).children.item(0).value,
+            fromTime: row.children.item(1).children.item(0).value,
+            toTime: row.children.item(2).children.item(0).value
+        }
+    }
+
+    let newTable = getEmptyExerciseTable(times);
+    document.getElementById("exercise-tables").appendChild(newTable);
+}
+
+function findTimeTableById(sessionId) {
+    for (let i = 0; i < document.getElementById("plan-table").children.length; i++) {
+        if (document.getElementById("plan-table").children.item(i).getAttribute("id") == "" + sessionId) return i;
+    }
+    return -1;
+}
+
 function removeExercises(sessionId) {
     let foundIndex = findExerciseTableById(sessionId);
     if (foundIndex == -1) {
@@ -310,18 +337,45 @@ function addWeekday(data) {
     weekday.setAttribute("id", "weekday" + sessionId);
     weekday.setAttribute("placeholder", "Monday");
     if (weekdayData) weekday.value = weekdayData.weekday;
+    weekday.addEventListener("input", (event) => {
+        let id = event.target.parentElement.parentElement.getAttribute("id");
+        let foundIndex = findExerciseTableById(id);
+        if (foundIndex != -1) {
+            let exTableBody = document.getElementById("exercise-table" + id);
+            let exTableHead = exTableBody.parentElement.children.item(0);
+            exTableHead.children.item(0).children.item(0).children.item(0).innerText = "Session: " + event.target.value;
+        }
+    })
 
     let from = document.createElement("input");
     from.setAttribute("type", "text");
     from.setAttribute("id", "from" + sessionId);
     from.setAttribute("placeholder", "08:00");
     if (weekdayData) from.value = weekdayData.fromTime;
+    from.addEventListener("input", (event) => {
+        let id = event.target.parentElement.parentElement.getAttribute("id");
+        let foundIndex = findExerciseTableById(id);
+        if (foundIndex != -1) {
+            let exTableBody = document.getElementById("exercise-table" + id);
+            let exTableHead = exTableBody.parentElement.children.item(0);
+            exTableHead.children.item(0).children.item(0).children.item(1).innerText = " from: " + event.target.value;
+        }
+    })
 
     let to = document.createElement("input");
     to.setAttribute("type", "text");
     to.setAttribute("id", "to" + sessionId);
     to.setAttribute("placeholder", "09:30");
     if (weekdayData) to.value = weekdayData.toTime;
+    to.addEventListener("input", (event) => {
+        let id = event.target.parentElement.parentElement.getAttribute("id");
+        let foundIndex = findExerciseTableById(id);
+        if (foundIndex != -1) {
+            let exTableBody = document.getElementById("exercise-table" + id);
+            let exTableHead = exTableBody.parentElement.children.item(0);
+            exTableHead.children.item(0).children.item(0).children.item(2).innerText = " to: " + event.target.value;
+        }
+    })
 
     let primaryMuscleGroup = document.createElement("select");
     primaryMuscleGroup.setAttribute("name", "selectMuscleGroup");
@@ -340,7 +394,11 @@ function addWeekday(data) {
 
     let removeExercisesForDayButton = document.createElement("button");
     removeExercisesForDayButton.setAttribute("id", "exercise-controlButton");
-    removeExercisesForDayButton.innerText = "remove exercises";
+    if (data && data.exercises) {
+        removeExercisesForDayButton.innerText = "remove exercises";
+    } else {
+        removeExercisesForDayButton.innerText = "add exercises";
+    }
     removeExercisesForDayButton.addEventListener("click", (event) => {
         if (document.getElementById("exercise-table" + event.target.parentElement.parentElement.getAttribute("id"))) {
             removeExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
@@ -478,11 +536,15 @@ function getEmptyExerciseTable(time) {
     ths[4].innerText = "Weight";
 
     let mainTh = document.createElement("th");
-    mainTh.innerText = "Day: " + time.times.weekday + " from " + time.times.fromTime + " to " + time.times.toTime;
+    mainTh.innerHTML = "<span>Day: " + time.times.weekday + "</span><span> from " + time.times.fromTime + "</span><span> to " + time.times.toTime + "</span>";
     mainTh.setAttribute("colspan", ths.length - 1);
 
     let addButton = document.createElement("button");
     addButton.innerText = "Add new Exercise";
+
+    let tr = document.createElement("tr");
+    tr.setAttribute("id", event.target.parentElement.parentElement.parentElement.children.length);
+
     addButton.addEventListener("click", (event) => {
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
         let inputs = [document.createElement("input"), document.createElement("input"), document.createElement("input")];
@@ -497,11 +559,11 @@ function getEmptyExerciseTable(time) {
 
         tds[1].innerText = "No Exercise Selected";
 
-        inputs[0].setAttribute("id", "reps" + i);
+        inputs[0].setAttribute("id", "reps" + tr.getAttribute("id"));
         inputs[0].placeholder = 5;
         tds[2].appendChild(inputs[0]);
 
-        inputs[1].setAttribute("id", "sets" + i);
+        inputs[1].setAttribute("id", "sets" + tr.getAttribute("id"));
         inputs[1].placeholder = 3;
         tds[3].appendChild(inputs[1]);
 
@@ -516,12 +578,10 @@ function getEmptyExerciseTable(time) {
         });
         tds[5].appendChild(delButton);
 
-        let tr = document.createElement("tr");
-        tr.setAttribute("id", event.target.parentElement.parentElement.parentElement.children.length);
         tds.forEach((td) => {
             tr.appendChild(td);
         });
-        event.target.parentElement.parentElement.parentElement.appendChild(tr);
+        event.target.parentElement.parentElement.parentElement.parentElement.children.item(1).appendChild(tr);
     });
 
     let addButtonTh = document.createElement("th");
@@ -541,6 +601,11 @@ function getEmptyExerciseTable(time) {
     thead.appendChild(headersRow);
 
     table.appendChild(thead);
+    if (!time.primaryMuscleGroup) {
+        let tbody = document.createElement("tbody");
+        tbody.setAttribute("id", "exercise-table" + time.sessionId);
+        table.appendChild(tbody);
+    }
 
     return table;
 }
@@ -553,7 +618,7 @@ function initializePlanTable() {
         } else {
             addWeekday(null);
         }
-        document.getElementById("day1").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
+        document.getElementById("plan-table").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
     });
 
     if (document.getElementById("delete-day")) document.getElementById("delete-day").addEventListener("click", (event) => {
@@ -584,6 +649,8 @@ function login() { //test this
                 sessionRunning: false,
             }
             localStorage.setItem("deviceData", JSON.stringify(newDeviceData));
+            localStorage.setItem("userSettings", JSON.stringify(answer.userSettings))
+            localStorage.setItem("userProperties", JSON.stringify(answer.userProperties))
             showLoggedIn(newDeviceData);
             location.href = "./index.html";
             initializeLogoutAndDelete();
@@ -834,7 +901,9 @@ function validateSessionTimes(data) {
                     exercise.reps &&
                     exercise.sets &&
                     !isNaN(Number(exercise.reps)) &&
-                    !isNaN(Number(exercise.sets))
+                    !isNaN(Number(exercise.sets)) &&
+                    exercise.reps != "" &&
+                    exercise.sets != ""
                 )) {
                     console.error("if 3 (" + exercise + ")");
                     return false;
@@ -996,11 +1065,27 @@ function showLongtermData(userdata) {
 }
 
 function getUserDataFromLocalStorage() {
-    return JSON.parse(localStorage.getItem("userData"));
+    try {
+        let data = localStorage.getItem("userData");
+        if (!data) return null;
+        return JSON.parse(data);
+    } catch (error) {
+        log("Error parsing userData from localStorage:", error);
+        return null;
+    }
 }
 
 function getUserPropertiesFromLocalStorage() {
-    let properties = JSON.parse(localStorage.getItem("userProperties"));
+    let properties;
+    try {
+        let data = localStorage.getItem("userProperties");
+        if (data) {
+            properties = JSON.parse(data);
+        }
+    } catch (error) {
+        properties = null;
+    }
+
     if (properties == null) {
         properties = {
             userId: 0,
@@ -1023,12 +1108,24 @@ function getUserPropertiesFromLocalStorage() {
 }
 
 function getSettingsFromLocalStorage() {
-    let settings = JSON.parse(localStorage.getItem("userSettings"));
+    let settings;
+    try {
+        if (localStorage.getItem("userSettings")) {
+            settings = JSON.parse(localStorage.getItem("userSettings"));
+        }
+    } catch (error) {
+        settings = null;
+    }
+
     if (settings == null) {
         log("loading site with default settings...");
         settings = {
             mode: "lightmode",
-            viewing: ["nothingToView"],
+            viewing: {
+                realTimeStats: false,
+                sessionStats: false,
+                longtermStats: false,
+            },
             devMode: false
         }
     } else {
@@ -1152,7 +1249,7 @@ async function clearUserData() {
     log("saving Data to Database and logging out");
     let defaultSettings = {
         mode: "lightmode",
-        viewing: ["nothingToView"],
+        viewing: null,
         devMode: false
     }
     return fetch("/api/clearUserData", {

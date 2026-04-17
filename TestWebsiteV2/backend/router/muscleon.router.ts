@@ -1,5 +1,5 @@
 import express from 'express';
-import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan} from '../fileManagement/muscleon.read';
+import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 export let muscleRouter = express.Router();
 
@@ -80,7 +80,78 @@ muscleRouter.post('/loadUserDataById', async (req, res) => {
         found: true,
         userId: 0,
         email: "willi@a.at",
-        username: "William"
+        username: "William",
+        userProperties: {
+            userId: 0,
+            userName: "dev",
+            password: "",
+            email: "hallo@test.com",
+            weight: 70,
+            size: 175,
+            birthday: "1990-01-01",
+            currentlyTraining: false,
+            currentlyInExercise: true,
+            createdPlan: true,
+            usualSessionTimes: [
+                {
+                    sessionId: 0,
+                    primaryMuscleGroup: "Biceps",
+                    exercises: [
+                        {
+                            exerciseType: "supported",
+                            name: "Kettlebell Swings",
+                            targetedMuscleGroups: [
+                                "Glutes",
+                                "Hamstrings",
+                                "Core"
+                            ],
+                            equipment: ["Kettlebell"],
+                            reps: 0,
+                            sets: 2,
+                            weight: null
+                        }
+                    ],
+                    times: {
+                        weekday: "Saturday",
+                        fromTime: "9:30",
+                        toTime: "11:30"
+                    }
+                },
+                {
+                    sessionId: 1,
+                    primaryMuscleGroup: "Chest",
+                    exercises: [
+                        {
+                            exerciseType: "supported",
+                            name: "Bench Press",
+                            targetedMuscleGroups: [
+                                "Chest",
+                                "Shoulders",
+                                "Triceps"
+                            ],
+                            equipment: ["Barbell or Dumbbells"],
+                            reps: 10,
+                            sets: 3,
+                            weight: null
+                        }
+                    ],
+                    times: {
+                        weekday: "Thursday",
+                        fromTime: "9:31",
+                        toTime: "11:31"
+                    }
+                }
+            ]
+        },
+        userSettings: {
+            mode: "darkmode",
+            viewing: {
+                realTimeStats: true,
+                sessionStats: false,
+                longtermStats: true
+            },
+            devMode: true
+        }
     };
     res.statusCode = 200;
     res.send(answer);

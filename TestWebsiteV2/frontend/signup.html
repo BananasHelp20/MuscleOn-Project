@@ -27,31 +27,21 @@
     <input type="checkbox" id="plan" name="plan"><br><br>
     <!--wenn plan geklickt, sollen darunter 7 checkboxen für jeden Tag erscheinen, und für jeden Tag eine Zeitangabe von wann bis wann.-->
     <div id="plan-section" hidden>
-        <button id="add-weekday">Add Weekday</button><br>
-        <button id="add-exercises">Add exercises</button>
-        <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+        <button id="add-weekday">Wochentag hinzufügen</button>
         <table>
-            <tr>
-                <th>Day of Week</th>
-                <th>From</th>
-                <th>To</th>
-                <th>Muscle Group</th>
-                <th>&emsp;</th>
-                <th>&emsp;</th>
-            </tr>
-            <tbody id="plan-table">
-                <tr id="day1">
-                    <td><input type="text" id="weekday1" placeholder="Montag"></td>
-                    <td><input type="text" id="from1" placeholder="08:00"></td>
-                    <td><input type="text" id="to1" placeholder="09:30"></td>
-                    <td>
-                        <button id="delete-day">remove day</button>
-                        <button id="remove-exercises">remove exercises</button>
-                    </td>
-                    <td><select name="selectMuscleGroup" id="selectMuscleGroup"></select></td>
+            <thead>
+                <tr>
+                    <th>Day of Week</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Muscle Group</th>
+                    <th>&emsp;</th>
+                    <th>&emsp;</th>
                 </tr>
-            </tbody>
+            </thead>
+            <tbody id="plan-table"></tbody>
         </table>
+        <div id="exercise-tables"></div>
     </div>
     <button id="signupButton">Signup</button><br>
     <a href="./index.html">Go Back</a>

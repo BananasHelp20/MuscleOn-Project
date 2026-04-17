@@ -80,7 +80,7 @@ export interface SupportedExercises {
 export interface ExerciseSelection {
     sessionId: number,
     primaryMuscleGroup: string,                                         // da Muskel, den da User trainieren möchte
-    excercises: Exercise[],
+    exercises: Exercise[],
     times?: Time
 }
 
@@ -106,7 +106,7 @@ export interface Exercise {                                 //a interface, wos q
     equipment?: string[],                                   //nur falls ma de Übung mit am Gerät oda sowos macht, sonst is des irrelevant
     reps?: number,
     sets?: number,
-    weight?: number | boolean,                                        //nur falls ma de Übung mit Gewicht macht, sonst is des irrelevant // ACHTUNG: WEIGHT KANN BOOLEAN UND NUMBER SEI, depending on use hoid
+    weight?: number | boolean | null,                                        //nur falls ma de Übung mit Gewicht macht, sonst is des irrelevant // ACHTUNG: WEIGHT KANN BOOLEAN UND NUMBER SEI, depending on use hoid
     userNameCreated?: string,                               //wichtig für usercredit
     userIdCreated?: number,                                 //nur wenn de übung vom User defined wordn is (tendentiell wird userNameCreated a braucht wenn des braucht wird)
     public?: boolean,                                       //wenn da user will, das de custom übung von andere ersichtlich is
@@ -116,5 +116,7 @@ export interface DatabaseAnswer {
     found: boolean,
     userId: number,
     email: string,
-    username: string
+    username: string,
+    userProperties?: UserProperties, //is notwendig, oba nur bei gewisse anfragen
+    userSettings?: UserSettings //wie bei userproperties
 }

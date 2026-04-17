@@ -20,7 +20,7 @@
     <button id="lightSwitch">lightmode</button><br>
     <div id="lockedFromLogin" hidden>
         <button id="dev">devmode</button><br>
-        <button id="check">CHECK</button><br id="checkbr">
+        <button id="check" hidden>CHECK</button><br id="checkbr" hidden>
         <button id="startStopSession">Start Session</button><br>
         <div id="sessionDiv" hidden>
             Current Exercise: <span id="currentExercise">Curls</span><br>
@@ -40,37 +40,9 @@
                         <th>&emsp;</th>
                     </tr>
                 </thead>
-                <tbody id="plan-table">
-                    <!-- <tr id="day1">
-                        <td><input type="text" id="weekday1" placeholder="Montag"></td>
-                        <td><input type="text" id="from1" placeholder="08:00"></td>
-                        <td><input type="text" id="to1" placeholder="09:30"></td>
-                        <td><button id="delete-day">remove</button></td>
-                    </tr> -->
-                </tbody>
+                <tbody id="plan-table"></tbody>
             </table>
-            <div id="exercise-tables">
-
-            </div>
-            <!-- <table>
-                <thead>
-                    <tr>
-                        <th>Exercise</th>
-                        <th>Required Equipment</th>
-                        <th>Reps</th>
-                        <th>Sets</th>
-                        <th>Weight</th>
-                    </tr>
-                </thead>
-                <tbody id="exercise-table">
-                    <tr id="day1">
-                        <td><input type="text" id="weekday1" placeholder="Montag"></td>
-                        <td><input type="text" id="from1" placeholder="08:00"></td>
-                        <td><input type="text" id="to1" placeholder="09:30"></td>
-                        <td><button id="delete-day">remove</button></td>
-                    </tr>
-                </tbody>
-            </table> -->
+            <div id="exercise-tables"></div>
         </div>
         <div id="dynamicHeadline" hidden>
             <h2>Dynamic data</h2>
