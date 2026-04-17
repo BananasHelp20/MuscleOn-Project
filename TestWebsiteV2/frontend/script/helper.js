@@ -485,7 +485,7 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
     let tbody = document.createElement("tbody");
     tbody.setAttribute("id", "exercise-table" + sessionId);
 
-    
+
     for (i in exerciseData) {
         let select = document.createElement("select");
         setExerciseOptions(select);

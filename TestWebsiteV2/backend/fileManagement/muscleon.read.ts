@@ -74,7 +74,7 @@ export async function saveTrainingsPlan(times: model.ExerciseSelection[]) {
         password: userProperties.password,
         email: userProperties.email,
         weight: userProperties.weight,
-        size: userProperties.size,
+        size: userProperties.size,6
         birthday: userProperties.birthday,
         currentlyTraining: userProperties.currentlyTraining,
         createdPlan: userProperties.createdPlan,
