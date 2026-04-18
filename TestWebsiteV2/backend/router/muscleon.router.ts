@@ -1,6 +1,7 @@
 import express from 'express';
 import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
+import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
 export let muscleRouter = express.Router();
 
 muscleRouter.get('/getUserData', async (req, res) => {
@@ -213,4 +214,48 @@ muscleRouter.get('/getExercises/unsupported', async (req, res) => {
 muscleRouter.get('/getExercises/user', async (req, res) => {
     res.statusCode = 200;
     res.send(await gatherUserExercises());
+});
+
+muscleRouter.post('/session/start', async (req, res) => {
+    await startOrResumeSession().catch((err) => {
+        console.error("Error starting session", err);
+        res.statusCode = 500;
+        res.send({ message: "Error starting session" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "logging out successful!" });
+});
+
+muscleRouter.post('/session/stop', async (req, res) => {
+    await stopSession().catch((err) => {
+        console.error("Error stopping session:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error stopping session" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "logging out successful!" });
+});
+
+muscleRouter.post('/exercise/start', async (req, res) => {
+    await resumeExercise().catch((err) => {
+        console.error("Error starting exercise:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error starting exercise" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "logging out successful!" });
+});
+
+muscleRouter.post('/exercise/stop', async (req, res) => {
+    await stopExercise().catch((err) => {
+        console.error("Error stopping session:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error stopping session" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "logging out successful!" });
 });

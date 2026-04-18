@@ -27,9 +27,12 @@ function init() {
         });
         showLoggedIn(deviceData);
         initializeLogoutAndDelete(); //wenn logout -> login und signup initialisieren // oder eventuell ned?
-        initializeSession();
 
         getUserData().then((data) => {
+            localStorage.setItem("userProperties", JSON.stringify(data.userProperties));
+            localStorage.setItem("userSettings", JSON.stringify(data.userSettings));
+            localStorage.setItem("userData", JSON.stringify(data));
+            initializeSession();
             setModes(data.userSettings); //des im localstorage is nur placeholdermäßig bis zum Einloggen, des wos im json steht is des wos braucht wird
             loadAndInitializeChecked(data.userSettings);
             let longtermStatsSection = document.getElementById("staticDiv");

@@ -87,10 +87,6 @@ function sessionButtonCheck() {
 }
 
 function initializeSession() {
-    if (!document.getElementById("sessionDiv")) {//wenn des session zeigs existiert
-        return;
-    }
-
     sessionButtonCheck();
     if (document.getElementById("startStopSession")) document.getElementById("startStopSession").addEventListener("click", () => {
         let device = getUserPropertiesFromLocalStorage();
@@ -119,6 +115,8 @@ function initializeSession() {
     if (document.getElementById("createTrainingsPlan")) document.getElementById("createTrainingsPlan").addEventListener("click", () => {
         let device = getDeviceData();
         let properties = getUserPropertiesFromLocalStorage();
+        log(properties.createdPlan);
+        log(properties.usualSessionTimes)
         if (device.editingPlanSection) { //on trying to save
             let times = getSessionTimes();
             if (validateSessionTimes(times)) {
@@ -138,7 +136,7 @@ function initializeSession() {
                     addWeekday(time);
                 }
 
-                for (time of properties.usualSessionTimes) {//ned zusammenfassen, das des mit da freien id geht
+                for (time of properties.usualSessionTimes) {
                     if (time.exercises) {
                         loadExerciseSelection(time);
                     }
@@ -968,7 +966,7 @@ function setModes(data) {
     }
     document.getElementById("modeStylesheet").href = data ? (data.mode == "lightmode" ? "./css/light.css" : "./css/dark.css") :  "./css/light.css";
     lightSwitch.innerText = data ? data.mode : "lightmode";
-    if (devModeSwitch) devModeSwitch.innerText = data? (data.devMode ? "devmode" : "usermdoe") : "usermode";
+    if (devModeSwitch) devModeSwitch.innerText = data? (data.devMode ? "devmode" : "usermode") : "usermode";
 }
 
 function loadAndInitializeChecked(settings) {
@@ -1138,7 +1136,7 @@ function getUserPropertiesFromLocalStorage() {
     return properties;
 }
 
-function getSettingsFromLocalStorage() {
+function getSettingsFromLocalStorage() { //MOCH DO KA log() EINI!
     let settings;
     try {
         if (localStorage.getItem("userSettings")) {
@@ -1149,7 +1147,6 @@ function getSettingsFromLocalStorage() {
     }
 
     if (settings == null) {
-        log("loading site with default settings...");
         settings = {
             mode: "lightmode",
             viewing: {
@@ -1330,10 +1327,12 @@ async function startSession() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
+        body: {
+            message: "start!"
+        }
     }).then((response) => {
         if (!response.ok) {
-            console.error("An error occured when trying to create a new user:", response.statusText);
+            console.error("An error occured when trying to start or resume Session:", response.statusText);
         }
     });
 }
@@ -1344,10 +1343,9 @@ async function stopSession() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
     }).then((response) => {
         if (!response.ok) {
-            console.error("An error occured when trying to create a new user:", response.statusText);
+            console.error("An error occured when trying to stop Session:", response.statusText);
         }
     });
 }
@@ -1358,10 +1356,9 @@ async function startExercise() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
     }).then((response) => {
         if (!response.ok) {
-            console.error("An error occured when trying to create a new user:", response.statusText);
+            console.error("An error occured when trying to resume Exercise", response.statusText);
         }
     });
 }
@@ -1372,10 +1369,9 @@ async function stopExercise() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(userData) //userid muss von der Datenbank verliehen werden
     }).then((response) => {
         if (!response.ok) {
-            console.error("An error occured when trying to create a new user:", response.statusText);
+            console.error("An error occured when trying to stop Exercise:", response.statusText);
         }
     });
 }
@@ -1386,7 +1382,6 @@ async function saveTimes(times) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(times) //userid muss von der Datenbank verliehen werden
     }).then((response) => {
         if (!response.ok) {
             console.error("An error occured when trying to alter or create the trainingsplan:", response.statusText);
@@ -1457,6 +1452,6 @@ async function getUserDefinedExercises() {
     });
 }
 
-function log(string) { //afoch kurze abkürzung
-    console.log(string);
+function log(string) { //für devmode
+    if (getSettingsFromLocalStorage().devMode) console.log(string);
 }

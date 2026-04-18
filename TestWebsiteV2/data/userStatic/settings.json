@@ -6,6 +6,6 @@
     "sessionStats": true,
     "longtermStats": true
   },
-  "devMode": false,
+  "devMode": true,
   "viewingExercises": "All Exercises"
 }
