@@ -150,7 +150,8 @@ muscleRouter.post('/loadUserDataById', async (req, res) => {
                 sessionStats: false,
                 longtermStats: true
             },
-            devMode: true
+            devMode: true,
+            viewingExercises: "All"
         }
     };
     res.statusCode = 200;

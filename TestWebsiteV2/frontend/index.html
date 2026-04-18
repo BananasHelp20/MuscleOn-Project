@@ -8,81 +8,39 @@
     <link rel="stylesheet" type="text/css" href="./Css/light.css" id="modeStylesheet">
     <script src="./Script/helper.js" defer></script>
     <script src="./Script/primary.js" defer></script>
+    <script src="./script/dev.js"></script> <!-- unwichtig -->
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
 <body>
     <h1>Test</h1>
     Momentan eingeloggt: <span id="currentUser">Du bist nicht eingeloggt. <a href="./login.html" id="loginLink">Login</a> oder: <a href="./signup.html" id="signupLink">Signup</a></span><br>
-    checkboxes for settings:<br>
-    <input type="checkbox" id="viewingSession">session<br>
-    <input type="checkbox" id="viewingRealTime">real-time<br>
-    <input type="checkbox" id="viewingLongterm">long-term<br>
     <button id="lightSwitch">lightmode</button><br>
-    <a href="./404/404.html">404</a>
+    <a href="./404/404.html">404</a><br>
     <div id="lockedFromLogin" hidden>
-        <button id="dev">devmode</button><br>
         <button id="check" hidden>CHECK</button><br id="checkbr" hidden>
-        <button id="startStopSession">Start Session</button><br>
-        <div id="sessionDiv" hidden>
-            Current Exercise: <span id="currentExercise">Curls</span><br>
-            <button id="startStopExercise">Start Exercise</button><br>
-        </div>
-        <button id="createTrainingsPlan">Create Trainings Plan</button> <!--oder wenn ma scho an hat: "alterTrainingsPlan"-->
-        <div id="plan-section" hidden>
-            <button id="add-weekday">Wochentag hinzufügen</button>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Day of Week</th>
-                        <th>From</th>
-                        <th>To</th>
-                        <th>Muscle Group</th>
-                        <th>&emsp;</th>
-                        <th>&emsp;</th>
-                    </tr>
-                </thead>
-                <tbody id="plan-table"></tbody>
-            </table>
-            <div id="exercise-tables"></div>
-        </div>
-        <div id="dynamicHeadline" hidden>
-            <h2>Dynamic data</h2>
-        </div>
-        <div id="dynamicDiv" hidden>
-            <h3>current Session (updated every second)</h3>
-            Average Heart Rate: <span id="averageHeartFrequence"></span><br>
-            Average Oxygen: <span id="averageOxygen"></span><br>
-            Average Muscle Usage: <span id="averageMuscleUsageInPercent"></span><br>
-            Trained Muscles: <span id="trainedMuscles"></span>
-        </div>
-        <div id="realTimeDiv" hidden>
-            <h3>current data (also updated every second)</h3>
-            Heart Rate: <span id="heartFrequence"></span><br>
-            Oxygen: <span id="oxygen"></span><br>
-            Current Muscle Being Trained: <span id="currentMuscleBeingTrained"></span><br>
-            Current Exercise: <span id="currentExercise"></span>
-        </div>
-        <div id="staticDiv" hidden>
-            <h2>Static data</h2>
-            <h3>All-Time Average</h3>
-            Average Time Trained: <span id="averageTimeTrained"></span><br>
-            Average Heart Rate: <span id="averageHeartFrequence"></span><br>
-            Average Oxygen: <span id="averageOxygen"></span><br>
-            Average Muscle Usage In Percent: <span id="averageMuscleUsageInPercent"></span><br>
-            Weekly burned calories: <span id="weeklyBurnedCalories"></span><br>
-            Monthly strength increase: <span id="monthlyStrengthIncrease"></span><br>
-            Average weekly training Time: <span id="weeklyTrainingTime"></span><br>
-            Most trained Muscle ever: <span id="mostTrainedMuscle"></span><br>
-            Most done exercise ever: <span id="mostDoneExercise"></span><br>
-
-            <h3>All-Time Highscores</h3>
-            Max Time Trained: <span id="maxTimeTrained"></span><br>
-            Max Done In One For Each Exercise: <span id="maxDoneInOneForEachExercise"></span><br>
-            Max Heart Rate: <span id="maxHeartRate"></span><br>
-        </div>
+        <a href="./session.html">Session</a><br>
+        <a href="./settings.html">Settings</a><br>
     </div>
-    <div id="exercises">
-        <button id="exerciseSwitch">Currently viewing: All</button>
+    <a href="./exercises.html">View Exercises</a><br>
+    <div id="upcomingFeatures">
+        <h3>Todo:</h3>
+        <ul>
+            <li>Subsites <input type="checkbox"></li>
+            <li>debug Subsites <input type="checkbox"></li>
+            <li>not-chatGPT looking 404 page <input type="checkbox"></li>
+            <li>display Exercises with group matching selected group <input type="checkbox"></li>
+            <li>display data how it should be <input type="checkbox"></li>
+            <li>add Preset Plans <input type="checkbox"></li>
+            <li>fix /n Bug when adding more than 1 Exercise to an Exercisetable <input type="checkbox"></li>
+            <li>make flex layouting <input type="checkbox"></li>
+            <li>Style Website <input type="checkbox"></li>
+            <li>Style/layout for tablets <input type="checkbox"></li>
+            <li>Style/layout for phones <input type="checkbox"></li>
+            <li>maybe Style/layout for smaller devices (e.g. watch) <input type="checkbox"></li>
+            <li>live graph <input type="checkbox"></li>
+            <li>last debugging <input type="checkbox"></li>
+            <li>finish todo list :pray: <input type="checkbox"></li>
+        </ul>
     </div>
 </body>
 </html>

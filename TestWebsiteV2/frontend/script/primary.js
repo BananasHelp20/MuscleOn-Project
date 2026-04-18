@@ -6,6 +6,7 @@ function init() {
     let devModeButton = document.getElementById("dev");
 
     initializeLightSwitch();
+    initializeExercises();
     if (devModeButton) initializeDevMode();
 
     let deviceData = getDeviceData();

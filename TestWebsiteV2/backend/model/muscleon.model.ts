@@ -61,7 +61,8 @@ export interface UserSettings {
         sessionStats: boolean,
         longtermStats: boolean,
     },                                                      //viewing speichert de sochn, de auf da website angezeigt werden sollen (ob sessiondaten mit-angezeigt werden sollen oda ned z.B.)
-    devMode: boolean                                        //platzhalter (was a nimma warum i den eingefügt hob)
+    devMode: boolean,                                       //dev mode, blended gewisse objekte ein, und aktiviert spezifisches logging in da konsole fürs bufixing wenn aktiv
+    viewingExercises: string                                //definiert, wos genau an Exercises angezeigt werden soi (all: alles, user: nur de de ma selbst gemacht hat, community: nicht unterstützte Übungen, supported: unterstützte Übungen)
 }
 
 export interface DeviceProperties {
