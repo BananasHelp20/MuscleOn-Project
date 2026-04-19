@@ -577,3 +577,13 @@ td, th {
 input[type="checkbox"]:checked {
     color: yellow;
 }
+
+.gameDiv {
+    width: 100%;
+}
+
+#gameDiv canvas {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
