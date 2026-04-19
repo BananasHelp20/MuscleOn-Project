@@ -3,16 +3,49 @@
 <head>
   <meta charset="UTF-8" />
   <title>EMG Monitor</title>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
   <h1>EMG Monitor</h1>
   <p id="status">Verbinde...</p>
-  <div id="log"></div>
+
+  <canvas id="emgChart" width="800" height="400"></canvas>
 
   <script>
     const socket = io();
 
+    const ctx = document.getElementById('emgChart').getContext('2d');
+
+    const data = {
+      labels: [],
+      datasets: [{
+        label: 'EMG Normalized',
+        data: [],
+        borderWidth: 2,
+        tension: 0.2
+      }]
+    };
+
+    const config = {
+      type: 'line',
+      data: data,
+      options: {
+        animation: false,
+        scales: {
+          y: {
+            min: 0,
+            max: 4096
+          }
+        }
+      }
+    };
+
+    const emgChart = new Chart(ctx, config);
+
+    // Status
     socket.on('connect', () => {
       document.getElementById('status').textContent = 'Verbunden ✅';
     });
@@ -21,11 +54,21 @@
       document.getElementById('status').textContent = 'Getrennt ❌';
     });
 
-    socket.on('emg-data', (data) => {
-      const log = document.getElementById('log');
-      const entry = document.createElement('p');
-      entry.textContent = `Raw: ${data.raw} | Adjusted: ${data.adjusted} | Normalized: ${data.normalized}`;
-      log.prepend(entry);
+    // Daten empfangen
+    socket.on('emg-data', (d) => {
+      const time = new Date().toLocaleTimeString();
+
+      // neuen Punkt hinzufügen
+      data.labels.push(time);
+      data.datasets[0].data.push(d.raw);
+
+      // max 100 Punkte anzeigen (sonst wird's langsam)
+      if (data.labels.length > 100) {
+        data.labels.shift();
+        data.datasets[0].data.shift();
+      }
+
+      emgChart.update();
     });
   </script>
 </body>

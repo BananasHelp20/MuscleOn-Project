@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "@serialport/parser-readline": "^13.0.0",
+    "better-sqlite3": "^12.8.0",
     "express": "^5.2.1",
     "serialport": "^13.0.0",
     "socket.io": "^4.8.3"
