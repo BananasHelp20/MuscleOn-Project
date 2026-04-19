@@ -12,14 +12,46 @@
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
 <body>
-    <h1>Login</h1>
-    <label for="email">Benutzername:</label>
-    <input type="email" id="email" name="email"><br><br>
-    <label for="password">Password:</label>
-    <input type="password" id="password" name="password"><br><br>
-    <button id="loginButton">Login</button><br>
-    <a href="./index.html" id="returnLink">Go Back</a>
-    <button id="lightSwitch">lightmode</button><br>
-    Noch keinen Account? <a href="./signup.html" id="signupLink">Hier registrieren</a>
+    <header>
+        <div id="logoHolder">
+        </div>
+        <div id="actualHeaderHolder">
+            <div id="title">
+                Muscle-ON!
+            </div>
+            <div id="menuBar">
+                <a id="menuLogo" class="menuObject" href="./index.html">
+                    <img src="./images/logo.png" alt="">
+                </a>
+                <div id="menuTitle" class="menuObject">
+                    Menu:
+                </div>
+                <div id="menuOptionBar">
+                    <a class="menuObject menuOption" href="./about.html">
+                        <span>About</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./settings.html">
+                        <span>Settings</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./session.html">
+                        <span>Session</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./exercises.html">
+                        <span>Exercises</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="siteBody">
+        <h1>Login</h1>
+        <label for="email">Benutzername:</label>
+        <input type="email" id="email" name="email"><br><br>
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password"><br><br>
+        <button id="loginButton" class="defaultButton">Login</button><br>
+        Noch keinen Account? <a href="./signup.html" id="signupLink">Hier registrieren</a>
+    </div>
+    <div class="background"></div>
 </body>
 </html>

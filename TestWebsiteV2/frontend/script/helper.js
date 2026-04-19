@@ -2,7 +2,7 @@ let interval = 250; //globale Variable für de Aktuallisierung in Millisekunden
 
 function syncModes() {
     if (document.getElementById("dev")) document.getElementById("dev").innerText = getSettingsFromLocalStorage().devMode ? "devmode" : "usermode";
-    document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
+    if (document.getElementById("lightSwitch")) document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
     document.getElementById("modeStylesheet").href = getSettingsFromLocalStorage().mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
 
     if (getSettingsFromLocalStorage().devMode && document.getElementById("check")) {
@@ -15,10 +15,11 @@ function syncModes() {
 }
 
 function initializeLightSwitch() {
-    document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
+    let lightSwitch = document.getElementById("lightSwitch")
+    if (lightSwitch) lightSwitch.innerText = getSettingsFromLocalStorage().mode;
     document.getElementById("modeStylesheet").href = getSettingsFromLocalStorage().mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
 
-    lightSwitch.addEventListener("click", () => {
+    if (lightSwitch) lightSwitch.addEventListener("click", () => {
         let settings = getSettingsFromLocalStorage();
         settings.mode = settings.mode == "lightmode" ? "darkmode" : "lightmode"
         document.getElementById("modeStylesheet").href = settings.mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
@@ -63,7 +64,7 @@ function sessionButtonCheck() {
     let deviceProperties = getDeviceData();
     let properties = getUserPropertiesFromLocalStorage();
     if (properties.createdPlan && !deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
-        document.getElementById("createTrainingsPlan").innerText = "Alter Trainings Plan";
+        document.getElementById("createTrainingsPlan").innerText = "Edit Trainings Plan";
     } else if (!deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
         document.getElementById("createTrainingsPlan").innerText = "Create Trainings Plan";
     } else if (document.getElementById("createTrainingsPlan")) {
@@ -122,7 +123,7 @@ function initializeSession() {
             if (validateSessionTimes(times)) {
                 device.editingPlanSection = false;
                 document.getElementById("plan-table").innerHTML = "";
-                document.getElementById("exercise-tables").innerHTML = "";
+                document.getElementById("exercise-tables").innerHTML = "<h3>Exercises</h3>";
                 properties.usualSessionTimes = times;
                 properties.createdPlan = true;
                 setUserProperties(properties);
@@ -281,8 +282,8 @@ function getFreeSessionId() {
 }
 
 function findExerciseTableById(sessionId) {
-    for (let i = 0; i < document.getElementById("exercise-tables").children.length; i++) {
-        let tbodyIndex;
+    for (let i = 1; i < document.getElementById("exercise-tables").children.length; i++) {
+        let tbodyIndex = 1;
         for (let j = 0; j < document.getElementById("exercise-tables").children.item(i).children.length; j++) {
             if (document.getElementById("exercise-tables").children.item(i).children.item(j).getAttribute("id")) tbodyIndex = j;
         }
@@ -292,6 +293,7 @@ function findExerciseTableById(sessionId) {
 }
 
 function addExercises(sessionId) {
+    document.getElementById("exercise-tables").hidden = false;
     let foundIndex = findTimeTableById(sessionId);
     if (foundIndex == -1) {
         log("something went wrong: " + foundIndex);
@@ -358,7 +360,7 @@ function addWeekday(data) {
         if (foundIndex != -1) {
             let exTableBody = document.getElementById("exercise-table" + id);
             let exTableHead = exTableBody.parentElement.children.item(0);
-            exTableHead.children.item(0).children.item(0).children.item(1).innerText = " from: " + event.target.value;
+            exTableHead.children.item(0).children.item(0).children.item(1).innerText = " from " + event.target.value;
         }
     })
 
@@ -373,9 +375,9 @@ function addWeekday(data) {
         if (foundIndex != -1) {
             let exTableBody = document.getElementById("exercise-table" + id);
             let exTableHead = exTableBody.parentElement.children.item(0);
-            exTableHead.children.item(0).children.item(0).children.item(2).innerText = " to: " + event.target.value;
+            exTableHead.children.item(0).children.item(0).children.item(2).innerText = " to " + event.target.value;
         }
-    })
+    });
 
     let primaryMuscleGroup = document.createElement("select");
     primaryMuscleGroup.setAttribute("name", "selectMuscleGroup");
@@ -384,6 +386,7 @@ function addWeekday(data) {
     if (data) primaryMuscleGroup.value = data.primaryMuscleGroup;
 
     let delButton = document.createElement("button");
+    delButton.setAttribute("class", "tableButton")
     delButton.setAttribute("id", "delete-day");
     delButton.innerText = "remove day";
     delButton.addEventListener("click", (event) => {
@@ -393,8 +396,9 @@ function addWeekday(data) {
     });
 
     let removeExercisesForDayButton = document.createElement("button");
+    removeExercisesForDayButton.setAttribute("class", "tableButton");
     removeExercisesForDayButton.setAttribute("id", "exercise-controlButton");
-    if (data && data.exercises) {
+    if (data && data.exercises.length != 0) {
         removeExercisesForDayButton.innerText = "remove exercises";
     } else {
         removeExercisesForDayButton.innerText = "add exercises";
@@ -414,7 +418,9 @@ function addWeekday(data) {
     tds[1].appendChild(from);
     tds[2].appendChild(to);
     tds[3].appendChild(primaryMuscleGroup);
+    tds[4].setAttribute("class", "tableButtonContainer");
     tds[4].appendChild(delButton);
+    tds[5].setAttribute("class", "tableButtonContainer");
     tds[5].appendChild(removeExercisesForDayButton)
 
     let tr = document.createElement("tr");
@@ -470,22 +476,23 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
     let sessionId = data.sessionId;
     let exerciseData = (data) ? data.exercises : null;
     if (data && !data.exercises) return;
-
+    document.getElementById("exercise-tables").hidden = false;
     let exerciseDiv = document.getElementById("exercise-tables");
     let exerciseTable = getEmptyExerciseTable(data);
-
-    let delButton = document.createElement("button");
-    delButton.setAttribute("id", "delete-exercise");
-    delButton.innerText = "remove exercise";
-    delButton.addEventListener("click", (event) => {
-        if (event.target.parentElement.parentElement.parentElement.children.length > 1) event.target.parentElement.parentElement.remove();
-        if (event.target.parentElement.parentElement.parentElement.children.length <= 1) event.target.parentElement.parentElement.parentElement.parentElement.remove();
-    });
 
     let tbody = document.createElement("tbody");
     tbody.setAttribute("id", "exercise-table" + sessionId);
 
     for (i in exerciseData) {
+        let delButton = document.createElement("button");
+        delButton.setAttribute("class", "tableButton");
+        delButton.setAttribute("id", "delete-exercise");
+        delButton.innerText = "remove exercise";
+        delButton.addEventListener("click", (event) => {
+            if (event.target.parentElement.parentElement.parentElement.children.length > 1) event.target.parentElement.parentElement.remove();
+            if (event.target.parentElement.parentElement.parentElement.children.length <= 1) event.target.parentElement.parentElement.parentElement.parentElement.remove();
+        });
+        
         let select = document.createElement("select");
         setExerciseOptions(select);
         select.addEventListener("change", (event) => {
@@ -509,6 +516,7 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
         } else {
             tds[4].innerText = " - ";
         }
+        tds[5].setAttribute("class", "tableButtonContainer");
         tds[5].appendChild(delButton);
 
         let tr = document.createElement("tr");
@@ -519,32 +527,35 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
 
         tbody.appendChild(tr);
     }
-
     exerciseTable.appendChild(tbody);
-    exerciseDiv.appendChild(exerciseTable);
+    if (exerciseData.length != 0) exerciseDiv.appendChild(exerciseTable);
+    if (exerciseData.length == 0) {
+        exerciseDiv.hidden = true;
+    }
 }
 
 function getEmptyExerciseTable(time) {
     let table = document.createElement("table");
-    let ths = [document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th")]
+    let ths = [document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th")];
 
     ths[0].innerText = "Exercise";
     ths[1].innerText = "Required Equipment";
     ths[2].innerText = "Reps";
     ths[3].innerText = "Sets";
     ths[4].innerText = "Weight";
+    ths[5].innerHTML = "&emsp;";
 
     let mainTh = document.createElement("th");
-    mainTh.innerHTML = "<span>Day: " + time.times.weekday + "</span><span> from " + time.times.fromTime + "</span><span> to " + time.times.toTime + "</span>";
-    mainTh.setAttribute("colspan", ths.length - 1);
+    mainTh.innerHTML = "<span>Session: " + time.times.weekday + "</span><span> from " + time.times.fromTime + "</span><span> to " + time.times.toTime + "</span>";
+    mainTh.setAttribute("colspan", ths.length-1);
 
     let addButton = document.createElement("button");
+    addButton.setAttribute("class", "tableButton");
     addButton.innerText = "Add new Exercise";
 
-    let tr = document.createElement("tr");
-    tr.setAttribute("id", event.target.parentElement.parentElement.parentElement.children.length);
-
     addButton.addEventListener("click", (event) => {
+        let tr = document.createElement("tr");
+        tr.setAttribute("id", event.target.parentElement.parentElement.parentElement.children.length);
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
         let inputs = [document.createElement("input"), document.createElement("input"), document.createElement("input")];
 
@@ -569,12 +580,14 @@ function getEmptyExerciseTable(time) {
         tds[4].innerText = "No Exercise Selected"
 
         let delButton = document.createElement("button");
+        delButton.setAttribute("class", "tableButton");
         delButton.setAttribute("id", "delete-exercise");
         delButton.innerText = "remove exercise";
         delButton.addEventListener("click", (event) => {
             if (event.target.parentElement.parentElement.parentElement.children.length > 1) event.target.parentElement.parentElement.remove();
             if (event.target.parentElement.parentElement.parentElement.children.length <= 1) event.target.parentElement.parentElement.parentElement.parentElement.remove();
         });
+        tds[5].setAttribute("class", "tableButtonContainer");
         tds[5].appendChild(delButton);
 
         tds.forEach((td) => {
@@ -584,6 +597,7 @@ function getEmptyExerciseTable(time) {
     });
 
     let addButtonTh = document.createElement("th");
+    addButtonTh.setAttribute("class", "tableButtonContainer");
     addButtonTh.appendChild(addButton);
 
     let headerRow = document.createElement("tr");
@@ -636,7 +650,7 @@ function initializeExercises() {
         
         if (device.loggedIn) setUserSettings(settings);
 
-        //updateExerciseDisplay();
+        updateExerciseDisplay(settings);
     });
 }
 
@@ -703,7 +717,7 @@ function logout() {
     localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
     clearUserData();
     showLoggedIn(defaultDeviceData);
-    location.reload(); //seite neu laden
+    location.href = "./index.html";
 }
 
 function signUp() {
@@ -795,36 +809,37 @@ function getSessionTimes() {
     }
 
     for (let i = 0; i < exerciseTables.children.length; i++) {
-        let tbodyIndex;
-        for (let j = 0; j < exerciseTables.children.item(i).children.length; j++) { //tables durchgeh
-            if (exerciseTables.children.item(i).children.item(j).getAttribute("id")) tbodyIndex = j;
-        }
-
-        for (let j = 0; j < exerciseTables.children.item(i).children.item(tbodyIndex).children.length; j++) { //rows durchgehen
-            let row = exerciseTables.children.item(i).children.item(tbodyIndex).children.item(j);
-            let allExercises = [];
-            let thisExercise;
-            if (row.children.item(0).children.item(0).value.charAt(0) == "s") {
-                allExercises = getSupportedExercisesFromLS();
-                thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
-            } else if (row.children.item(0).children.item(0).value.charAt(0) == "u") {
-                allExercises = getUnsupportedExercisesFromLS();
-                thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
-            } else {
-                allExercises = getUserdefinedExercisesFromLS();
-                thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
+        let tbodyIndex = 1;
+        if (exerciseTables.children.item(i).nodeName == "TABLE") {
+            for (let j = 0; j < exerciseTables.children.item(i).children.length; j++) { //tables durchgeh
+                if (exerciseTables.children.item(i).children.item(j).getAttribute("id")) tbodyIndex = j;
             }
-            if (!exercises[i]) exercises.push([]);
-            if (!thisExercise) return null;
-            exercises[i].push({
-                exerciseType: row.children.item(0).children.item(0).value.charAt(0) == "s" ? "supported" : row.children.item(0).children.item(0).value.charAt(0) == "u" ? "unsupported" : "defined-by-user",
-                name: thisExercise.name,
-                targetedMuscleGroups: thisExercise.targetedMuscleGroups,
-                equipment: thisExercise.equipment,
-                reps: row.children.item(2).children.item(0).value,
-                sets: row.children.item(3).children.item(0).value,
-                weight: (row.children.item(4).children.item(0)) ? row.children.item(4).children.item(0).value : null
-            });
+            for (let j = 0; j < exerciseTables.children.item(i).children.item(tbodyIndex).children.length; j++) { //rows durchgehen
+                let row = exerciseTables.children.item(i).children.item(tbodyIndex).children.item(j);
+                let allExercises = [];
+                let thisExercise;
+                if (row.children.item(0).children.item(0).value.charAt(0) == "s") {
+                    allExercises = getSupportedExercisesFromLS();
+                    thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
+                } else if (row.children.item(0).children.item(0).value.charAt(0) == "u") {
+                    allExercises = getUnsupportedExercisesFromLS();
+                    thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
+                } else {
+                    allExercises = getUserdefinedExercisesFromLS();
+                    thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
+                }
+                if (!exercises[i]) exercises.push([]);
+                if (!thisExercise) return null;
+                exercises[i].push({
+                    exerciseType: row.children.item(0).children.item(0).value.charAt(0) == "s" ? "supported" : row.children.item(0).children.item(0).value.charAt(0) == "u" ? "unsupported" : "defined-by-user",
+                    name: thisExercise.name,
+                    targetedMuscleGroups: thisExercise.targetedMuscleGroups,
+                    equipment: thisExercise.equipment,
+                    reps: row.children.item(2).children.item(0).value,
+                    sets: row.children.item(3).children.item(0).value,
+                    weight: (row.children.item(4).children.item(0)) ? row.children.item(4).children.item(0).value : null
+                });
+            }
         }
     }
     let plantimeObjects = [];
@@ -847,7 +862,7 @@ function getSessionTimes() {
 
 function getIndexOfSessionId(id) {
     let exerciseTables = document.getElementById("exercise-tables");
-    for (let i = 0; i < exerciseTables.children.length; i++) {
+    for (let i = 1; i < exerciseTables.children.length; i++) { //1 weils jo überschrift a gibt
         let table = exerciseTables.children.item(i);
         let tbodyIndex;
         for (let j = 0; j < table.children.length; j++) {
@@ -947,16 +962,15 @@ function validateSessionTimes(data) {
 function showLoggedIn(deviceData) {
     let loggedInAsDisplay = document.getElementById("currentUser");
     if (deviceData.loggedIn && loggedInAsDisplay) {
-        loggedInAsDisplay.innerHTML = deviceData.loggedInAsUser + " <button id='logoutButton'>Logout</button>";
+        loggedInAsDisplay.innerHTML = "Logged in as " + deviceData.loggedInAsUser + " <br><button id='logoutButton' class='defaultButton'>Logout</button>";
     } else if (loggedInAsDisplay) {
-        loggedInAsDisplay.innerHTML = "You are logged out. <a href='./login.html'>Login</a> <br>Don't have an account? <a href='./signup.html'>Signup Now</a>";
+        loggedInAsDisplay.innerHTML = "You are logged out. <a href='./login.html' class='styledLink'>Login</a> <br>Don't have an account? <a href='./signup.html' class='styledLink'>Signup Now</a>";
     }
 }
 
 function setModes(data) {
     let lightSwitch = document.getElementById("lightSwitch");
     let devModeSwitch = document.getElementById("dev");
-    log(data);
     if (data) {
         localStorage.setItem("lightSwitch", (data.mode == "lightmode") + "");
         localStorage.setItem("lightSwitch", data.devMode + "");
@@ -964,15 +978,18 @@ function setModes(data) {
         localStorage.setItem("lightSwitch", true);
         localStorage.setItem("devmode", true);
     }
-    document.getElementById("modeStylesheet").href = data ? (data.mode == "lightmode" ? "./css/light.css" : "./css/dark.css") :  "./css/light.css";
-    lightSwitch.innerText = data ? data.mode : "lightmode";
+    if (lightSwitch) document.getElementById("modeStylesheet").href = data ? (data.mode == "lightmode" ? "./css/light.css" : "./css/dark.css") :  "./css/light.css";
+    if (lightSwitch) lightSwitch.innerText = data ? data.mode : "lightmode";
     if (devModeSwitch) devModeSwitch.innerText = data? (data.devMode ? "devmode" : "usermode") : "usermode";
 }
 
 function loadAndInitializeChecked(settings) {
+    log(settings)
     let sessionStatsSection = document.getElementById("dynamicDiv");
     let realTimeStatsSection = document.getElementById("realTimeDiv");
     let longtermStatsSection = document.getElementById("staticDiv");
+
+    if (!sessionStatsSection || !realTimeStatsSection || !longtermStatsSection) return;
     localStorage.setItem("userSettings", JSON.stringify(settings));
     if (document.getElementById("viewingRealTime") && document.getElementById("viewingSession") && document.getElementById("viewingLongterm")) {
         if (settings) {
@@ -996,9 +1013,9 @@ function loadAndInitializeChecked(settings) {
             let deviceData = getDeviceData();
             if (deviceData.loggedIn) {
                 let settings = getSettingsFromLocalStorage();
-                settings.viewing.realTimeStats = checked;
-                localStorage.setItem("userSettings", JSON.stringify(settings));
-                setUserSettings(settings);
+                if (settings.viewing) settings.viewing.realTimeStats = checked;
+                if (settings.viewing) localStorage.setItem("userSettings", JSON.stringify(settings));
+                if (settings.viewing) setUserSettings(settings);
                 if (realTimeStatsSection) realTimeStatsSection.hidden = !checked;
                 if (document.getElementById("dynamicHeadline")) document.getElementById("dynamicHeadline").hidden = !(settings.viewing.realTimeStats || settings.viewing.sessionStats);
             }
@@ -1010,9 +1027,9 @@ function loadAndInitializeChecked(settings) {
             let deviceData = getDeviceData();
             if (deviceData.loggedIn) {
                 let settings = getSettingsFromLocalStorage();
-                settings.viewing.sessionStats = checked;
-                localStorage.setItem("userSettings", JSON.stringify(settings));
-                setUserSettings(settings);
+                if (settings.viewing) settings.viewing.sessionStats = checked;
+                if (settings.viewing) localStorage.setItem("userSettings", JSON.stringify(settings));
+                if (settings.viewing) setUserSettings(settings);
                 if (sessionStatsSection) sessionStatsSection.hidden = !checked;
                 if (document.getElementById("dynamicHeadline")) document.getElementById("dynamicHeadline").hidden = !(settings.viewing.realTimeStats || settings.viewing.sessionStats);
             }
@@ -1024,9 +1041,9 @@ function loadAndInitializeChecked(settings) {
             let deviceData = getDeviceData();
             if (deviceData.loggedIn) {
                 let settings = getSettingsFromLocalStorage();
-                settings.viewing.longtermStats = checked;
-                localStorage.setItem("userSettings", JSON.stringify(settings));
-                setUserSettings(settings);
+                if (settings.viewing) settings.viewing.longtermStats = checked;
+                if (settings.viewing) localStorage.setItem("userSettings", JSON.stringify(settings));
+                if (settings.viewing) setUserSettings(settings);
                 if (longtermStatsSection) longtermStatsSection.hidden = !checked;
             }
         });
@@ -1163,16 +1180,19 @@ function getSettingsFromLocalStorage() { //MOCH DO KA log() EINI!
 }
 
 function getSupportedExercisesFromLS() {
+    log(localStorage.getItem("supportedExercises"));
     let ex = JSON.parse(localStorage.getItem("supportedExercises"));
     return ex ? ex : [];
 }
 
 function getUnsupportedExercisesFromLS() {
+    log(localStorage.getItem("unsupportedExercises"));
     let ex = JSON.parse(localStorage.getItem("unsupportedExercises"));
     return ex ? ex : [];
 }
 
 function getUserdefinedExercisesFromLS() {
+    log(localStorage.getItem("userdefinedExercises"));
     let ex = JSON.parse(localStorage.getItem("userdefinedExercises"));
     return ex ? ex : [];
 }
@@ -1277,7 +1297,11 @@ async function clearUserData() {
     log("saving Data to Database and logging out");
     let defaultSettings = {
         mode: "lightmode",
-        viewing: null,
+        viewing: {
+            sessionStats: false,
+            realTimeStats: false,
+            longtermStats: false
+        },
         devMode: false
     }
     return fetch("/api/clearUserData", {

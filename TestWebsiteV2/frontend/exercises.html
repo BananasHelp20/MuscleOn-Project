@@ -4,18 +4,61 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Muscle ON Testwebsite</title>
+    <title>Muscle ON Website</title>
     <link rel="stylesheet" type="text/css" href="./Css/style.css">
     <link rel="stylesheet" type="text/css" href="./Css/light.css" id="modeStylesheet">
     <script src="./Script/helper.js" defer></script>
     <script src="./Script/primary.js" defer></script>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
-
 <body>
-    <div id="exercises">
-        Currently viewing:<button id="exerciseSwitch">All</button>
+    <header>
+        <div id="logoHolder">
+        </div>
+        <div id="actualHeaderHolder">
+            <div id="title">
+                Muscle-ON!
+            </div>
+            <div id="menuBar">
+                <a id="menuLogo" class="menuObject" href="./index.html">
+                    <img src="./images/logo.png" alt="">
+                </a>
+                <div id="menuTitle" class="menuObject">
+                    Menu:
+                </div>
+                <div id="menuOptionBar">
+                    <a class="menuObject menuOption" href="./about.html">
+                        <span>About</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./settings.html">
+                        <span>Settings</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./session.html">
+                        <span>Session</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./exercises.html">
+                        <span>Exercises</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="siteBody">
+        <h1>Exercises</h1>
+        Currently viewing: <button id="exerciseSwitch">All</button>
+        <div id="exercises">
+            <div class="exerciseObject">
+                <span class="exerciseTitle">Name</span>
+                <p>Description</p>
+                <span class="exerciseCreatedBy">Created By User: </span>
+                <span class="exerciseEquipment">Equipment</span>
+                <span class="exerciseWeight">Needs Weight</span>
+                <span class="exercisePublic">Public: </span>
+                <ul class="muscleGroupList">
+                    <li class="muscleGroupListObject">musclegroup1</li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <button id="lightSwitch">lightmode</button><br>
-    <a href="./index.html" id="returnLink">Go Back</a>
+    <div class="background"></div>
 </body>

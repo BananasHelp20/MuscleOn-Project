@@ -10,41 +10,74 @@
     <script src="./Script/primary.js" defer></script>
 </head>
 <body>
-    <h1>Signup</h1>
-    <label for="username">Benutzername:</label>
-    <input type="text" id="username" name="username"><br><br>
-    <label for="password">Passwort</label>
-    <input type="password" id="password" name="password"><br><br>
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email"><br><br>
-    <label for="weight">Gewicht:</label>
-    <input type="number" id="weight" name="weight"><br><br>
-    <label for="size">Größe:</label>
-    <input type="number" id="size" name="size"><br><br>
-    <label for="birthday">Geburtstag:</label>
-    <input type="date" id="birthday" name="birthday"><br><br>
-    <label for="plan">Wollen Sie einen Trainingsplan?</label>
-    <input type="checkbox" id="plan" name="plan"><br><br>
-    <!--wenn plan geklickt, sollen darunter 7 checkboxen für jeden Tag erscheinen, und für jeden Tag eine Zeitangabe von wann bis wann.-->
-    <div id="plan-section" hidden>
-        <button id="add-weekday">Wochentag hinzufügen</button>
-        <table>
-            <thead>
-                <tr>
-                    <th>Day of Week</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Muscle Group</th>
-                    <th>&emsp;</th>
-                    <th>&emsp;</th>
-                </tr>
-            </thead>
-            <tbody id="plan-table"></tbody>
-        </table>
-        <div id="exercise-tables"></div>
+    <header>
+        <div id="logoHolder">
+        </div>
+        <div id="actualHeaderHolder">
+            <div id="title">
+                Muscle-ON!
+            </div>
+            <div id="menuBar">
+                <a id="menuLogo" class="menuObject" href="./index.html">
+                    <img src="./images/logo.png" alt="">
+                </a>
+                <div id="menuTitle" class="menuObject">
+                    Menu:
+                </div>
+                <div id="menuOptionBar">
+                    <a class="menuObject menuOption" href="./about.html">
+                        <span>About</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./settings.html">
+                        <span>Settings</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./session.html">
+                        <span>Session</span>
+                    </a>
+                    <a class="menuObject menuOption" href="./exercises.html">
+                        <span>Exercises</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="siteBody">
+        <h1>Signup</h1>
+        <label for="username">Benutzername:</label>
+        <input type="text" id="username" name="username"><br><br>
+        <label for="password">Passwort</label>
+        <input type="password" id="password" name="password"><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email"><br><br>
+        <label for="weight">Gewicht:</label>
+        <input type="number" id="weight" name="weight"><br><br>
+        <label for="size">Größe:</label>
+        <input type="number" id="size" name="size"><br><br>
+        <label for="birthday">Geburtstag:</label>
+        <input type="date" id="birthday" name="birthday"><br><br>
+        <label for="plan">Wollen Sie einen Trainingsplan?</label>
+        <input type="checkbox" id="plan" name="plan"><br><br>
+        <!--wenn plan geklickt, sollen darunter 7 checkboxen für jeden Tag erscheinen, und für jeden Tag eine Zeitangabe von wann bis wann.-->
+        <div id="plan-section" hidden>
+            <table id="plan-table-table">
+                <thead>
+                    <tr>
+                        <th>Day of Week</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Muscle Group</th>
+                        <th colspan="2" class="tableButtonContainer"><button id="add-weekday" class="tableButton">Add
+                                Weekday</button></th>
+                    </tr>
+                </thead>
+                <tbody id="plan-table"></tbody>
+            </table>
+            <div id="exercise-tables" hidden>
+                <h3>Exercises</h3>
+            </div>
+        </div>
+        <button id="signupButton" class="defaultButton">Signup</button><br>
     </div>
-    <button id="signupButton">Signup</button><br>
-    <a href="./index.html">Go Back</a>
-    <button id="lightSwitch">lightmode</button><br>
+    <div class="background"></div>
 </body>
 </html>

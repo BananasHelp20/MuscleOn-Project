@@ -1,30 +1,579 @@
-* {
-    font-family: Arial, Helvetica, sans-serif;
+/* 
+html5doctor.com Reset Stylesheet
+v1.6.1
+Last Updated: 2010-09-17
+Author: Richard Clark - http://richclarkdesign.com 
+Twitter: @rich_clark
+*/
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
 }
 
 body {
-    margin-left: 15%;
-    margin-right: 15%;
+    line-height: 1;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+nav ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+a {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+    text-decoration: none;
+}
+
+/* change colours to suit your needs */
+ins {
+    background-color: #ff9;
+    color: #000;
+    text-decoration: none;
+}
+
+/* change colours to suit your needs */
+mark {
+    background-color: #ff9;
+    color: #000;
+    font-style: italic;
+    font-weight: bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title],
+dfn[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* change border colour to suit your needs */
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #cccccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+input,
+select {
+    vertical-align: middle;
+}
+
+/*Old Stylesheet*/
+img {
+    width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: rgb(255, 230, 0);
+}
+
+.styledLink {
+    color: var(--link-color);
+}
+
+.styledLink:hover {
+    color: var(--link-color-hover);
+}
+
+.styledLink:active {
+    color: var(--link-color-active);
+}
+
+.background {
+    background-image: url(../images/background.jpg);
+    position: fixed;
+    filter: blur(25px) saturate(170%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    transform: scale(1.2);
+    /* MUCHO IMPORTANTE beim bluren --> sonst weiße vignette */
+    -webkit-filter: blur(25px) saturate(170%);
+}
+
+header {
+    /*Level 1*/
+    display: flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+    margin-bottom: 0;
+    border-bottom: 5px rgb(239, 219, 0) solid;
+    background: linear-gradient(to top, rgba(42, 61, 155, 1) 0%, rgba(36, 201, 174, 1) 91%);
+}
+
+#logoHolder {
+    /*Level 2 - header*/
+    text-align: center;
+}
+
+#actualHeaderHolder {
+    /*Level 2 - header*/
+    display: flex;
+    flex-direction: column;
+    background-color: linear-gradient;
+}
+
+#title {
+    /*Level3-actualHeaderHolder*/
+    vertical-align: middle;
+    width: 100%;
+    text-align: center;
+    color: white;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    font-size: var(--mainHeaderSize);
+    font-weight: bold;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: middle;
+    background: transparent;
+}
+
+#menuBar {
+    /*Level 3 - actualHeaderHolder*/
+    background-color: rgba(49, 49, 49, 0.648);
+    display: flex;
+    flex-direction: row;
+    padding-right: 3%;
+    padding-left: 3%;
+}
+
+#menuLogo {
+    width: 4em;
+    margin-left: -3%;
+    padding: 4px;
+}
+
+#menuTitle {
+    /*Level 4 - menuBar [ALSO menuObject]*/
+    width: 10%;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-left: 1px solid rgba(193, 193, 193, 0.42);
+}
+
+#menuOptionBar {
+    /*Level 4 - menuBar [ALSO menuObject]*/
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#darkmodeButton {
+    /*Level3-siteBodyp*/
+    transform: scale(1.2);
+}
+
+.menuObject {
+    /*Level5 - menuOptionBar [BOTH menuTitle and menuOption]*/
+    border-right: 1px solid rgba(193, 193, 193, 0.42);
+    color: rgb(220, 220, 220);
+    font-size: 20px;
+}
+
+.menuOption {
+    /*Level 5 - menuOption Bar AND Level 4 - menuBar*/
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.siteBody {
+    /*Level1*/
+    background-color: rgba(56, 56, 56, 0.742);
+    color: rgb(240, 240, 240);
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    margin-top: 0;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+/*Stylesheet begin!*/
+
+:root {
+   --bodyMargin: 15%;
+   --defaultFont: Arial, Helvetica, sans-serif;
+
+   --mainHeaderSize: 2.5em;
+   --middleMainHeaderSize: 2em;
+   --smallHeaderSize: 1.5em;
+
+   --link-color: rgb(255, 230, 0);
+   --link-color-hover: rgb(237, 255, 75);
+   --link-color-active: rgb(222, 255, 152);
+
+   --border-color: rgb(255, 230, 0);
+
+   --table-button-color: rgba(255, 255, 255, 0.146);
+   --table-button-color-hover: rgba(255, 255, 255, 0.189);
+   --table-button-color-active: rgba(255, 255, 255, 0.231);
+   --table-button-color-textcolor: rgb(255, 230, 0);
+   --table-cell-background-color: rgba(255, 255, 255, 0.075);
+   --table-object-background-color: rgba(255, 255, 255, 0.146);
+   --table-object-background-color-hover: rgba(255, 255, 255, 0.237);
+   --table-object-background-color-active: rgba(255, 255, 255, 0.308);
+
+   --header-color: rgb(255, 230, 0);
+   --button-input-color: rgb(223, 201, 0);
 }
 
 h1, h2, h3 {
     text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+}
+
+h1 {
+    font-size: var(--mainHeaderSize);
+}
+
+h2 {
+    font-size: var(--middleMainHeaderSize);
+}
+
+h3 {
+    font-size: var(--smallHeaderSize);
 }
 
 button {
-    margin: 10px;
-    padding: 5px;
-}
-
-a {
-    text-decoration: none;
+    padding: .5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
 }
 
 #loginLink, #signupLink, #returnLink {
-    color: rgb(0, 145, 255);
+    color: var(--link-color);
 }
 
-table, tbody, tr {
+#loginLink:hover,
+#signupLink:hover,
+#returnLink:hover {
+    color: var(--link-color-hover);
+}
+
+#loginLink:active,
+#signupLink:active,
+#returnLink:active {
+    color: var(--link-color-active);
+}
+
+body {
+    font-family: var(--defaultFont);
+}
+
+#exercise-tables, table, tr, th, td {
+    border: solid .1em;
+    padding: 1em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#exercise-tables {
+    border-color: var(--border-color);
+}
+
+#exercise-tables, table {
+    margin-top: 2em;
+}
+
+#plan-section, #exercise-tables, table, tr {
+    width: 100%;
+}
+
+.linkButton {
+    padding: .5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.defaultButton {
+    text-decoration: none;
+    padding: .5em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    background-color: #0000004f;
+    border: none;
+    border-radius: .5em;
+    color: var(--button-input-color);
+}
+
+.defaultButton:hover {
+    background-color: #00000071;
+}
+
+.defaultButton:active {
+    background-color: #00000087;
+}
+
+.tableButtonContainer {
+    padding: 0;
+}
+
+.tableButton {
+    width: 100%;
+    height: 6em;
+    margin-top: 0;
+    margin-bottom: 0;
+    border: none;
+    font-weight: bold;
+    background-color: var(--table-button-color);
+    color: var(--table-button-color-textcolor);
+}
+
+.tableButton:hover {
+    background-color: var(--table-button-color-hover);
+}
+
+.tableButton:active {
+    background-color: var(--table-button-color-active);
+}
+
+#viewSection {
+    padding-bottom: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
     border-collapse: collapse;
-    border: 2px solid;
+    display: flex;
+    flex-direction: column;
+}
+
+#viewSection span {
+    margin-top: 1em;
+}
+
+#plan-table-table tr td input {
+    width: 5em;
+}
+
+td, th {
+    background-color: var(--table-cell-background-color);
+}
+
+#exercise-tables table tr td input {
+    width: 3em;
+}
+
+#signupButton,
+#logoutButton,
+#loginButton {
+    padding: 1em;
+}
+
+#exercise-tables table tr td select, 
+#exercise-tables table tr td input, 
+#plan-table-table tr td input,
+#plan-table-table tr td select {
+    text-align: center;
+    padding: 1em;
+    border: none;
+    border-radius: .4em;
+    color: var(--button-input-color);
+    background-color: var(--table-object-background-color);
+}
+
+#username,
+#password,
+#email,
+#weight,
+#size,
+#birthday {
+    padding: .5em;
+    text-align: center;
+    border: none;
+    border-radius: .4em;
+    color: var(--button-input-color);
+    background-color: var(--table-object-background-color);
+    transition: all 0.5s ease;
+}
+
+#username:focus,
+#password:focus,
+#email:focus,
+#weight:focus,
+#size:focus,
+#birthday:focus {
+    outline: none;
+    outline: .1em solid var(--border-color);
+    box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
+}
+
+#username:hover,
+#password:hover,
+#email:hover,
+#weight:hover,
+#size:hover,
+#birthday:hover,
+#exercise-tables table tr td select:hover,
+#exercise-tables table tr td input:hover,
+#plan-table-table tr td input:hover,
+#plan-table-table tr td select:hover {
+    background-color: var(--table-object-background-color-hover);
+}
+
+#username:active,
+#password:active,
+#email:active,
+#weight:active,
+#size:active,
+#birthday:active,
+#exercise-tables table tr td select:active,
+#exercise-tables table tr td input:active,
+#plan-table-table tr td input:active,
+#plan-table-table tr td select:active {
+    background-color: var(--table-object-background-color-active);
+}
+
+#plan-table-table tr td select option,
+#exercise-tables table tr td select option,
+#exercise-tables table tr td select optgroup {
+    color:black;
+    background-color: #00000059;
+}
+
+#plan-table-table tr td select option:checked,
+#exercise-tables table tr td select option:checked {
+    color: var(--button-input-color);
+    background-color: #00000070;
+}
+
+input[type="checkbox"]:checked {
+    color: yellow;
 }

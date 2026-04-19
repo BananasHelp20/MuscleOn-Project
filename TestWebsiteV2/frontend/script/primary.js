@@ -11,6 +11,18 @@ function init() {
 
     let deviceData = getDeviceData();
 
+    setInterval(() => {
+        getSupportedExercises().then(exercises => {
+            localStorage.setItem("supportedExercises", JSON.stringify(exercises));
+        });
+        getUnsupportedExercises().then(exercises => {
+            localStorage.setItem("unsupportedExercises", JSON.stringify(exercises));
+        });
+        getUserDefinedExercises().then(exercises => {
+            localStorage.setItem("userdefinedExercises", JSON.stringify(exercises));
+        });
+    }, interval);
+
     showLoggedIn(deviceData);
     deviceData.editingPlanSection = false;
     localStorage.setItem("deviceData", JSON.stringify(deviceData));
@@ -50,19 +62,16 @@ function init() {
                         showSessionData(userdata);
                         showLongtermData(userdata);
                     });
-                    getSupportedExercises().then(exercises => {
-                        localStorage.setItem("supportedExercises", JSON.stringify(exercises));
-                    })
-                    getUnsupportedExercises().then(exercises => {
-                        localStorage.setItem("unsupportedExercises", JSON.stringify(exercises));
-                    })
-                    getUserDefinedExercises().then(exercises => {
-                        localStorage.setItem("userdefinedExercises", JSON.stringify(exercises));
-                    }) 
                 }, interval);
             }
         });
     } else {
+        console.log(document.getElementsByClassName("loggedOutNotice"));
+        if (document.getElementsByClassName("loggedOutNotice")) {
+            for (let i = 0; i < document.getElementsByClassName("loggedOutNotice").length; i++) {
+                document.getElementsByClassName("loggedOutNotice").item(i).hidden = true;
+            }
+        }
         if (loginButton) initializeLogin(); //wenn login -> logout initialisieren // oder eventuell ned?
         if (signUpButton) initializeSignUp(); //nach signup -> login() // oder eventuell ned?
     }

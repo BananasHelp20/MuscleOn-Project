@@ -8,5 +8,29 @@
         "equipment": "None",
         "public": true,
         "weight": false
+    },
+    {
+        "userIdCreated": 1,
+        "name": "Volleyball",
+        "exerciseType": "defined",
+        "description": "Volleyball hoid",
+        "targetedMuscleGroups": [
+            "Biceps"
+        ],
+        "equipment": "Volleyball, Net",
+        "public": true,
+        "weight": false
+    },
+    {
+        "userIdCreated": 1,
+        "name": "Askö",
+        "exerciseType": "defined",
+        "description": "Askö Turnverein",
+        "targetedMuscleGroups": [
+            "Biceps"
+        ],
+        "equipment": "Kasten, Trampolin, Airtrack,...",
+        "public": true,
+        "weight": false
     }
 ]

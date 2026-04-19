@@ -1,9 +1,8 @@
 {
   "mode": "lightmode",
   "viewing": {
-    "realTimeStats": true,
-    "longTimeStats": false,
     "sessionStats": true,
+    "realTimeStats": true,
     "longtermStats": true
   },
   "devMode": true,

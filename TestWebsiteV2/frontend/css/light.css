@@ -8,5 +8,5 @@ tbody,
 th,
 td,
 tr {
-    border: black;
+    border-color: black;
 }
