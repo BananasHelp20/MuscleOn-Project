@@ -27,6 +27,11 @@ function init() {
     deviceData.editingPlanSection = false;
     localStorage.setItem("deviceData", JSON.stringify(deviceData));
 
+    if (document.getElementById("gameDiv")) {
+        log("initializing game...");
+        startGame();
+    }
+
     if (deviceData.loggedIn) {
         if (document.getElementById("check") && getSettingsFromLocalStorage().devMode) document.getElementById("check").addEventListener("click", () => { //TESTBUTTON
         })

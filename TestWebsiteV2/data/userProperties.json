@@ -34,7 +34,7 @@
     },
     {
       "sessionId": "1",
-      "primaryMuscleGroup": "Upper Back (Traps & Rhomboids)",
+      "primaryMuscleGroup": "Shoulders (Deltoids)",
       "exercises": [
         {
           "exerciseType": "defined-by-user",
@@ -56,7 +56,7 @@
     },
     {
       "sessionId": "2",
-      "primaryMuscleGroup": "Biceps",
+      "primaryMuscleGroup": "Shoulders (Deltoids)",
       "exercises": [
         {
           "exerciseType": "defined-by-user",
@@ -78,7 +78,7 @@
     },
     {
       "sessionId": "3",
-      "primaryMuscleGroup": "Upper Back (Traps & Rhomboids)",
+      "primaryMuscleGroup": "Shoulders (Deltoids)",
       "exercises": [
         {
           "exerciseType": "defined-by-user",
@@ -100,7 +100,7 @@
     },
     {
       "sessionId": "4",
-      "primaryMuscleGroup": "Biceps",
+      "primaryMuscleGroup": "Shoulders (Deltoids)",
       "exercises": [
         {
           "exerciseType": "defined-by-user",
@@ -122,7 +122,7 @@
     },
     {
       "sessionId": "5",
-      "primaryMuscleGroup": "-1",
+      "primaryMuscleGroup": "Shoulders (Deltoids)",
       "exercises": [
         {
           "exerciseType": "defined-by-user",

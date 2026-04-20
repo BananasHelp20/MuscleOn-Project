@@ -173,30 +173,9 @@ select {
     vertical-align: middle;
 }
 
-/*Old Stylesheet*/
+/*Stylesheet begin!*/
 img {
     width: 100%;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    color: rgb(255, 230, 0);
-}
-
-.styledLink {
-    color: var(--link-color);
-}
-
-.styledLink:hover {
-    color: var(--link-color-hover);
-}
-
-.styledLink:active {
-    color: var(--link-color-active);
 }
 
 .background {
@@ -214,7 +193,7 @@ h6 {
     bottom: 0;
     z-index: -1;
     transform: scale(1.2);
-    /* MUCHO IMPORTANTE beim bluren --> sonst weiße vignette */
+    /*MUCHOIMPORTANTEbeimbluren-->sonstweißevignette*/
     -webkit-filter: blur(25px) saturate(170%);
 }
 
@@ -224,8 +203,6 @@ header {
     flex-direction: column;
     background-color: antiquewhite;
     margin-bottom: 0;
-    border-bottom: 5px rgb(239, 219, 0) solid;
-    background: linear-gradient(to top, rgba(42, 61, 155, 1) 0%, rgba(36, 201, 174, 1) 91%);
 }
 
 #logoHolder {
@@ -245,7 +222,6 @@ header {
     vertical-align: middle;
     width: 100%;
     text-align: center;
-    color: white;
     margin-top: .5em;
     margin-bottom: .5em;
     font-size: var(--mainHeaderSize);
@@ -259,7 +235,6 @@ header {
 
 #menuBar {
     /*Level 3 - actualHeaderHolder*/
-    background-color: rgba(49, 49, 49, 0.648);
     display: flex;
     flex-direction: row;
     padding-right: 3%;
@@ -280,7 +255,6 @@ header {
     display: flex;
     flex-direction: row;
     align-items: center;
-    border-left: 1px solid rgba(193, 193, 193, 0.42);
 }
 
 #menuOptionBar {
@@ -297,8 +271,6 @@ header {
 
 .menuObject {
     /*Level5 - menuOptionBar [BOTH menuTitle and menuOption]*/
-    border-right: 1px solid rgba(193, 193, 193, 0.42);
-    color: rgb(220, 220, 220);
     font-size: 20px;
 }
 
@@ -313,23 +285,19 @@ header {
 
 .siteBody {
     /*Level1*/
-    background-color: rgba(56, 56, 56, 0.742);
-    color: rgb(240, 240, 240);
     padding-left: 5%;
     padding-right: 5%;
     padding-top: 2%;
     padding-bottom: 2%;
     margin-top: 0;
-    margin-left: 10%;
-    margin-right: 10%;
+    margin-left: var(--bodyMargin);
+    margin-right: var(--bodyMargin);
     border-bottom-left-radius: 15px;
     border-bottom-right-radius: 15px;
 }
 
-/*Stylesheet begin!*/
-
 :root {
-   --bodyMargin: 15%;
+   --bodyMargin: 10%;
    --defaultFont: Arial, Helvetica, sans-serif;
 
    --mainHeaderSize: 2.5em;
@@ -341,6 +309,7 @@ header {
    --link-color-active: rgb(222, 255, 152);
 
    --border-color: rgb(255, 230, 0);
+   --devider-color: rgb(239, 219, 0);
 
    --table-button-color: rgba(255, 255, 255, 0.146);
    --table-button-color-hover: rgba(255, 255, 255, 0.189);
@@ -351,8 +320,18 @@ header {
    --table-object-background-color-hover: rgba(255, 255, 255, 0.237);
    --table-object-background-color-active: rgba(255, 255, 255, 0.308);
 
+   --header-gradiant: linear-gradient(to top, rgba(42, 61, 155, 1) 0%, rgba(36, 201, 174, 1) 91%);
    --header-color: rgb(255, 230, 0);
    --button-input-color: rgb(223, 201, 0);
+
+   --title-color: rgb(240, 240, 240);
+   --text-color: rgb(240, 240, 240);
+
+   --menu-bar-background: rgba(49, 49, 49, 0.648);
+   --menu-deviders-color: rgba(193, 193, 193, 0.42);
+   --menu-text-color: rgb(220, 220, 220);
+
+   --site-body-background: rgba(56, 56, 56, 0.742);
 }
 
 h1, h2, h3 {
@@ -379,22 +358,6 @@ button {
     margin-bottom: 1em;
 }
 
-#loginLink, #signupLink, #returnLink {
-    color: var(--link-color);
-}
-
-#loginLink:hover,
-#signupLink:hover,
-#returnLink:hover {
-    color: var(--link-color-hover);
-}
-
-#loginLink:active,
-#signupLink:active,
-#returnLink:active {
-    color: var(--link-color-active);
-}
-
 body {
     font-family: var(--defaultFont);
 }
@@ -404,10 +367,6 @@ body {
     padding: 1em;
     text-align: center;
     vertical-align: middle;
-}
-
-#exercise-tables {
-    border-color: var(--border-color);
 }
 
 #exercise-tables, table {
@@ -429,18 +388,12 @@ body {
     padding: .5em;
     margin-top: .5em;
     margin-bottom: .5em;
-    background-color: #0000004f;
     border: none;
     border-radius: .5em;
-    color: var(--button-input-color);
-}
-
-.defaultButton:hover {
-    background-color: #00000071;
-}
-
-.defaultButton:active {
-    background-color: #00000087;
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    -ms-border-radius: .5em;
+    -o-border-radius: .5em;
 }
 
 .tableButtonContainer {
@@ -454,16 +407,6 @@ body {
     margin-bottom: 0;
     border: none;
     font-weight: bold;
-    background-color: var(--table-button-color);
-    color: var(--table-button-color-textcolor);
-}
-
-.tableButton:hover {
-    background-color: var(--table-button-color-hover);
-}
-
-.tableButton:active {
-    background-color: var(--table-button-color-active);
 }
 
 #viewSection {
@@ -481,10 +424,6 @@ body {
 
 #plan-table-table tr td input {
     width: 5em;
-}
-
-td, th {
-    background-color: var(--table-cell-background-color);
 }
 
 #exercise-tables table tr td input {
@@ -505,8 +444,10 @@ td, th {
     padding: 1em;
     border: none;
     border-radius: .4em;
-    color: var(--button-input-color);
-    background-color: var(--table-object-background-color);
+    -webkit-border-radius: .4em;
+    -moz-border-radius: .4em;
+    -ms-border-radius: .4em;
+    -o-border-radius: .4em;
 }
 
 #username,
@@ -519,64 +460,20 @@ td, th {
     text-align: center;
     border: none;
     border-radius: .4em;
-    color: var(--button-input-color);
-    background-color: var(--table-object-background-color);
     transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -webkit-border-radius: .4em;
+    -moz-border-radius: .4em;
+    -ms-border-radius: .4em;
+    -o-border-radius: .4em;
 }
 
-#username:focus,
-#password:focus,
-#email:focus,
-#weight:focus,
-#size:focus,
-#birthday:focus {
-    outline: none;
-    outline: .1em solid var(--border-color);
-    box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
-}
-
-#username:hover,
-#password:hover,
-#email:hover,
-#weight:hover,
-#size:hover,
-#birthday:hover,
-#exercise-tables table tr td select:hover,
-#exercise-tables table tr td input:hover,
-#plan-table-table tr td input:hover,
-#plan-table-table tr td select:hover {
-    background-color: var(--table-object-background-color-hover);
-}
-
-#username:active,
-#password:active,
-#email:active,
-#weight:active,
-#size:active,
-#birthday:active,
-#exercise-tables table tr td select:active,
-#exercise-tables table tr td input:active,
-#plan-table-table tr td input:active,
-#plan-table-table tr td select:active {
-    background-color: var(--table-object-background-color-active);
-}
-
-#plan-table-table tr td select option,
-#exercise-tables table tr td select option,
-#exercise-tables table tr td select optgroup {
-    color:black;
-    background-color: #00000059;
-}
-
-#plan-table-table tr td select option:checked,
-#exercise-tables table tr td select option:checked {
-    color: var(--button-input-color);
-    background-color: #00000070;
-}
-
-input[type="checkbox"]:checked {
+/* input[type="checkbox"]:checked {
     color: yellow;
-}
+} */
 
 .gameDiv {
     width: 100%;
@@ -586,4 +483,15 @@ input[type="checkbox"]:checked {
     margin-left: auto;
     margin-right: auto;
     display: block;
+}
+
+canvas {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 12px;
+      color: #a6a6a6;
+      -webkit-border-radius: 12px;
+      -moz-border-radius: 12px;
+      -ms-border-radius: 12px;
+      -o-border-radius: 12px;
 }

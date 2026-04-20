@@ -17,5 +17,5 @@ app.listen(port, () => {
 
 //404 handeling oda so
 app.use((req, res, next) => {
-    res.status(404).sendFile(join(__dirname, "frontend", "404", "404.html"));
+    res.status(404).sendFile(join(__dirname, "frontend", "404.html"));
 })
