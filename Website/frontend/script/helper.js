@@ -1529,6 +1529,45 @@ async function getUserData() {
     });
 }
 
+async function sendValidationMail() {
+    let props = getUserPropertiesFromLocalStorage();
+    return fetch("/api/sendValidationMail", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userId: props.userId, email: props.email})
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured while updating settings", response.statusText);
+        }
+        response.json().then((json) => {
+            if (!json.validEmail) alert("Email could not be sent!");
+        });
+    });
+}
+
+async function validateMail(code) {
+    if (!code || code.length < 4) {
+        alert("invalid Code!");
+        return false;
+    }
+    let props = getUserPropertiesFromLocalStorage();
+    return fetch("/api/getUserData", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: {userId: props.userId, validationCode: code}
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error("An error ocured while requesting data from backend:", response.statusText);
+        }
+    });
+}
+
 async function setUserSettings(settings) {
     localStorage.setItem("userSettings", JSON.stringify(settings));
     return fetch("/api/setUserSettings", {

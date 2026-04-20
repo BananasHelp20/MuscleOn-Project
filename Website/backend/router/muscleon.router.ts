@@ -1,7 +1,8 @@
 import express from 'express';
-import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan } from '../fileManagement/muscleon.read';
+import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
+import { validateMail } from '../mail/muscleon.mail';
 export let muscleRouter = express.Router();
 
 muscleRouter.get('/getUserData', async (req, res) => {
@@ -65,11 +66,14 @@ muscleRouter.post('/setDeviceData', async (req, res) => {
 
 muscleRouter.post('/loadUserData', async (req, res) => {
     // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und username="", found=false}
+    let data = await gatherUserData(); //provisorisch
     let answer: model.DatabaseAnswer = {
         found: true,
-        userId: 0,
-        email: "willi@a.at",
-        username: "William"
+        userId: data.userProperties.userId,
+        email: data.userProperties.email,
+        username: data.userProperties.userName,
+        userProperties: data.userProperties,
+        userSettings: data.userSettings,
     };
     res.statusCode = 200;
     res.send(answer);
@@ -77,83 +81,14 @@ muscleRouter.post('/loadUserData', async (req, res) => {
 
 muscleRouter.post('/loadUserDataById', async (req, res) => {
     // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und username="", found=false}
+    let data = await gatherUserData(); //provisorisch
     let answer: model.DatabaseAnswer = {
         found: true,
-        userId: 0,
-        email: "willi@a.at",
-        username: "William",
-        userProperties: {
-            userId: 0,
-            userName: "dev",
-            password: "",
-            email: "hallo@test.com",
-            weight: 70,
-            size: 175,
-            birthday: "1990-01-01",
-            currentlyTraining: false,
-            currentlyInExercise: true,
-            createdPlan: true,
-            usualSessionTimes: [
-                {
-                    sessionId: 0,
-                    primaryMuscleGroup: "Biceps",
-                    exercises: [
-                        {
-                            exerciseType: "supported",
-                            name: "Kettlebell Swings",
-                            targetedMuscleGroups: [
-                                "Glutes",
-                                "Hamstrings",
-                                "Core"
-                            ],
-                            equipment: ["Kettlebell"],
-                            reps: 0,
-                            sets: 2,
-                            weight: null
-                        }
-                    ],
-                    times: {
-                        weekday: "Saturday",
-                        fromTime: "9:30",
-                        toTime: "11:30"
-                    }
-                },
-                {
-                    sessionId: 1,
-                    primaryMuscleGroup: "Chest",
-                    exercises: [
-                        {
-                            exerciseType: "supported",
-                            name: "Bench Press",
-                            targetedMuscleGroups: [
-                                "Chest",
-                                "Shoulders",
-                                "Triceps"
-                            ],
-                            equipment: ["Barbell or Dumbbells"],
-                            reps: 10,
-                            sets: 3,
-                            weight: null
-                        }
-                    ],
-                    times: {
-                        weekday: "Thursday",
-                        fromTime: "9:31",
-                        toTime: "11:31"
-                    }
-                }
-            ]
-        },
-        userSettings: {
-            mode: "darkmode",
-            viewing: {
-                realTimeStats: true,
-                sessionStats: false,
-                longtermStats: true
-            },
-            devMode: true,
-            viewingExercises: "All"
-        }
+        userId: data.userProperties.userId,
+        email: data.userProperties.email,
+        username: data.userProperties.userName,
+        userProperties: data.userProperties,
+        userSettings: data.userSettings,
     };
     res.statusCode = 200;
     res.send(answer);
@@ -258,4 +193,29 @@ muscleRouter.post('/exercise/stop', async (req, res) => {
     });
     res.statusCode = 200;
     res.send({ message: "logging out successful!" });
+});
+
+muscleRouter.post('/sendValidationMail', (req, res) => {
+    let validationCode = validateMail(req.body.email);
+    if (!validationCode) {
+        res.send({validEmail: false});
+    }
+
+    let validationObject = {
+        userId: req.body.userId,
+        validationCode: validationCode
+    }
+    
+    appendValidationCode(validationObject);
+    res.send({validEmail: true});
+});
+
+muscleRouter.get('/validateMail', (req, res) => {
+    let code = getValidationCode(req.body.userId);
+    if (code && req.body.validationCode == code) {
+        delValidationCode(req.body.userId);
+        res.send({valid: true});
+    } else {
+        res.send({valid: false});
+    }
 });

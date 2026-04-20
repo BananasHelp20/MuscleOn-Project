@@ -2,13 +2,14 @@
   "userId": 0,
   "userName": "dev",
   "password": "",
-  "email": "hallo@test.com",
+  "email": "bananashelp20@gmail.com",
   "weight": 70,
   "size": 175,
   "birthday": "1990-01-01",
   "currentlyTraining": false,
   "currentlyInExercise": true,
   "createdPlan": true,
+  "verifiedEmail": false,
   "usualSessionTimes": [
     {
       "sessionId": "0",

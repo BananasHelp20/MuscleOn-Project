@@ -41,6 +41,33 @@ export async function gatherUserPropertiess() {
     return userProperties;
 }
 
+export async function appendValidationCode(codeObject:{userId:number, validationCode:string | boolean}) {
+    let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
+    objects.push(codeObject);
+    await writeFile("./data/validationCodes.json", JSON.stringify(objects))
+}
+
+export async function getValidationCode(userId:number): Promise<string | boolean> {
+    let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
+    for (let i = 0; i < objects.length; i++) {
+        if (objects[i].userId == userId) {
+            return objects[i].validationCode;
+        }
+    }
+    return false;
+}
+
+export async function delValidationCode(userId:number) {
+    let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
+    let newObjects: {userId:number, validationCode:string | boolean}[] = [];
+    for (let i = 0; i < objects.length; i++) {
+        if (objects[i].userId != userId) {
+            newObjects.push(objects[i]);
+        }
+    }
+    await writeFile("./data/validationCodes.json", JSON.stringify(newObjects));
+}
+
 export async function setUserData(userData: model.User) {
     await Promise.all([
         writeFile("./data/userProperties.json", JSON.stringify(userData.userProperties, null, 2)),
@@ -76,6 +103,7 @@ export async function saveTrainingsPlan(times: model.ExerciseSelection[]) {
         weight: userProperties.weight,
         size: userProperties.size,
         birthday: userProperties.birthday,
+        verifiedEmail: userProperties.verifiedEmail,
         currentlyTraining: userProperties.currentlyTraining,
         createdPlan: userProperties.createdPlan,
         currentlyInExercise: userProperties.currentlyInExercise,
