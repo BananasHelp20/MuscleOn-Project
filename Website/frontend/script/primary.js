@@ -7,6 +7,7 @@ function init() {
 
     initializeLightSwitch();
     initializeExercises();
+
     if (devModeButton) initializeDevMode();
 
     let deviceData = getDeviceData();
@@ -49,6 +50,14 @@ function init() {
             localStorage.setItem("userProperties", JSON.stringify(data.userProperties));
             localStorage.setItem("userSettings", JSON.stringify(data.userSettings));
             localStorage.setItem("userData", JSON.stringify(data));
+
+            /* NED WICHTIG, NUR DEVMODE */
+            if (document.getElementById("upcomingFeatures") && data.userSettings.devMode) {
+                addAllTasks();
+            } else if (document.getElementById("upcomingFeatures"))
+                document.getElementById("upcomingFeatures").parentElement.hidden = true;
+            /* */
+
             initializeSession();
             setModes(data.userSettings); //des im localstorage is nur placeholdermäßig bis zum Einloggen, des wos im json steht is des wos braucht wird
             loadAndInitializeChecked(data.userSettings);

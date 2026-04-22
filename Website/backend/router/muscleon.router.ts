@@ -205,7 +205,6 @@ muscleRouter.post('/sendValidationMail', (req, res) => {
         userId: req.body.userId,
         validationCode: validationCode
     }
-    
     appendValidationCode(validationObject);
     res.send({validEmail: true});
 });
