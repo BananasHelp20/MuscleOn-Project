@@ -1,5 +1,6 @@
 let tasks = [
     "define parental functions (render, startGame, initializeLoggedIn, initializeLoggedOut, syncData...)",
+    "verify Email upon signining up",
     "display Exercises",
     "add Exercise",
     "display data how it should be",
