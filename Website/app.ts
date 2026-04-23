@@ -1,6 +1,7 @@
 import express from 'express';
 import { muscleRouter } from './backend/router/muscleon.router';
 import { join } from 'path';
+import { sendMail } from './backend/mail/muscleon.mail';
 
 const app = express();
 const port = 3000;
