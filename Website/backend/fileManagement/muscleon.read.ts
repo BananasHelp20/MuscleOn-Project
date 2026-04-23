@@ -57,6 +57,69 @@ export async function getValidationCode(userId:number): Promise<string | boolean
     return false;
 }
 
+export async function addExercise(exercise:model.Exercise) {
+    let userExercises: model.Exercise[] = await gatherUserExercises();
+    let unsuppExercises: model.Exercise[] = await gatherSupportedExercises();
+    if (exercise.public) unsuppExercises.push(exercise);
+    userExercises.push(exercise);
+
+    await writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(userExercises, null, 2));
+    if (exercise.public) await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsuppExercises, null, 2));
+}
+
+export async function validateExercise(name:string): Promise<boolean> {
+    let exercises: model.Exercise[] = (await gatherUserExercises()).concat(await gatherSupportedExercises()).concat(await gatherUnsupportedExercises());
+    for (let exercise of exercises) {
+        if (exercise.name == name) return true;
+    }
+    return false;
+}
+
+export async function deleteExercise(name:string) {
+    if (await existsInSupported(name)) return false;
+    if (await existsInUnsupported(name) && !await existsInDefined(name)) return false;
+
+    let unsup: model.Exercise[] = await gatherUnsupportedExercises();
+    let own: model.Exercise[] = await gatherUserExercises();
+
+    for (let i = 0; i < own.length; i++) {
+        if (own[i].name == name) own.splice(i, 1);
+    }
+
+    if (await existsInUnsupported(name)) {
+        for (let i = 0; i < unsup.length; i++) {
+            if (unsup[i].name == name) unsup.splice(i, 1);
+        }
+        await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsup, null, 2));
+    }
+    await writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(own, null, 2));
+    return true;
+}
+
+export async function existsInDefined(name:string) {
+    let userExercises: model.Exercise[] = await gatherUserExercises();
+    for (let exercise of userExercises) {
+        if (exercise.name == name) return true;
+    }
+    return false;
+}
+
+export async function existsInUnsupported(name:string) {
+    let unsupExercises: model.Exercise[] = await gatherUnsupportedExercises();
+    for (let exercise of unsupExercises) {
+        if (exercise.name == name) return true;
+    }
+    return false;
+}
+
+export async function existsInSupported(name:string) {
+    let exercises: model.Exercise[] = await gatherSupportedExercises();
+    for (let exercise of exercises) {
+        if (exercise.name == name) return true;
+    }
+    return false;
+}
+
 export async function delValidationCode(userId:number) {
     let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
     let newObjects: {userId:number, validationCode:string | boolean}[] = [];

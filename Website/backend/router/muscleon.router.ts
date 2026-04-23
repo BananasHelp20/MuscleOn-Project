@@ -1,5 +1,5 @@
 import express from 'express';
-import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode } from '../fileManagement/muscleon.read';
+import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
 import { validateMail } from '../mail/muscleon.mail';
@@ -193,6 +193,39 @@ muscleRouter.post('/exercise/stop', async (req, res) => {
     });
     res.statusCode = 200;
     res.send({ message: "logging out successful!" });
+});
+
+muscleRouter.post('/newExercise', async (req, res) => {
+    await addExercise(req.body).catch((err) => {
+        console.error("Error creating Exercise:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error creating Exercise" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "creating Exercise successful!" });
+});
+
+muscleRouter.post('/deleteExercise', async (req, res) => {
+    await deleteExercise(req.body).catch((err) => {
+        console.error("Error deleting Exercise:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error deleting Exercise" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "deleting Exercise successful!" });
+});
+
+muscleRouter.post('/validateExercise', async (req, res) => {
+    let found = await validateExercise(req.body).catch((err) => {
+        console.error("Error validating Exercise:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error validating Exercise" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ found: found });
 });
 
 muscleRouter.post('/sendValidationMail', (req, res) => {

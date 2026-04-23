@@ -122,3 +122,85 @@ function showLongtermData(userdata) {
     document.getElementById("viewingLongterm").checked = userdata.userSettings.viewing.longtermStats;
     document.getElementById("staticDiv").hidden = !userdata.userSettings.viewing.longtermStats;
 }
+
+//render each exercise as a list in the following format:
+function renderExercises(settings) {
+    let exercisesDiv = document.getElementById("exercises");
+    let exerciseState = settings.viewingExercises;
+    if (exercisesDiv) {
+        exercisesDiv.innerHTML = "";
+        let supportedExercises = getSupportedExercisesFromLS();
+        let unsupportedExercises = getUnsupportedExercisesFromLS();
+        let userdefinedExercises = getUserdefinedExercisesFromLS();
+        let exercisesToRender = [];
+        if (exerciseState == "All Exercises") {
+            exercisesToRender = supportedExercises.concat(unsupportedExercises).concat(userdefinedExercises);
+        } else if (exerciseState == "Supported Exercises") {
+            exercisesToRender = supportedExercises;
+        } else if (exerciseState == "Community-made Exercises") {
+            exercisesToRender = unsupportedExercises;
+        } else if (exerciseState == "User-defined Exercises") {
+            exercisesToRender = userdefinedExercises;
+        } else {
+            exercisesToRender = [];
+        }
+
+        exercisesToRender.forEach(exercise => {
+            let isDefined = exercise.exerciseType != "supported";
+            let exerciseObject = document.createElement("div");
+            exerciseObject.classList.add("exerciseObject");
+
+            let title = document.createElement("span");
+            title.classList.add("exerciseTitle");
+            title.innerText = exercise.name;
+            
+            let description = document.createElement("p");
+            description.innerText = exercise.description;
+            
+            let createdByUser = document.createElement("span");
+            createdByUser.classList.add("exerciseCreatedBy");
+            createdByUser.innerText = "Created By User: " + exercise.userIdCreated; //getUserOfId(userIdCreated);
+            
+            let equipment = document.createElement("span");
+            equipment.classList.add("exerciseEquipment");
+            equipment.innerText = "Equipment: " + exercise.equipment;
+            
+            let weight = document.createElement("span");
+            weight.classList.add("exerciseWeight");
+            weight.innerText = "Needs Weight: " + (exercise.needsWeight ? "Yes" : "No");
+            
+            let isPublic = document.createElement("span");
+            isPublic.classList.add("exercisePublic");
+            isPublic.innerText = "Public: " + (exercise.public ? "Yes" : "No");
+            
+            let muscleGroupList = document.createElement("dl");
+            muscleGroupList.classList.add("muscleGroupList");
+            
+            let muscleGroupTitle = document.createElement("dt");
+            muscleGroupTitle.classList.add("muscleGroupListObject");
+            muscleGroupTitle.innerText = "MuscleGroups: ";
+            muscleGroupList.appendChild(muscleGroupTitle);
+            exercise.targetedMuscleGroups.forEach(muscleGroup => {
+                let muscleGroupListObject = document.createElement("dd");
+                muscleGroupListObject.classList.add("muscleGroupListObject");
+                muscleGroupListObject.innerText = "- " + muscleGroup;
+                muscleGroupList.appendChild(muscleGroupListObject);
+            });
+            
+            exerciseObject.appendChild(title);
+            exerciseObject.appendChild(document.createElement("br"));
+            exerciseObject.appendChild(description);
+            exerciseObject.appendChild(document.createElement("br"));
+            if (isDefined) exerciseObject.appendChild(createdByUser);
+            if (isDefined) exerciseObject.appendChild(document.createElement("br"));
+            exerciseObject.appendChild(equipment);
+            exerciseObject.appendChild(document.createElement("br"));
+            exerciseObject.appendChild(weight);
+            exerciseObject.appendChild(document.createElement("br"));
+            if (isDefined) exerciseObject.appendChild(isPublic);
+            if (isDefined) exerciseObject.appendChild(document.createElement("br"));
+            exerciseObject.appendChild(muscleGroupList);
+            exercisesDiv.appendChild(exerciseObject);
+        });
+    }
+}

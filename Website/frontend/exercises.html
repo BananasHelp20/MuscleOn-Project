@@ -7,14 +7,14 @@
     <title>Muscle ON!</title>
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/light.css" id="modeStylesheet">
-    <script src="./script/initalize.js"></script>
-    <script src="./script/localStorage.js"></script>
-    <script src="./script/router.js"></script>
+    <script src="./script/initalize.js" defer></script>
+    <script src="./script/localStorage.js" defer></script>
+    <script src="./script/router.js" defer></script>
     <script src="./script/helper.js" defer></script>
-    <script src="./script/render.js"></script>
-    <script src="./script/game.js"></script>
-    <script src="./script/dev.js"></script>
-    <script src="./script/feature.js"></script>
+    <script src="./script/render.js" defer></script>
+    <script src="./script/game.js" defer></script>
+    <script src="./script/dev.js" defer></script>
+    <script src="./script/feature.js" defer></script>
     <script src="./script/primary.js" defer></script>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
@@ -52,18 +52,36 @@
     </header>
     <div class="siteBody">
         <h1>Exercises</h1>
-        Currently viewing: <button id="exerciseSwitch" class="defaultButton">All</button>
+        Currently viewing: <button id="exerciseSwitch" class="defaultButton">All</button><br>
+        <button id="addExercise" class="defaultButton">Add New Exercise</button>
+        <button id="cancelExerciseAddition" class="defaultButton" hidden>Cancel</button>
+        <div id="exerciseForm" hidden>
+            <label for="exerciseName">Name of Exercise: </label>
+            <input type="text" id="exerciseName" name="exerciseName"><br>
+            <label for="exerciseDescription">Description of Exercise:</label><br>
+            <textarea name="exerciseDescription" id="exerciseDescription" rows="3"></textarea>
+            <ul id="muscleGroupSelection">
+                <!-- <li>group</li> -->
+            </ul>
+            <label for="equipment">Uses Equipment (leave blank if not): </label>
+            <input type="text" name="equipment" id="equipment"><br>
+            <label for="usesWeight">Uses Weight: </label>
+            <input type="checkbox" name="usesWeight" id="usesWeight"><br>
+            <label for="public">Visible to others: </label>
+            <input type="checkbox" id="public" name="public">
+        </div>
         <div id="exercises">
             <div class="exerciseObject">
                 <span class="exerciseTitle">Name</span>
                 <p>Description</p>
-                <span class="exerciseCreatedBy">Created By User: </span>
-                <span class="exerciseEquipment">Equipment</span>
-                <span class="exerciseWeight">Needs Weight</span>
-                <span class="exercisePublic">Public: </span>
-                <ul class="muscleGroupList">
-                    <li class="muscleGroupListObject">musclegroup1</li>
-                </ul>
+                <span class="exerciseCreatedBy">Created By User: </span><br>
+                <span class="exerciseEquipment">Equipment</span><br>
+                <span class="exerciseWeight">Needs Weight</span><br>
+                <span class="exercisePublic">Public: </span><br>
+                <dl class="muscleGroupList">
+                    <dt>Muscle Groups targeted:</dt>
+                    <!-- <dd class="muscleGroupListObject">musclegroup1</dd> -->
+                </dl>
             </div>
         </div>
     </div>

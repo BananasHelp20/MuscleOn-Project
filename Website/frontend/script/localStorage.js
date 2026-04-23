@@ -68,19 +68,16 @@ function getSettingsFromLocalStorage() { //MOCH DO KA log() EINI!
 }
 
 function getSupportedExercisesFromLS() {
-    log(localStorage.getItem("supportedExercises"));
     let ex = JSON.parse(localStorage.getItem("supportedExercises"));
     return ex ? ex : [];
 }
 
 function getUnsupportedExercisesFromLS() {
-    log(localStorage.getItem("unsupportedExercises"));
     let ex = JSON.parse(localStorage.getItem("unsupportedExercises"));
     return ex ? ex : [];
 }
 
 function getUserdefinedExercisesFromLS() {
-    log(localStorage.getItem("userdefinedExercises"));
     let ex = JSON.parse(localStorage.getItem("userdefinedExercises"));
     return ex ? ex : [];
 }

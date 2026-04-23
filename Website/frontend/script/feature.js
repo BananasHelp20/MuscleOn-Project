@@ -237,3 +237,72 @@ function signUp() {
         login();
     });
 }
+
+function addExercise() {
+    let muscleGroups = getMuscleGroups();
+    let muscleGroupSelection = document.getElementById("muscleGroupSelection");
+    let musclegroupSelectionTitle = document.createElement("dt");
+    musclegroupSelectionTitle.innerText = "Muscle Groups targeted: ";
+    muscleGroupSelection.appendChild(musclegroupSelectionTitle);
+    for (let i = 0; i < muscleGroups.length; i++) {
+        let listelem = document.createElement("dd");
+        let uses = document.createElement("input");
+        uses.setAttribute("type", "checkbox");
+        let text = document.createElement("span");
+        text.innerText = "- " + muscleGroups[i] + ": ";
+        listelem.appendChild(text);
+        listelem.appendChild(uses);
+        muscleGroupSelection.appendChild(listelem);
+    }
+}
+
+function saveExercise() {
+    let exerciseDiv = document.getElementById("exerciseForm");
+    let muscleGroupSelection = document.getElementById("muscleGroupSelection");
+    let exName = document.getElementById("exerciseName");
+    let exDescription = document.getElementById("exerciseDescription");
+    let exEquipment = document.getElementById("equipment");
+    let usesWeight = document.getElementById("usesWeight").checked;
+    let visibility = document.getElementById("public").checked;
+
+    let groups = [];
+    for (let i = 0; i < muscleGroupSelection.children.length; i++) {
+        let liElem = muscleGroupSelection.children.item(i);
+        if (liElem.nodeName == "DD" && liElem.children.item(1).checked) groups.push(liElem.children.item(0).innerText);
+    }
+
+    if (groups.length < 1 || !exName.value || !exDescription.value) {
+        alert("invalid inputs: " + groups.length + ", " + exName.value + ", " + exDescription.value);
+        return false;
+    }
+
+    let device = getDeviceData();
+    let newExercise = {
+        userIdCreated: device.loggedInWithUserId,
+        name: exName.value,
+        exerciseType: "defined",
+        description: exDescription.value,
+        equipment: exEquipment.value ? exEquipment.value : "None",
+        targetedMuscleGroups: groups,
+        public: visibility,
+        weight: usesWeight
+    };
+
+    validateExerciseName(newExercise.name).then(foundElem => {
+        if (foundElem.found) {
+            alert("Exercisename already Exists");
+            return false;
+        } else {
+            appendExercise(newExercise);
+            for (let i = 0; i < muscleGroupSelection.children; i++) {
+                let liElem = muscleGroupSelection.children.item(i);
+                if (liElem.nodeName == "dd" && liElem.children.item(1).checked) liElem.children.item(1).checked = false;
+            }
+            document.getElementById("public").checked = false;
+            document.getElementById("usesWeight").checked = false;
+            exEquipment.value = "";
+            exName.value = "";
+            exDescription.value = "";
+        }
+    });
+}

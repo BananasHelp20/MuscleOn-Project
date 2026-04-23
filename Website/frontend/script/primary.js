@@ -27,11 +27,11 @@ function requestData(deviceData) {
 function initalizeDefault(deviceData) {
     initializeLightSwitch();
     initializeExercises();
-    initializeDevMode();    
+    initializeDevMode();
     //nur vorerst
     deviceData.editingPlanSection = false;
     localStorage.setItem("deviceData", JSON.stringify(deviceData));
-
+    
     startGame();
 }
 
@@ -45,6 +45,7 @@ function render(deviceData, data) {
     showLoggedIn(deviceData);
 
     if (deviceData.loggedIn) {
+        renderExercises(data.userSettings);
         if (document.getElementById("lockedFromLogin")) document.getElementById("lockedFromLogin").hidden = false;
         if (data) {
             /* NED WICHTIG, NUR DEVMODE */
@@ -121,4 +122,4 @@ function initializeLoggedIn(deviceData, data) {
 
 init();
 
-/* ^THIS CALL RUNS EVERYTHING^ */
+/* ^THIS CALL RUNS EVERYTHING^ DO NOT DELETE*/

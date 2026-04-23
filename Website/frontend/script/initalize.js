@@ -74,11 +74,10 @@ function initializeSession() {
     if (document.getElementById("createTrainingsPlan")) document.getElementById("createTrainingsPlan").addEventListener("click", () => {
         let device = getDeviceData();
         let properties = getUserPropertiesFromLocalStorage();
-        log(properties.createdPlan);
-        log(properties.usualSessionTimes)
         if (device.editingPlanSection) { //on trying to save
             let times = getSessionTimes();
             if (validateSessionTimes(times)) {
+                document.getElementById("cancelTrainingsPlan").hidden = true;
                 device.editingPlanSection = false;
                 document.getElementById("plan-table").innerHTML = "";
                 document.getElementById("exercise-tables").innerHTML = "<h3>Exercises</h3>";
@@ -90,6 +89,7 @@ function initializeSession() {
             }
         } else { //on activation
             device.editingPlanSection = true;
+            document.getElementById("cancelTrainingsPlan").hidden = false;
             if (properties.createdPlan && properties.usualSessionTimes) {
                 for (time of properties.usualSessionTimes) {
                     addWeekday(time);
@@ -105,6 +105,17 @@ function initializeSession() {
         localStorage.setItem("deviceData", JSON.stringify(device));
         sessionButtonCheck();
     });
+
+    if (document.getElementById("cancelTrainingsPlan")) document.getElementById("cancelTrainingsPlan").addEventListener("click", () => {
+        let device = getDeviceData();
+        document.getElementById("cancelTrainingsPlan").hidden = true;
+        device.editingPlanSection = false;
+        document.getElementById("plan-table").innerHTML = "";
+        document.getElementById("exercise-tables").innerHTML = "<h3>Exercises</h3>";
+        localStorage.setItem("deviceData", JSON.stringify(device));
+        sessionButtonCheck();
+    });
+
     initializePlanTable();
 }
 
@@ -193,6 +204,7 @@ function initializeExercises() {
     let exerciseDiv = document.getElementById("exerciseDisplay");
     let exerciseSwitch = document.getElementById("exerciseSwitch");
     let settings = getSettingsFromLocalStorage();
+    let addExerciseBtn = document.getElementById("addExercise");
 
     if (exerciseSwitch) exerciseSwitch.innerText = settings.viewingExercises ? settings.viewingExercises : "All Exercises";
 
@@ -204,8 +216,8 @@ function initializeExercises() {
         } else if (event.target.innerText == "Community-made Exercises") {
             event.target.innerText = "Supported Exercises";
         } else if (event.target.innerText == "Supported Exercises") {
-            event.target.innerText = "All Exercises";
-        } else {
+            event.target.innerText = "None";
+        } else if (event.target.innerText == "None") {
             event.target.innerText = "All Exercises";
         }
         let settings = getSettingsFromLocalStorage();
@@ -216,7 +228,41 @@ function initializeExercises() {
 
         if (device.loggedIn) setUserSettings(settings);
 
-        updateExerciseDisplay(settings);
+        renderExercises(settings);
+    });
+
+    if (addExerciseBtn) addExerciseBtn.addEventListener("click", () => {
+        if (addExerciseBtn.innerText == "Save Exercise") {
+            if (saveExercise() != false) {
+                addExerciseBtn.innerText = "Add New Exercise";
+                document.getElementById("exerciseForm").hidden = true;
+                document.getElementById("cancelExerciseAddition").hidden = true;
+            }
+        } else {
+            addExerciseBtn.innerText = "Save Exercise";
+            document.getElementById("exerciseForm").hidden = false;
+            document.getElementById("cancelExerciseAddition").hidden = false;
+            addExercise();
+        }
+    });
+
+    if (document.getElementById("cancelExerciseAddition")) document.getElementById("cancelExerciseAddition").addEventListener("click", () => {
+        let muscleGroupSelection = document.getElementById("muscleGroupSelection");
+        let exName = document.getElementById("exerciseName");
+        let exDescription = document.getElementById("exerciseDescription");
+        let exEquipment = document.getElementById("equipment");
+        addExerciseBtn.innerText = "Add New Exercise";
+        document.getElementById("cancelExerciseAddition").hidden = true;
+        document.getElementById("exerciseForm").hidden = true;
+        for (let i = 0; i < muscleGroupSelection.children; i++) {
+        let liElem = muscleGroupSelection.children.item(i);
+            if (liElem.nodeName == "dd" && liElem.children.item(1).checked) liElem.children.item(1).checked = false;
+        }
+        document.getElementById("public").checked = false;
+        document.getElementById("usesWeight").checked = false;
+        exEquipment.value = "";
+        exName.value = "";
+        exDescription.value = "";
     });
 }
 

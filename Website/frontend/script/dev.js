@@ -1,8 +1,8 @@
 let tasks = [
-    "define parental functions (render, startGame, initializeLoggedIn, initializeLoggedOut, syncData...)",
     "verify Email upon signining up",
-    "display Exercises",
-    "add Exercise",
+    "About Page",
+    "delete Exercise",
+    "edit Exercise",
     "display data how it should be",
     "add Preset Plans",
     "Style/layout for tablets/phones",

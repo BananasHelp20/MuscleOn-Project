@@ -68,6 +68,48 @@ async function loadDataFromSpecificUserById(userId) {
     });
 }
 
+async function deleteExercise(name) {
+    return fetch("/api/deleteExercise", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: name
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured while saving new exercise into JSON:", response.statusText);
+        }
+    });
+}
+
+async function validateExerciseName(name) {
+    return fetch("/api/validateExercise", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: name
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured while saving new exercise into JSON:", response.statusText);
+        }
+    });
+}
+
+async function appendExercise(exercise) {
+    return fetch("/api/newExercise", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(exercise)
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured while saving new exercise into JSON:", response.statusText);
+        }
+    });
+}
+
 async function clearUserData() {
     log("saving Data to Database and logging out");
     let defaultSettings = {

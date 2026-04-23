@@ -495,3 +495,12 @@ canvas {
       -ms-border-radius: 12px;
       -o-border-radius: 12px;
 }
+
+textarea {
+    resize: none;
+}
+
+#exerciseDescription {
+    width: 100%;
+    max-width: 40em;
+}
