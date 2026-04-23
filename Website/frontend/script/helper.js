@@ -29,6 +29,7 @@ function initializeLightSwitch() {
 }
 
 function initializeDevMode() {
+    if (!document.getElementById("dev")) return;
     let on = getSettingsFromLocalStorage().devMode;
     let devModeSwitch = document.getElementById("dev");
     devModeSwitch.innerText = on ? "devmode" : "usermode";
@@ -152,12 +153,14 @@ function initializeSession() {
 
 function initializeLogin() {
     let loginButton = document.getElementById("loginButton");
+    if (!loginButton) return;
     loginButton.addEventListener("click", () => {
         login();
     });
 }
 
 function initializeSignUp() {
+    if (!document.getElementById("signupButton")) return; 
     document.getElementById("plan").checked = false;
     document.getElementById("plan-table").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
     document.getElementById("signupButton").addEventListener("click", () => {
@@ -721,6 +724,7 @@ function logout() {
 }
 
 function startGame() {
+    if (!document.getElementById("gameDiv")) return;
     const streetColor = getSettingsFromLocalStorage().mode == "darkmode" ? '#c9c9c9' : '#4f4f4f';
     const textColor = getSettingsFromLocalStorage().mode == "darkmode" ? '#c9c9c9' : '#4f4f4f';
     const canvas = document.getElementById('gameCanvas');

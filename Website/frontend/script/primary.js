@@ -1,17 +1,93 @@
 function init() {
-    let logoutButton = document.getElementById("logoutButton");
-    let loginButton = document.getElementById("loginButton");
-    let signUpButton = document.getElementById("signupButton");
+    let deviceData = getDeviceData();
+    initalizeDefault(deviceData);
+    initializeExerciseUpdateLoop(); //loop2
 
-    let devModeButton = document.getElementById("dev");
+    if (deviceData.loggedIn) {
+        getUserData().then((data) => {
+            saveDataToLocalStorage(data);
+            render(deviceData, data);
+            initializeLoggedIn(deviceData, data);
+            initializeDataUpdateLoop(); //loop
+        });
+    } else {
+        render(deviceData, null);
+        initializeLoggedOut();
+    }
+}
 
+function requestData(deviceData) {
+    if (!deviceData.loadedUserData) loadDataFromSpecificUserById(deviceData.loggedInWithUserId).then(answer => {
+        if (!answer.found) {
+            alert("requested userdata might have been deleted or doesn't exist");
+        }
+    });
+}
+
+function initalizeDefault(deviceData) {
     initializeLightSwitch();
     initializeExercises();
+    initializeDevMode();    
+    //nur vorerst
+    deviceData.editingPlanSection = false;
+    localStorage.setItem("deviceData", JSON.stringify(deviceData));
 
-    if (devModeButton) initializeDevMode();
+    startGame();
+}
 
-    let deviceData = getDeviceData();
+function saveDataToLocalStorage(data) {
+    localStorage.setItem("userProperties", JSON.stringify(data.userProperties));
+    localStorage.setItem("userSettings", JSON.stringify(data.userSettings));
+    localStorage.setItem("userData", JSON.stringify(data));
+}
 
+function render(deviceData, data) {
+    showLoggedIn(deviceData);
+
+    if (deviceData.loggedIn) {
+        if (document.getElementById("lockedFromLogin")) document.getElementById("lockedFromLogin").hidden = false;
+        if (data) {
+            /* NED WICHTIG, NUR DEVMODE */
+            if (document.getElementById("upcomingFeatures") && data.userSettings.devMode) {
+                addAllTasks();
+            } else if (document.getElementById("upcomingFeatures"))
+                document.getElementById("upcomingFeatures").parentElement.hidden = true;
+            /* */
+
+            setModes(data.userSettings); //des im localstorage is nur placeholdermäßig bis zum Einloggen, des wos im json steht is des wos braucht wird
+
+        }
+    } else {
+        console.log(document.getElementsByClassName("loggedOutNotice"));
+        if (document.getElementsByClassName("loggedOutNotice")) {
+            for (let i = 0; i < document.getElementsByClassName("loggedOutNotice").length; i++) {
+                document.getElementsByClassName("loggedOutNotice").item(i).hidden = true;
+            }
+        }
+    }
+}
+
+function initializeDataUpdateLoop() {
+    let longtermStatsSection = document.getElementById("staticDiv");
+    let realTimeStatsSection = document.getElementById("realTimeDiv");
+    let sessionStatsSection = document.getElementById("dynamicDiv");
+
+    if (longtermStatsSection || realTimeStatsSection || sessionStatsSection) {
+        setInterval(() => {
+            getUserData().then((userdata) => {
+                localStorage.setItem("userProperties", JSON.stringify(userdata.userProperties));
+                localStorage.setItem("userSettings", JSON.stringify(userdata.userSettings));
+                localStorage.setItem("userData", JSON.stringify(userdata));
+                syncModes();
+                showRealTimeData(userdata);
+                showSessionData(userdata);
+                showLongtermData(userdata);
+            });
+        }, interval);
+    }
+}
+
+function initializeExerciseUpdateLoop() {
     setInterval(() => {
         getSupportedExercises().then(exercises => {
             localStorage.setItem("supportedExercises", JSON.stringify(exercises));
@@ -23,71 +99,26 @@ function init() {
             localStorage.setItem("userdefinedExercises", JSON.stringify(exercises));
         });
     }, interval);
-
-    showLoggedIn(deviceData);
-    deviceData.editingPlanSection = false;
-    localStorage.setItem("deviceData", JSON.stringify(deviceData));
-
-    if (document.getElementById("gameDiv")) {
-        log("initializing game...");
-        startGame();
-    }
-
-    if (deviceData.loggedIn) {
-        if (document.getElementById("check") && getSettingsFromLocalStorage().devMode) document.getElementById("check").addEventListener("click", () => { //TESTBUTTON
-        })
-
-        if (document.getElementById("lockedFromLogin")) document.getElementById("lockedFromLogin").hidden = false;
-        if (!deviceData.loadedUserData) loadDataFromSpecificUserById(deviceData.loggedInWithUserId).then(answer => {
-            if (!answer.found) {
-                alert("requested userdata might have been deleted or doesn't exist");
-            }
-        });
-        showLoggedIn(deviceData);
-        initializeLogoutAndDelete(); //wenn logout -> login und signup initialisieren // oder eventuell ned?
-
-        getUserData().then((data) => {
-            localStorage.setItem("userProperties", JSON.stringify(data.userProperties));
-            localStorage.setItem("userSettings", JSON.stringify(data.userSettings));
-            localStorage.setItem("userData", JSON.stringify(data));
-
-            /* NED WICHTIG, NUR DEVMODE */
-            if (document.getElementById("upcomingFeatures") && data.userSettings.devMode) {
-                addAllTasks();
-            } else if (document.getElementById("upcomingFeatures"))
-                document.getElementById("upcomingFeatures").parentElement.hidden = true;
-            /* */
-
-            initializeSession();
-            setModes(data.userSettings); //des im localstorage is nur placeholdermäßig bis zum Einloggen, des wos im json steht is des wos braucht wird
-            loadAndInitializeChecked(data.userSettings);
-            let longtermStatsSection = document.getElementById("staticDiv");
-            let realTimeStatsSection = document.getElementById("realTimeDiv");
-            let sessionStatsSection = document.getElementById("dynamicDiv");
-
-            if (longtermStatsSection || realTimeStatsSection || sessionStatsSection) {
-                setInterval(() => {
-                    getUserData().then((userdata) => {
-                        localStorage.setItem("userProperties", JSON.stringify(userdata.userProperties));
-                        localStorage.setItem("userSettings", JSON.stringify(userdata.userSettings));
-                        localStorage.setItem("userData", JSON.stringify(userdata));
-                        syncModes();
-                        showRealTimeData(userdata);
-                        showSessionData(userdata);
-                        showLongtermData(userdata);
-                    });
-                }, interval);
-            }
-        });
-    } else {
-        console.log(document.getElementsByClassName("loggedOutNotice"));
-        if (document.getElementsByClassName("loggedOutNotice")) {
-            for (let i = 0; i < document.getElementsByClassName("loggedOutNotice").length; i++) {
-                document.getElementsByClassName("loggedOutNotice").item(i).hidden = true;
-            }
-        }
-        if (loginButton) initializeLogin(); //wenn login -> logout initialisieren // oder eventuell ned?
-        if (signUpButton) initializeSignUp(); //nach signup -> login() // oder eventuell ned?
-    }
 }
+
+function initializeLoggedOut() {
+    initializeLogin(); //wenn login -> logout initialisieren // oder eventuell ned?
+    initializeSignUp(); //nach signup -> login() // oder eventuell ned?
+}
+
+function initializeLoggedIn(deviceData, data) {
+    let settings = data.userSettings;
+    if (document.getElementById("check") && settings.devMode) document.getElementById("check").addEventListener("click", () => {
+         //TESTBUTTON
+    })
+    
+    initializeSession();
+    initializeLogoutAndDelete(); //wenn logout -> login und signup initialisieren // oder eventuell ned?
+    loadAndInitializeChecked(data.userSettings);
+}
+
+/* INIT */
+
 init();
+
+/* ^THIS CALL RUNS EVERYTHING^ */

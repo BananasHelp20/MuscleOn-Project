@@ -1,7 +1,6 @@
 import express from 'express';
 import { muscleRouter } from './backend/router/muscleon.router';
 import { join } from 'path';
-import { sendMail } from './backend/mail/muscleon.mail';
 
 const app = express();
 const port = 3000;
@@ -16,7 +15,7 @@ app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
 });
 
-//404 handeling oda so
+//404 hendeling oda so
 app.use((req, res, next) => {
     res.status(404).sendFile(join(__dirname, "frontend", "404.html"));
 });

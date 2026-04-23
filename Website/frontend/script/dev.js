@@ -12,6 +12,8 @@ let tasks = [
 
 function addAllTasks() {
     let features = document.getElementById("upcomingFeatures");
+    if (!features) return;
+    features.innerHTML = "";
     for (let i = 0; i < tasks.length; i++) {
         let box = document.createElement("input");
         box.setAttribute("type", "checkbox");
