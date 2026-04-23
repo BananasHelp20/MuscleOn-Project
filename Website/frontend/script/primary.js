@@ -53,7 +53,7 @@ function render(deviceData, data) {
             } else if (document.getElementById("upcomingFeatures"))
                 document.getElementById("upcomingFeatures").parentElement.hidden = true;
             /* */
-
+            //syncModes();
             setModes(data.userSettings); //des im localstorage is nur placeholdermäßig bis zum Einloggen, des wos im json steht is des wos braucht wird
 
         }
@@ -78,10 +78,10 @@ function initializeDataUpdateLoop() {
                 localStorage.setItem("userProperties", JSON.stringify(userdata.userProperties));
                 localStorage.setItem("userSettings", JSON.stringify(userdata.userSettings));
                 localStorage.setItem("userData", JSON.stringify(userdata));
-                syncModes();
                 showRealTimeData(userdata);
                 showSessionData(userdata);
                 showLongtermData(userdata);
+                render(getDeviceData(), userdata);
             });
         }, interval);
     }

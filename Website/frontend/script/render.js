@@ -1,0 +1,124 @@
+function syncModes() {
+    if (document.getElementById("dev")) document.getElementById("dev").innerText = getSettingsFromLocalStorage().devMode ? "devmode" : "usermode";
+    if (document.getElementById("lightSwitch")) document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
+    document.getElementById("modeStylesheet").href = getSettingsFromLocalStorage().mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
+
+    if (getSettingsFromLocalStorage().devMode && document.getElementById("check")) {
+        document.getElementById("check").hidden = false;
+        document.getElementById("checkbr").hidden = false;
+    } else if (document.getElementById("check")) {
+        document.getElementById("check").hidden = true;
+        document.getElementById("checkbr").hidden = true;
+    }
+}
+
+function sessionButtonCheck() {
+    let deviceProperties = getDeviceData();
+    let properties = getUserPropertiesFromLocalStorage();
+    if (properties.createdPlan && !deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
+        document.getElementById("createTrainingsPlan").innerText = "Edit Trainings Plan";
+    } else if (!deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
+        document.getElementById("createTrainingsPlan").innerText = "Create Trainings Plan";
+    } else if (document.getElementById("createTrainingsPlan")) {
+        document.getElementById("createTrainingsPlan").innerText = "Save Trainings Plan";
+    }
+    if (document.getElementById("plan-section")) document.getElementById("plan-section").hidden = !deviceProperties.editingPlanSection;
+
+    if (properties.currentlyInExercise && document.getElementById("startStopExercise")) {
+        document.getElementById("startStopExercise").innerText = "End Exercise";
+    } else if (document.getElementById("startStopExercise")) {
+        document.getElementById("startStopExercise").innerText = "Start Exercise";
+    }
+
+    if (deviceProperties.sessionRunning && document.getElementById("startStopSession")) {
+        document.getElementById("startStopSession").innerText = "End Session";
+        if (document.getElementById("sessionDiv")) document.getElementById("sessionDiv").hidden = false;
+    } else if (document.getElementById("startStopSession")) {
+        document.getElementById("startStopSession").innerText = "Start Session";
+        if (document.getElementById("sessionDiv")) document.getElementById("sessionDiv").hidden = true;
+    }
+}
+
+function showLoggedIn(deviceData) {
+    let loggedInAsDisplay = document.getElementById("currentUser");
+    if (deviceData.loggedIn && loggedInAsDisplay) {
+        loggedInAsDisplay.innerHTML = "Logged in as " + deviceData.loggedInAsUser + " <br><button id='logoutButton' class='defaultButton'>Logout</button>";
+    } else if (loggedInAsDisplay) {
+        loggedInAsDisplay.innerHTML = "You are logged out. <a href='./login.html' class='styledLink'>Login</a> <br>Don't have an account? <a href='./signup.html' class='styledLink'>Signup Now</a>";
+    }
+}
+
+function setModes(data) {
+    let lightSwitch = document.getElementById("lightSwitch");
+    let devModeSwitch = document.getElementById("dev");
+    if (data) {
+        localStorage.setItem("lightSwitch", (data.mode == "lightmode") + "");
+        localStorage.setItem("lightSwitch", data.devMode + "");
+    } else {
+        localStorage.setItem("lightSwitch", true);
+        localStorage.setItem("devmode", true);
+    }
+    if (lightSwitch) document.getElementById("modeStylesheet").href = data ? (data.mode == "lightmode" ? "./css/light.css" : "./css/dark.css") : "./css/light.css";
+    if (lightSwitch) lightSwitch.innerText = data ? data.mode : "lightmode";
+    if (devModeSwitch) devModeSwitch.innerText = data ? (data.devMode ? "devmode" : "usermode") : "usermode";
+}
+
+function showRealTimeData(userdata) {
+    // let heartRateDisplay = document.getElementById("heartFrequence");
+    // let oxygenDisplay = document.getElementById("oxygen");
+    // let currentMuscleBeingTrainedDisplay = document.getElementById("currentMuscleBeingTrained");
+    // let currentExerciseDisplay = document.getElementById("currentExercise");
+
+    // heartRateDisplay.innerText = userdata.userShortTerm.heartFrequence + " bpm";
+    // oxygenDisplay.innerText = userdata.userShortTerm.oxygen + " %";
+    // currentMuscleBeingTrainedDisplay.innerText = userdata.userShortTerm.currentMuscleBeingTrained;
+    // currentExerciseDisplay.innerText = userdata.userShortTerm.currentExercise;
+
+    document.getElementById("dynamicHeadline").hidden = !(userdata.userSettings.viewing.realTimeStats || userdata.userSettings.viewing.sessionStats);
+    document.getElementById("viewingRealTime").checked = userdata.userSettings.viewing.realTimeStats;
+    document.getElementById("realTimeDiv").hidden = !userdata.userSettings.viewing.realTimeStats;
+}
+
+function showSessionData(userdata) {
+    // let avgHeartRateDisplay = document.getElementById("averageHeartFrequence");
+    // let avgOxygenDisplay = document.getElementById("averageOxygen");
+    // let avgMuscleUsageDisplay = document.getElementById("averageMuscleUsageInPercent");
+    // let trainedMusclesInCurrentOrLatestSessionDisplay = document.getElementById("trainedMuscles");
+
+    // avgHeartRateDisplay.innerText = userdata.userSessionData.averageHeartFrequence + " bpm";
+    // avgOxygenDisplay.innerText = userdata.userSessionData.averageOxygen + " %";
+    // avgMuscleUsageDisplay.innerText = userdata.userSessionData.averageMuscleUsageInPercent + " %";
+
+    document.getElementById("viewingSession").checked = userdata.userSettings.viewing.sessionStats;
+    document.getElementById("dynamicDiv").hidden = !userdata.userSettings.viewing.sessionStats;
+}
+
+function showLongtermData(userdata) {
+    // let maxTimeTrainedDisplay = document.getElementById("maxTimeTrained");
+    // let maxDoneInOneForEachExerciseDisplay = document.getElementById("maxDoneInOneForEachExercise");
+    // let maxHeartRateDisplay = document.getElementById("maxHeartRate");
+    // let averageTimeTrainedDisplay = document.getElementById("averageTimeTrained");
+    // let averageHeartFrequenceDisplay = document.getElementById("averageHeartFrequence");
+    // let averageOxygenDisplay = document.getElementById("averageOxygen")
+    // let averageMuscleUsageInPercentDisplay = document.getElementById("averageMuscleUsageInPercent");
+    // let weeklyBurnedCaloriesDisplay = document.getElementById("weeklyBurnedCalories");
+    // let monthlyStrengthIncreaseDisplay = document.getElementById("monthlyStrengthIncrease");
+    // let weeklyTrainingTimeDisplay = document.getElementById("weeklyTrainingTime");
+    // let mostTrainedMuscleDisplay = document.getElementById("mostTrainedMuscle");
+    // let mostDoneExerciseDisplay = document.getElementById("mostDoneExercise");
+
+    // maxTimeTrainedDisplay.innerText = userdata.userHighscores.maxTimeTrained + " Minuten";
+    // maxHeartRateDisplay.innerText = userdata.userHighscores.maxHeartRate + " bpm";
+    // averageTimeTrainedDisplay.innerText = userdata.userLongTermAverages.averageTimeTrained + " Minuten";
+    // averageHeartFrequenceDisplay.innerText = userdata.userLongTermAverages.averageHeartFrequence + " bpm";
+    // averageOxygenDisplay.innerText = userdata.userLongTermAverages.averageOxygen + " %";
+    // averageMuscleUsageInPercentDisplay.innerText = userdata.userLongTermAverages.averageMuscleUsageInPercent + " %";
+    // weeklyBurnedCaloriesDisplay.innerText = userdata.userLongTermAverages.weeklyBurnedCalories + " kcal";
+    // monthlyStrengthIncreaseDisplay.innerText = userdata.userLongTermAverages.monthlyStrengthIncrease + " %";
+    // weeklyTrainingTimeDisplay.innerText = userdata.userLongTermAverages.weeklyTrainingTime + " Minuten";
+    // mostTrainedMuscleDisplay.innerText = userdata.userLongTermAverages.mostTrainedMuscle;
+    // mostDoneExerciseDisplay.innerText = userdata.userLongTermAverages.mostDoneExercise;
+
+    document.getElementById("viewingLongterm").checked = userdata.userSettings.viewing.longtermStats;
+    document.getElementById("staticDiv").hidden = !userdata.userSettings.viewing.longtermStats;
+}
