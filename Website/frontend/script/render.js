@@ -186,7 +186,18 @@ function renderExercises(settings) {
                 muscleGroupListObject.innerText = "- " + muscleGroup;
                 muscleGroupList.appendChild(muscleGroupListObject);
             });
-            
+
+            let delButton = document.createElement("button");
+            delButton.innerText = "Delete Exercise";
+            delButton.addEventListener("click", (event) => {enableDeleteExercise(event.target)});
+            let editButton = document.createElement("button");
+            editButton.innerText = "Delete Exercise";
+            editButton.addEventListener("click", (event) => {enableEditExercise(event.target)});
+            let actionDiv = document.createElement("div");
+
+            actionDiv.appendChild(editButton);
+            actionDiv.appendChild(delButton);
+
             exerciseObject.appendChild(title);
             exerciseObject.appendChild(document.createElement("br"));
             exerciseObject.appendChild(description);
@@ -200,6 +211,7 @@ function renderExercises(settings) {
             if (isDefined) exerciseObject.appendChild(isPublic);
             if (isDefined) exerciseObject.appendChild(document.createElement("br"));
             exerciseObject.appendChild(muscleGroupList);
+            exerciseObject.appendChild(actionDiv);
             exercisesDiv.appendChild(exerciseObject);
         });
     }
@@ -210,5 +222,6 @@ function renderSessionAndExercise(data) {
 
     let settings = data.userProperties;
     if (document.getElementById("startStopExercise")) document.getElementById("startStopExercise").innerText = settings.currentlyInExercise ? "Stop Exercise" : "Start Exercise";
-    if (document.getElementById("startStopSession")) document.getElementById("startStopSession").innerText = settings.currentlyTraining ? "Stop Session" : "Start Session";    
+    if (document.getElementById("startStopSession")) document.getElementById("startStopSession").innerText = settings.currentlyTraining ? "Stop Session" : "Start Session";
+    document.getElementById("sessionDiv").hidden = !settings.currentlyTraining;
 }

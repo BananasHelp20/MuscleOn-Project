@@ -88,11 +88,13 @@ async function validateExerciseName(name) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: name
+        body: JSON.stringify({ name: name })
     }).then((response) => {
         if (!response.ok) {
             console.error("An error occured while saving new exercise into JSON:", response.statusText);
+            return undefined;
         }
+        return response.json();
     });
 }
 
@@ -106,7 +108,9 @@ async function appendExercise(exercise) {
     }).then((response) => {
         if (!response.ok) {
             console.error("An error occured while saving new exercise into JSON:", response.statusText);
+            return undefined;
         }
+        return response.json();
     });
 }
 

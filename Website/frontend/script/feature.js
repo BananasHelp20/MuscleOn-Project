@@ -294,10 +294,7 @@ function saveExercise() {
             return false;
         } else {
             appendExercise(newExercise);
-            for (let i = 0; i < muscleGroupSelection.children; i++) {
-                let liElem = muscleGroupSelection.children.item(i);
-                if (liElem.nodeName == "dd" && liElem.children.item(1).checked) liElem.children.item(1).checked = false;
-            }
+            muscleGroupSelection.innerHTML = "";
             document.getElementById("public").checked = false;
             document.getElementById("usesWeight").checked = false;
             exEquipment.value = "";
@@ -305,4 +302,45 @@ function saveExercise() {
             exDescription.value = "";
         }
     });
+}
+
+function enableDeleteExercise(exerciseDeleteButton) {
+    exerciseDeleteButton.parentElement.parentElement.remove();
+}
+
+function enableEditExercise(exerciseEditButton) {
+    let exerciseObjectChildren = exerciseEditButton.parentElement.parentElement.children;
+
+    let definedName = exerciseObjectChildren.item(0);
+    let definedDescription = exerciseObjectChildren.item(2);
+    let definedEqipment = exerciseObjectChildren.item(6);
+    let definedWeight = exerciseObjectChildren.item(8);
+    let definedVisibility = exerciseObjectChildren.item(10);
+    let definedGroups = exerciseObjectChildren.item(12).children;
+    let definedGroupStrings = [];
+
+    for (let i = 0; i < definedGroups.length; i++) {
+        if (definedGroups.item(i).nodeName != "DT") {
+            definedGroupStrings.push(definedGroups.item(i).innerText);
+        }
+    }
+
+    let muscleGroups = getMuscleGroups();
+    let muscleGroupSelection = document.getElementById("muscleGroupSelection");
+    let musclegroupSelectionTitle = document.createElement("dt");
+    musclegroupSelectionTitle.innerText = "Muscle Groups targeted: ";
+    muscleGroupSelection.appendChild(musclegroupSelectionTitle);
+    for (let i = 0; i < muscleGroups.length; i++) {
+        let listelem = document.createElement("dd");
+        let uses = document.createElement("input");
+        uses.setAttribute("type", "checkbox");
+        uses.checked = (definedGroupStrings.includes(muscleGroups[i]));
+        let text = document.createElement("span");
+        text.innerText = "- " + muscleGroups[i] + ": ";
+        listelem.appendChild(text);
+        listelem.appendChild(uses);
+        muscleGroupSelection.appendChild(listelem);
+    }
+
+    
 }

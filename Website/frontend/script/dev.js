@@ -1,7 +1,7 @@
 let tasks = [
     "verify Email upon signining up",
     "About Page",
-    "validate Exercise",
+    "better Login And SignUp Page",
     "delete Exercise",
     "edit Exercise",
     "display data how it should be",
