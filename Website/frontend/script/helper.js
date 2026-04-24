@@ -1,5 +1,3 @@
-let interval = 250; //globale Variable für de Aktuallisierung in Millisekunden
-
 function getRealChildren(children) {
     let real = [];
     for (i in children) {

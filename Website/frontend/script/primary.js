@@ -46,6 +46,7 @@ function render(deviceData, data) {
 
     if (deviceData.loggedIn) {
         renderExercises(data.userSettings);
+        renderSessionAndExercise(data);
         if (document.getElementById("lockedFromLogin")) document.getElementById("lockedFromLogin").hidden = false;
         if (data) {
             /* NED WICHTIG, NUR DEVMODE */

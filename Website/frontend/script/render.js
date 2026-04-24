@@ -204,3 +204,11 @@ function renderExercises(settings) {
         });
     }
 }
+
+function renderSessionAndExercise(data) {
+    if (!document.getElementById("sessionDiv") || !document.getElementById("startStopSession")) return;
+
+    let settings = data.userProperties;
+    if (document.getElementById("startStopExercise")) document.getElementById("startStopExercise").innerText = settings.currentlyInExercise ? "Stop Exercise" : "Start Exercise";
+    if (document.getElementById("startStopSession")) document.getElementById("startStopSession").innerText = settings.currentlyTraining ? "Stop Session" : "Start Session";    
+}

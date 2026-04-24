@@ -1,3 +1,6 @@
+//global variables/constants
+const interval = 250; //für de Aktuallisierung in Millisekunden
+
 function initializeLightSwitch() {
     let lightSwitch = document.getElementById("lightSwitch")
     if (lightSwitch) lightSwitch.innerText = getSettingsFromLocalStorage().mode;
@@ -49,8 +52,8 @@ function initializeSession() {
     sessionButtonCheck();
     if (document.getElementById("startStopSession")) document.getElementById("startStopSession").addEventListener("click", () => {
         let device = getUserPropertiesFromLocalStorage();
-        device.currentlyInExercise = !device.currentlyTraining;
-        if (device.currentExercise) {
+        device.currentlyTraining = !device.currentlyTraining;
+        if (device.currentlyTraining) {
             startSession();
         } else {
             stopSession();
