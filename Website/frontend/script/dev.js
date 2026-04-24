@@ -8,7 +8,7 @@ let tasks = [
     "add Preset Plans",
     "Style/layout for tablets/phones",
     "live graph",
-    "finish todo list :pray:",
+    "finish todo list :pray:"
 ];
 
 function addAllTasks() {

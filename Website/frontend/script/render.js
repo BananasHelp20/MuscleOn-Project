@@ -145,7 +145,7 @@ function renderExercises(settings) {
             exercisesToRender = [];
         }
 
-        exercisesToRender.forEach(exercise => {
+        exercisesToRender.forEach((exercise) => {
             let isDefined = exercise.exerciseType != "supported";
             let exerciseObject = document.createElement("div");
             exerciseObject.classList.add("exerciseObject");
@@ -153,34 +153,34 @@ function renderExercises(settings) {
             let title = document.createElement("span");
             title.classList.add("exerciseTitle");
             title.innerText = exercise.name;
-            
+
             let description = document.createElement("p");
             description.innerText = exercise.description;
-            
+
             let createdByUser = document.createElement("span");
             createdByUser.classList.add("exerciseCreatedBy");
             createdByUser.innerText = "Created By User: " + exercise.userIdCreated; //getUserOfId(userIdCreated);
-            
+
             let equipment = document.createElement("span");
             equipment.classList.add("exerciseEquipment");
             equipment.innerText = "Equipment: " + exercise.equipment;
-            
+
             let weight = document.createElement("span");
             weight.classList.add("exerciseWeight");
             weight.innerText = "Needs Weight: " + (exercise.needsWeight ? "Yes" : "No");
-            
+
             let isPublic = document.createElement("span");
             isPublic.classList.add("exercisePublic");
             isPublic.innerText = "Public: " + (exercise.public ? "Yes" : "No");
-            
+
             let muscleGroupList = document.createElement("dl");
             muscleGroupList.classList.add("muscleGroupList");
-            
+
             let muscleGroupTitle = document.createElement("dt");
             muscleGroupTitle.classList.add("muscleGroupListObject");
             muscleGroupTitle.innerText = "MuscleGroups: ";
             muscleGroupList.appendChild(muscleGroupTitle);
-            exercise.targetedMuscleGroups.forEach(muscleGroup => {
+            exercise.targetedMuscleGroups.forEach((muscleGroup) => {
                 let muscleGroupListObject = document.createElement("dd");
                 muscleGroupListObject.classList.add("muscleGroupListObject");
                 muscleGroupListObject.innerText = "- " + muscleGroup;
@@ -189,12 +189,19 @@ function renderExercises(settings) {
 
             let delButton = document.createElement("button");
             delButton.innerText = "Delete Exercise";
-            delButton.addEventListener("click", (event) => {enableDeleteExercise(event.target)});
-            let editButton = document.createElement("button");
-            editButton.innerText = "Delete Exercise";
-            editButton.addEventListener("click", (event) => {enableEditExercise(event.target)});
-            let actionDiv = document.createElement("div");
+            delButton.classList.add("defaultButton");
+            delButton.addEventListener("click", (event) => {
+                enableDeleteExercise(event.target);
+            });
 
+            let editButton = document.createElement("button");
+            editButton.innerText = "Edit Exercise";
+            editButton.classList.add("defaultButton");
+            editButton.addEventListener("click", (event) => {
+                enableEditExercise(event.target);
+            });
+
+            let actionDiv = document.createElement("div");
             actionDiv.appendChild(editButton);
             actionDiv.appendChild(delButton);
 
