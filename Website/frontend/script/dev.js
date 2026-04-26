@@ -1,14 +1,12 @@
 let tasks = [
     "verify Email upon signining up",
     "About Page",
-    "better Login And SignUp Page",
     "delete/edit Exercise ins backend übertragen",
     "display data how it should be",
     "add Preset Plans",
     "Style/layout for tablets/phones",
     "live graph",
     "finish todo list :pray:",
-    "following Settings are needed: change email, change password, change username.",
 ];
 
 function addAllTasks() {

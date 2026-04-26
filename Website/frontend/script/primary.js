@@ -41,36 +41,11 @@ function saveDataToLocalStorage(data) {
     localStorage.setItem("userData", JSON.stringify(data));
 }
 
-function showButtons(loggedIn) {
-    let lockedElements = document.getElementsByClassName("locked");
-    let lockedButtons = document.getElementsByClassName("lockedButton");
-    if (loggedIn) {
-        for (let i = 0; i < lockedElements.length; i++) {
-            lockedElements.item(i).classList.add("menuObject");
-            lockedElements.item(i).classList.add("menuOption");
-            lockedElements.item(i).hidden = false;
-            lockedElements.item(i).children.item(0).hidden = false;
-        }
-        for (let i = 0; i < lockedButtons.length; i++) {
-            lockedButtons.item(i).hidden = false;
-        }
-    } else {
-        for (let i = 0; i < lockedElements.length; i++) {
-        lockedElements.item(i).classList.remove("menuObject");
-        lockedElements.item(i).classList.remove("menuOption");
-        lockedElements.item(i).hidden = true;
-        lockedElements.item(i).children.item(0).hidden = true;
-        }
-        for (let i = 0; i < lockedButtons.length; i++) {
-            lockedButtons.item(i).hidden = true;
-        }
-    }
-}
-
 function render(deviceData, data) {
     showLoggedIn(deviceData);
-    showButtons(deviceData.loggedIn)
+    showButtons(deviceData.loggedIn);
     if (deviceData.loggedIn) {
+        showProfileSettings(data.userProperties);
         renderExercises(data.userSettings);
         renderSessionAndExercise(data);
         if (document.getElementById("lockedFromLogin")) document.getElementById("lockedFromLogin").hidden = false;
@@ -138,8 +113,23 @@ function initializeLoggedIn(deviceData, data) {
     let settings = data.userSettings;
     if (document.getElementById("check") && settings.devMode) document.getElementById("check").addEventListener("click", () => {
          //TESTBUTTON
-    })
-    
+    });
+    let changePasswordButton = document.getElementById("changePasswordButton");
+    let changePasswordLink = document.getElementById("changePasswordLink");
+    let editProfileButton = document.getElementById("editProfileButton");
+    let cancelEditProfileButton = document.getElementById("cancelEditProfileButton");
+    if (cancelEditProfileButton) cancelEditProfileButton.addEventListener("click", () => {
+        disableProfileEditing();
+    });
+    if (editProfileButton) editProfileButton.addEventListener("click", editListener);
+    if (changePasswordLink) changePasswordLink.addEventListener("click", () => {
+        window.location.href = "./passwordSite.html";
+    });
+    if (changePasswordButton) changePasswordButton.addEventListener("click", () => {
+        if (validatePasswordChange(getUserPropertiesFromLocalStorage())) {
+            changePassword();
+        }
+    });
     initializeSession();
     initializeLogoutAndDelete(); //wenn logout -> login und signup initialisieren // oder eventuell ned?
     loadAndInitializeChecked(data.userSettings);

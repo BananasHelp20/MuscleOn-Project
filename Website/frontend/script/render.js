@@ -123,6 +123,53 @@ function showLongtermData(userdata) {
     document.getElementById("staticDiv").hidden = !userdata.userSettings.viewing.longtermStats;
 }
 
+function showProfileSettings(userdata) {
+    let profileSettingsList = document.getElementById("profileSettingsList");
+    if (!profileSettingsList) return;
+    profileSettingsList.innerHTML = "";
+    let email = document.createElement("li");
+    email.innerText = "Email: " + userdata.email;
+    let username = document.createElement("li");
+    username.innerText = "Username: " + userdata.userName;
+    let weight = document.createElement("li");
+    weight.innerText = "Weight: " + userdata.weight + " kg";
+    let size = document.createElement("li");
+    size.innerText = "Size: " + userdata.size + " cm";
+    let birthday = document.createElement("li");
+    birthday.innerText = "Birthday: " + userdata.birthday;
+    profileSettingsList.appendChild(username);
+    profileSettingsList.appendChild(email);
+    profileSettingsList.appendChild(weight);
+    profileSettingsList.appendChild(size);
+    profileSettingsList.appendChild(birthday);
+}
+
+function showButtons(loggedIn) {
+    let lockedElements = document.getElementsByClassName("locked");
+    let lockedButtons = document.getElementsByClassName("lockedButton");
+    if (loggedIn) {
+        for (let i = 0; i < lockedElements.length; i++) {
+            lockedElements.item(i).classList.add("menuObject");
+            lockedElements.item(i).classList.add("menuOption");
+            lockedElements.item(i).hidden = false;
+            lockedElements.item(i).children.item(0).hidden = false;
+        }
+        for (let i = 0; i < lockedButtons.length; i++) {
+            lockedButtons.item(i).hidden = false;
+        }
+    } else {
+        for (let i = 0; i < lockedElements.length; i++) {
+            lockedElements.item(i).classList.remove("menuObject");
+            lockedElements.item(i).classList.remove("menuOption");
+            lockedElements.item(i).hidden = true;
+            lockedElements.item(i).children.item(0).hidden = true;
+        }
+        for (let i = 0; i < lockedButtons.length; i++) {
+            lockedButtons.item(i).hidden = true;
+        }
+    }
+}
+
 //render each exercise as a list in the following format:
 function renderExercises(settings) {
     let exercisesDiv = document.getElementById("exercises");

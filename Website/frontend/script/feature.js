@@ -358,6 +358,103 @@ function saveExercise(exerciseSaveButton) {
     exerciseObject.appendChild(actionDiv);
 }
 
+let saveListener = () => {
+    saveProfileSettings();
+};
+let editListener = () => {
+    enableProfileEditing();
+};
+
+function validatePasswordChange(userProperties) {
+    let currentPassword = document.getElementById("currentPassword").value;
+    let newPassword = document.getElementById("newPassword").value;
+    let confirmNewPassword = document.getElementById("confirmNewPassword").value;
+
+    if (newPassword !== confirmNewPassword) {
+        alert("New passwords do not match!");
+        return false;
+    }
+    if (currentPassword !== userProperties.password) {
+        alert("Current password is incorrect!");
+        return false;
+    }
+    if (currentPassword == newPassword) {
+        alert("New password cannot be the same as the current password!");
+        return false;
+    }
+    return true;
+}
+
+function changePassword() {
+    let userProperties = getUserPropertiesFromLocalStorage();
+    userProperties.password = document.getElementById("newPassword").value;
+    setUserProperties(userProperties).then(() => {
+        logout();
+    });
+}
+
+function disableProfileEditing() {
+    document.getElementById("cancelEditProfileButton").hidden = true;
+    document.getElementById("editProfileButton").innerHTML = "Edit Profile";
+    document.getElementById("editProfileButton").removeEventListener("click", saveListener);
+    document.getElementById("editProfileButton").addEventListener("click", editListener);
+    showProfileSettings(getUserPropertiesFromLocalStorage());
+}
+
+function enableProfileEditing() {
+    document.getElementById("cancelEditProfileButton").hidden = false;
+    document.getElementById("editProfileButton").innerHTML = "Save Profile";
+    document.getElementById("editProfileButton").removeEventListener("click", editListener);
+    document.getElementById("editProfileButton").addEventListener("click", saveListener);
+    let profileSettingsList = document.getElementById("profileSettingsList");
+    let email = document.createElement("input");
+    email.value = profileSettingsList.children.item(1).innerText.split(": ")[1];
+    email.type = "email";
+    email.id = "emailInput";
+    let username = document.createElement("input");
+    username.value = profileSettingsList.children.item(0).innerText.split(": ")[1];
+    username.type = "text";
+    username.id = "usernameInput";
+    let weight = document.createElement("input");
+    weight.value = profileSettingsList.children.item(2).innerText.split(": ")[1].split(" ")[0];
+    weight.type = "number";
+    weight.id = "weightInput";
+    let size = document.createElement("input");
+    size.value = profileSettingsList.children.item(3).innerText.split(": ")[1].split(" ")[0];
+    size.type = "number";
+    size.id = "sizeInput";
+    let birthday = document.createElement("input");
+    birthday.value = profileSettingsList.children.item(4).innerText.split(": ")[1];
+    birthday.type = "date";
+    birthday.id = "birthdayInput";
+    profileSettingsList.children.item(0).innerHTML = "<span>Username: </span>";
+    profileSettingsList.children.item(0).appendChild(username);
+    profileSettingsList.children.item(1).innerHTML = "<span>Email: </span>";
+    profileSettingsList.children.item(1).appendChild(email);
+    profileSettingsList.children.item(2).innerHTML = "<span>Weight: </span>";
+    profileSettingsList.children.item(2).appendChild(weight);
+    profileSettingsList.children.item(3).innerHTML = "<span>Size: </span>";
+    profileSettingsList.children.item(3).appendChild(size);
+    profileSettingsList.children.item(4).innerHTML = "<span>Birthday: </span>";
+    profileSettingsList.children.item(4).appendChild(birthday);
+}
+
+function saveProfileSettings() {
+    let profileSettingsList = document.getElementById("profileSettingsList");
+    let newUserData = getUserPropertiesFromLocalStorage();
+    newUserData.userName = document.getElementById("usernameInput").value;
+    newUserData.email = document.getElementById("emailInput").value;
+    newUserData.weight = parseInt(document.getElementById("weightInput").value);
+    newUserData.size = parseInt(document.getElementById("sizeInput").value);
+    newUserData.birthday = document.getElementById("birthdayInput").value;
+    document.getElementById("cancelEditProfileButton").hidden = true;
+    document.getElementById("editProfileButton").innerHTML = "Edit Profile";
+    setUserProperties(newUserData);
+    showProfileSettings(newUserData);
+    document.getElementById("editProfileButton").removeEventListener("click", saveListener);
+    document.getElementById("editProfileButton").addEventListener("click", editListener);
+}
+
 function enableDeleteExercise(exerciseDeleteButton) {
     exerciseDeleteButton.parentElement.parentElement.remove();
 }
