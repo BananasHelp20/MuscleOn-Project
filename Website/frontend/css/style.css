@@ -179,6 +179,7 @@ img {
 }
 
 .background {
+    /*Level 1*/
     background-image: url(../images/background.jpg);
     position: fixed;
     filter: blur(25px) saturate(170%);
@@ -235,20 +236,62 @@ header {
 
 #menuBar {
     /*Level 3 - actualHeaderHolder*/
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#menuContainer {
+    /*Level 4 - menuBar*/
     display: flex;
     flex-direction: row;
-    padding-right: 3%;
     padding-left: 3%;
+}
+
+#inlineSignupButton,
+#inlineLoginButton,
+#logoutButton,
+#inlineUsernameDisplay {
+    /*Level 5 - currentUser*/
+    width: 5em;
+    text-align: center;
+    height: 100%;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+#inlineUsernameDisplay {
+    /*Level 5 - currentUser*/
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--menu-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#currentUser {
+    /*Level 4 - menuBar*/
+    justify-self: flex-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 #menuLogo {
     width: 4em;
     margin-left: -3%;
     padding: 4px;
+    display: flex;
+    align-items: center;
 }
 
 #menuTitle {
-    /*Level 4 - menuBar [ALSO menuObject]*/
+    /*Level 4 - menuContainer [ALSO menuObject]*/
     width: 3em;
     padding-left: 1.5%;
     padding-right: 1.5%;
@@ -258,14 +301,14 @@ header {
 }
 
 #menuOptionBar {
-    /*Level 4 - menuBar [ALSO menuObject]*/
+    /*Level 4 - menuContainer [ALSO menuObject]*/
     display: flex;
     flex-direction: row;
     width: 100%;
 }
 
 #darkmodeButton {
-    /*Level3-siteBodyp*/
+    /*Level 3 - siteBodyp*/
     transform: scale(1.2);
 }
 
@@ -275,7 +318,7 @@ header {
 }
 
 .menuOption {
-    /*Level 5 - menuOption Bar AND Level 4 - menuBar*/
+    /*Level 5 - menuOption Bar AND Level 4 - menuContainer*/
     padding-left: 1.5%;
     padding-right: 1.5%;
     display: flex;
@@ -284,7 +327,7 @@ header {
 }
 
 .siteBody {
-    /*Level1*/
+    /* Level1 */
     padding-left: 5%;
     padding-right: 5%;
     padding-top: 2%;

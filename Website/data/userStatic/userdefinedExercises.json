@@ -1,6 +1,6 @@
 [
   {
-    "userIdCreated": 1,
+    "userIdCreated": 0,
     "name": "Frontflip",
     "exerciseType": "defined",
     "description": "!PILF A OD",
@@ -12,7 +12,7 @@
     "weight": false
   },
   {
-    "userIdCreated": 1,
+    "userIdCreated": 0,
     "name": "Volleyball",
     "exerciseType": "defined",
     "description": "Volleyball hoid",
@@ -24,7 +24,7 @@
     "weight": false
   },
   {
-    "userIdCreated": 1,
+    "userIdCreated": 0,
     "name": "Askö",
     "exerciseType": "defined",
     "description": "Askö Turnverein",

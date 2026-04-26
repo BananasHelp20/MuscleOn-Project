@@ -7,14 +7,14 @@
     <title>Muscle ON! Login</title>
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/light.css" id="modeStylesheet">
-    <script src="./script/initalize.js"></script>
-    <script src="./script/localStorage.js"></script>
-    <script src="./script/router.js"></script>
+    <script src="./script/initalize.js" defer></script>
+    <script src="./script/localStorage.js" defer></script>
+    <script src="./script/router.js" defer></script>
     <script src="./script/helper.js" defer></script>
-    <script src="./script/render.js"></script>
-    <script src="./script/game.js"></script>
-    <script src="./script/dev.js"></script>
-    <script src="./script/feature.js"></script>
+    <script src="./script/render.js" defer></script>
+    <script src="./script/game.js" defer></script>
+    <script src="./script/dev.js" defer></script>
+    <script src="./script/feature.js" defer></script>
     <script src="./script/primary.js" defer></script>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
@@ -27,25 +27,28 @@
                 Muscle-ON!
             </div>
             <div id="menuBar">
-                <a id="menuLogo" class="menuObject" href="./index.html">
-                    <img src="./images/logo.png" alt="">
-                </a>
-                <div id="menuTitle" class="menuObject">
-                    Menu:
-                </div>
-                <div id="menuOptionBar">
-                    <a class="menuObject menuOption" href="./about.html">
-                        <span>About</span>
+                <div id="menuContainer">
+                    <a id="menuLogo" class="menuObject" href="./index.html">
+                        <img src="./images/logo.png" alt="">
                     </a>
-                    <a class="menuObject menuOption" href="./settings.html">
-                        <span>Settings</span>
-                    </a>
-                    <a class="menuObject menuOption" href="./session.html">
-                        <span>Session</span>
-                    </a>
-                    <a class="menuObject menuOption" href="./exercises.html">
-                        <span>Exercises</span>
-                    </a>
+                    <div id="menuTitle" class="menuObject">
+                        Menu:
+                    </div>
+                    <div id="menuOptionBar">
+                        <a class="menuObject menuOption" href="./about.html">
+                            <span>About</span>
+                        </a>
+                        <a class="menuObject menuOption locked" href="./settings.html">
+                            <span>Settings</span>
+                        </a>
+                        <a class="menuObject menuOption locked" href="./session.html">
+                            <span>Session</span>
+                        </a>
+                        <a class="menuObject menuOption" href="./exercises.html">
+                            <span>Exercises</span>
+                        </a>
+                    </div>
+                    <div id="currentUser"></div>
                 </div>
             </div>
         </div>

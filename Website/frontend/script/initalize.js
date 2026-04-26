@@ -123,6 +123,9 @@ function initializeSession() {
 }
 
 function initializeLogin() {
+    document.getElementById("inlineLoginButton").addEventListener("click", () => {
+        window.location.href = "./login.html";
+    });
     let loginButton = document.getElementById("loginButton");
     if (!loginButton) return;
     loginButton.addEventListener("click", () => {
@@ -131,6 +134,9 @@ function initializeLogin() {
 }
 
 function initializeSignUp() {
+    document.getElementById("inlineSignupButton").addEventListener("click", () => {
+        window.location.href = "./signup.html";
+    });
     if (!document.getElementById("signupButton")) return; 
     document.getElementById("plan").checked = false;
     document.getElementById("plan-table").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
@@ -212,8 +218,10 @@ function initializeExercises() {
     if (exerciseSwitch) exerciseSwitch.innerText = settings.viewingExercises ? settings.viewingExercises : "All Exercises";
 
     if (exerciseSwitch) exerciseSwitch.addEventListener("click", (event) => {
-        if (event.target.innerText == "All Exercises") {
+        if (event.target.innerText == "All Exercises" && getDeviceData().loggedIn) {
             event.target.innerText = "User-defined Exercises";
+        } else if (event.target.innerText == "All Exercises") {
+            event.target.innerText = "Community-made Exercises";
         } else if (event.target.innerText == "User-defined Exercises") {
             event.target.innerText = "Community-made Exercises";
         } else if (event.target.innerText == "Community-made Exercises") {

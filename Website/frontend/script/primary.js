@@ -41,9 +41,35 @@ function saveDataToLocalStorage(data) {
     localStorage.setItem("userData", JSON.stringify(data));
 }
 
+function showButtons(loggedIn) {
+    let lockedElements = document.getElementsByClassName("locked");
+    let lockedButtons = document.getElementsByClassName("lockedButton");
+    if (loggedIn) {
+        for (let i = 0; i < lockedElements.length; i++) {
+            lockedElements.item(i).classList.add("menuObject");
+            lockedElements.item(i).classList.add("menuOption");
+            lockedElements.item(i).hidden = false;
+            lockedElements.item(i).children.item(0).hidden = false;
+        }
+        for (let i = 0; i < lockedButtons.length; i++) {
+            lockedButtons.item(i).hidden = false;
+        }
+    } else {
+        for (let i = 0; i < lockedElements.length; i++) {
+        lockedElements.item(i).classList.remove("menuObject");
+        lockedElements.item(i).classList.remove("menuOption");
+        lockedElements.item(i).hidden = true;
+        lockedElements.item(i).children.item(0).hidden = true;
+        }
+        for (let i = 0; i < lockedButtons.length; i++) {
+            lockedButtons.item(i).hidden = true;
+        }
+    }
+}
+
 function render(deviceData, data) {
     showLoggedIn(deviceData);
-
+    showButtons(deviceData.loggedIn)
     if (deviceData.loggedIn) {
         renderExercises(data.userSettings);
         renderSessionAndExercise(data);

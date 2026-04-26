@@ -12,157 +12,241 @@
   "verifiedEmail": false,
   "usualSessionTimes": [
     {
-      "sessionId": "0",
-      "primaryMuscleGroup": "Core (Abs & Obliques)",
+      "sessionId": "6",
+      "primaryMuscleGroup": "Chest",
       "exercises": [
         {
-          "exerciseType": "defined-by-user",
-          "name": "Askö",
+          "exerciseType": "supported",
+          "name": "Push-Up",
           "targetedMuscleGroups": [
-            "Biceps"
+            "Chest",
+            "Shoulders",
+            "Triceps"
           ],
-          "equipment": "Kasten, Trampolin, Airtrack,...",
-          "reps": "1",
-          "sets": "1",
+          "equipment": "None",
+          "reps": "10",
+          "sets": "3",
           "weight": null
-        }
-      ],
-      "times": {
-        "weekday": "Saturday",
-        "fromTime": "10:00",
-        "toTime": "12:00"
-      }
-    },
-    {
-      "sessionId": "1",
-      "primaryMuscleGroup": "Shoulders (Deltoids)",
-      "exercises": [
+        },
         {
-          "exerciseType": "defined-by-user",
-          "name": "Volleyball",
+          "exerciseType": "supported",
+          "name": "Bench Press",
           "targetedMuscleGroups": [
-            "Biceps"
+            "Chest",
+            "Shoulders",
+            "Triceps"
           ],
-          "equipment": "Volleyball, Net",
-          "reps": "1",
-          "sets": "1",
-          "weight": null
+          "equipment": "Barbell or Dumbbells",
+          "reps": "3",
+          "sets": "2",
+          "weight": "25"
         }
       ],
       "times": {
         "weekday": "Monday",
-        "fromTime": "19:45",
-        "toTime": "22:00"
+        "fromTime": "18:00",
+        "toTime": "20:00"
       }
     },
     {
-      "sessionId": "2",
-      "primaryMuscleGroup": "Shoulders (Deltoids)",
+      "sessionId": "0",
+      "primaryMuscleGroup": "Biceps",
       "exercises": [
         {
-          "exerciseType": "defined-by-user",
-          "name": "Volleyball",
+          "exerciseType": "supported",
+          "name": "Bicep Curl",
           "targetedMuscleGroups": [
             "Biceps"
           ],
-          "equipment": "Volleyball, Net",
-          "reps": "1",
-          "sets": "1",
+          "equipment": "Dumbbells",
+          "reps": "10",
+          "sets": "4",
+          "weight": null
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Pull-Up",
+          "targetedMuscleGroups": [
+            "Back",
+            "Shoulders",
+            "Biceps"
+          ],
+          "equipment": "Pull-Up Bar",
+          "reps": "5",
+          "sets": "3",
+          "weight": null
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Push-Up",
+          "targetedMuscleGroups": [
+            "Chest",
+            "Shoulders",
+            "Triceps"
+          ],
+          "equipment": "None",
+          "reps": "10",
+          "sets": "2",
+          "weight": null
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Tricep Dips",
+          "targetedMuscleGroups": [
+            "Triceps"
+          ],
+          "equipment": "Dip Bars or Bench",
+          "reps": "4",
+          "sets": "5",
+          "weight": null
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Shoulder Press",
+          "targetedMuscleGroups": [
+            "Shoulders",
+            "Triceps"
+          ],
+          "equipment": "Dumbbells or Barbell",
+          "reps": "3",
+          "sets": "4",
           "weight": null
         }
       ],
       "times": {
         "weekday": "Tuesday",
-        "fromTime": "19:45",
-        "toTime": "22:00"
+        "fromTime": "19:00",
+        "toTime": "20:00"
       }
     },
     {
-      "sessionId": "3",
-      "primaryMuscleGroup": "Shoulders (Deltoids)",
+      "sessionId": "1",
+      "primaryMuscleGroup": "Glutes",
       "exercises": [
         {
-          "exerciseType": "defined-by-user",
-          "name": "Volleyball",
+          "exerciseType": "supported",
+          "name": "Squat",
           "targetedMuscleGroups": [
-            "Biceps"
+            "Quadriceps",
+            "Hamstrings",
+            "Glutes",
+            "Calves"
           ],
-          "equipment": "Volleyball, Net",
-          "reps": "1",
-          "sets": "1",
+          "equipment": "None",
+          "reps": "20",
+          "sets": "3",
+          "weight": null
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Deadlift",
+          "targetedMuscleGroups": [
+            "Lower Back",
+            "Glutes",
+            "Hamstrings",
+            "Core"
+          ],
+          "equipment": "Barbell",
+          "reps": "4",
+          "sets": "2",
+          "weight": "30"
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Leg Press",
+          "targetedMuscleGroups": [
+            "Quadriceps",
+            "Hamstrings",
+            "Glutes"
+          ],
+          "equipment": "Leg Press Machine",
+          "reps": "10",
+          "sets": "2",
+          "weight": "15"
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Glute Bridge",
+          "targetedMuscleGroups": [
+            "Glutes",
+            "Hamstrings"
+          ],
+          "equipment": "None",
+          "reps": "5",
+          "sets": "2",
+          "weight": null
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Lunges",
+          "targetedMuscleGroups": [
+            "Quadriceps",
+            "Hamstrings",
+            "Glutes",
+            "Calves"
+          ],
+          "equipment": "None",
+          "reps": "20",
+          "sets": "5",
           "weight": null
         }
       ],
       "times": {
         "weekday": "Wednesday",
-        "fromTime": "15:15",
-        "toTime": "17:10"
+        "fromTime": "5:00",
+        "toTime": "6:30"
       }
     },
     {
-      "sessionId": "4",
-      "primaryMuscleGroup": "Shoulders (Deltoids)",
+      "sessionId": "2",
+      "primaryMuscleGroup": "Quadriceps",
       "exercises": [
         {
-          "exerciseType": "defined-by-user",
-          "name": "Volleyball",
+          "exerciseType": "supported",
+          "name": "Leg Press",
           "targetedMuscleGroups": [
-            "Biceps"
+            "Quadriceps",
+            "Hamstrings",
+            "Glutes"
           ],
-          "equipment": "Volleyball, Net",
-          "reps": "1",
-          "sets": "1",
+          "equipment": "Leg Press Machine",
+          "reps": "5",
+          "sets": "2",
+          "weight": "30"
+        },
+        {
+          "exerciseType": "supported",
+          "name": "Lunges",
+          "targetedMuscleGroups": [
+            "Quadriceps",
+            "Hamstrings",
+            "Glutes",
+            "Calves"
+          ],
+          "equipment": "None",
+          "reps": "40",
+          "sets": "3",
           "weight": null
-        }
-      ],
-      "times": {
-        "weekday": "Tuesday",
-        "fromTime": "18:45",
-        "toTime": "19:45"
-      }
-    },
-    {
-      "sessionId": "5",
-      "primaryMuscleGroup": "Shoulders (Deltoids)",
-      "exercises": [
+        },
         {
-          "exerciseType": "defined-by-user",
-          "name": "Volleyball",
+          "exerciseType": "supported",
+          "name": "Squat",
           "targetedMuscleGroups": [
-            "Biceps"
+            "Quadriceps",
+            "Hamstrings",
+            "Glutes",
+            "Calves"
           ],
-          "equipment": "Volleyball, Net",
-          "reps": "1",
+          "equipment": "None",
+          "reps": "30",
           "sets": "2",
           "weight": null
         }
       ],
       "times": {
-        "weekday": "Thursday",
-        "fromTime": "19:45",
-        "toTime": "22:00"
-      }
-    },
-    {
-      "sessionId": "6",
-      "primaryMuscleGroup": "Shoulders (Deltoids)",
-      "exercises": [
-        {
-          "exerciseType": "defined-by-user",
-          "name": "Volleyball",
-          "targetedMuscleGroups": [
-            "Biceps"
-          ],
-          "equipment": "Volleyball, Net",
-          "reps": "1",
-          "sets": "1",
-          "weight": null
-        }
-      ],
-      "times": {
-        "weekday": "Friday",
-        "fromTime": "18:00",
-        "toTime": "20:00"
+        "weekday": "Saturday",
+        "fromTime": "20:00",
+        "toTime": "21:00"
       }
     }
   ]

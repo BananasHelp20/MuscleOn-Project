@@ -1,8 +1,8 @@
 [
   {
-    "userIdCreated": 1,
+    "userIdCreated": 0,
     "name": "Frontflip",
-    "exerciseType": "defined",
+    "exerciseType": "unsupported",
     "description": "!PILF A OD",
     "targetedMuscleGroups": [
       "Biceps"
@@ -12,9 +12,9 @@
     "weight": false
   },
   {
-    "userIdCreated": 1,
+    "userIdCreated": 0,
     "name": "Volleyball",
-    "exerciseType": "defined",
+    "exerciseType": "unsupported",
     "description": "Volleyball hoid",
     "targetedMuscleGroups": [
       "Biceps"
@@ -24,14 +24,26 @@
     "weight": false
   },
   {
-    "userIdCreated": 1,
+    "userIdCreated": 0,
     "name": "Askö",
-    "exerciseType": "defined",
+    "exerciseType": "unsupported",
     "description": "Askö Turnverein",
     "targetedMuscleGroups": [
       "Biceps"
     ],
     "equipment": "Kasten, Trampolin, Airtrack,...",
+    "public": true,
+    "weight": false
+  },
+  {
+    "userIdCreated": 1,
+    "name": "Basketball",
+    "exerciseType": "unsupported",
+    "description": "Scheiß Basketball",
+    "targetedMuscleGroups": [
+      "Biceps"
+    ],
+    "equipment": "Basketball, Korb",
     "public": true,
     "weight": false
   }

@@ -42,9 +42,9 @@ function sessionButtonCheck() {
 function showLoggedIn(deviceData) {
     let loggedInAsDisplay = document.getElementById("currentUser");
     if (deviceData.loggedIn && loggedInAsDisplay) {
-        loggedInAsDisplay.innerHTML = "Logged in as " + deviceData.loggedInAsUser + " <br><button id='logoutButton' class='defaultButton'>Logout</button>";
+        loggedInAsDisplay.innerHTML = "<span id='inlineUsernameDisplay'>" + deviceData.loggedInAsUser + "</span><button id='logoutButton' class='defaultButton'>Logout</button>";
     } else if (loggedInAsDisplay) {
-        loggedInAsDisplay.innerHTML = "You are logged out. <a href='./login.html' class='styledLink'>Login</a> <br>Don't have an account? <a href='./signup.html' class='styledLink'>Signup Now</a>";
+        loggedInAsDisplay.innerHTML = "<button href='./login.html' class='defaultButton' id='inlineLoginButton'>Login</button><button href='./signup.html' id='inlineSignupButton' class='defaultButton'>Signup Now</button>";
     }
 }
 
@@ -147,6 +147,7 @@ function renderExercises(settings) {
 
         exercisesToRender.forEach((exercise) => {
             let isDefined = exercise.exerciseType != "supported";
+            let isDefinedByUser = exercise.userIdCreated == getDeviceData().loggedInWithUserId;
             let exerciseObject = document.createElement("div");
             exerciseObject.classList.add("exerciseObject");
 
@@ -218,7 +219,7 @@ function renderExercises(settings) {
             if (isDefined) exerciseObject.appendChild(isPublic);
             if (isDefined) exerciseObject.appendChild(document.createElement("br"));
             exerciseObject.appendChild(muscleGroupList);
-            exerciseObject.appendChild(actionDiv);
+            if (isDefinedByUser) exerciseObject.appendChild(actionDiv);
             exercisesDiv.appendChild(exerciseObject);
         });
     }
