@@ -319,7 +319,7 @@ async function sendValidationMail() {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({userId: props.userId, email: props.email})
+        body: JSON.stringify({userId: props.userId, email: props.email, userName: props.userName})
     }).then((response) => {
         if (!response.ok) {
             console.error("An error occured while updating settings", response.statusText);
@@ -330,18 +330,32 @@ async function sendValidationMail() {
     });
 }
 
+async function deleteValidationCodes(userId) {
+    return fetch("/api/deleteValidationCodes", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({userId: userId})
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured while deleting validation codes", response.statusText);
+        }
+    });
+}
+
 async function validateMail(code) {
     if (!code || code.length < 4) {
         alert("invalid Code!");
         return false;
     }
     let props = getUserPropertiesFromLocalStorage();
-    return fetch("/api/getUserData", {
-        method: "GET",
+    return fetch("/api/validateMail", {
+        method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: {userId: props.userId, validationCode: code}
+        body: JSON.stringify({userId: props.userId, validationCode: code})
     }).then((response) => {
         if (response.ok) {
             return response.json();

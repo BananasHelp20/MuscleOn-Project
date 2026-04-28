@@ -233,3 +233,19 @@ td, th {
     color: var(--button-input-color);
     background-color: #00000070;
 }
+
+/* Mobile and Tablet Responsive Design */
+
+/* Tablets: 481px to 768px */
+@media (max-width: 768px) {
+    :root {
+        --bodyMargin: 5%;
+    }
+}
+
+/* Mobile: up to 480px */
+@media (max-width: 480px) {
+    :root {
+        --bodyMargin: 0;
+    }
+}

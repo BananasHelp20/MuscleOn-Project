@@ -2,7 +2,7 @@ import express from 'express';
 import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
-import { validateMail } from '../mail/muscleon.mail';
+import { sendMail, validateMail } from '../mail/muscleon.mail';
 export let muscleRouter = express.Router();
 
 muscleRouter.get('/getUserData', async (req, res) => {
@@ -228,26 +228,47 @@ muscleRouter.post('/validateExercise', async (req, res) => {
     res.send({ found: found });
 });
 
-muscleRouter.post('/sendValidationMail', (req, res) => {
-    let validationCode = validateMail(req.body.email);
+muscleRouter.post('/sendValidationMail', async (req, res) => {
+    let validationCode = await validateMail(req.body.email);
     if (!validationCode) {
         res.send({validEmail: false});
+        return;
     }
 
     let validationObject = {
         userId: req.body.userId,
         validationCode: validationCode
     }
-    appendValidationCode(validationObject);
+    if (getValidationCode(req.body.userId) != null) {
+        await delValidationCode(req.body.userId);
+    }
+    await appendValidationCode(validationObject);
+    await sendMail({
+        from: 'noreply@muscleon.com',
+        to: req.body.email,
+        subject: 'Email Validation',
+        text: `Hey ${req.body.userName},\n your validation code is: ${validationCode}`
+    });
     res.send({validEmail: true});
 });
 
-muscleRouter.get('/validateMail', (req, res) => {
+muscleRouter.post('/validateMail', async (req, res) => {
     let code = getValidationCode(req.body.userId);
     if (code && req.body.validationCode == code) {
-        delValidationCode(req.body.userId);
+        await delValidationCode(req.body.userId);
         res.send({valid: true});
     } else {
         res.send({valid: false});
     }
+});
+
+muscleRouter.post('/deleteValidationCodes', async (req, res) => {
+    await delValidationCode(req.body.userId).catch((err) => {
+        console.error("Error deleting validation code:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error deleting validation code" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "validation code deleted successfully!" });
 });

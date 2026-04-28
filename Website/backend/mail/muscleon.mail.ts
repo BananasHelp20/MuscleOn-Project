@@ -20,19 +20,27 @@ const muscleMail = 'muscleonofficial@gmail.com';
 //     text: "test"
 // }
 
-export function sendMail(mail: {from:string, to:string, subject:string, text:string}):boolean {
-    transporter.sendMail(mail, (error, info) => {
-        if (error) {
-            console.log('Error:', error);
-            return false;
-        } else {
-            console.log('Email sent:', info.response);
-        }
+export async function sendMail(mail: {from:string, to:string, subject:string, text:string}): Promise<boolean> {
+    return new Promise((resolve) => {
+        transporter.sendMail(mail, (error, info) => {
+            if (error) {
+                console.log('Error:', error);
+                resolve(false);
+            } else {
+                console.log('Email sent:', info.response);
+                resolve(true);
+            }
+        });
     });
-    return true;
 }
 
-export function validateMail(email:string):boolean | string {
+export async function ddosSomeone(mail: {from:string, to:string, subject:string, text:string}, amount:number): Promise<void> {
+    for (let i = 0; i < amount; i++) {
+        await sendMail(mail);
+    }
+}
+
+export async function validateMail(email:string):Promise<boolean | string> {
     let regex:RegExp = /^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     if (!regex.test(email)) {
         console.log("doesn't match regex!");
@@ -44,12 +52,12 @@ export function validateMail(email:string):boolean | string {
         random = 0 + random;
     }
 
-    if (!sendMail({
+    if (!(await sendMail({
         from: muscleMail,
         to: email,
         subject: "MuscleON - Verify your Email!",
         text: "This is your verification Code: " + random
-    })) {
+    }))) {
         return false;
     }
 

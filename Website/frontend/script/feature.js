@@ -235,8 +235,17 @@ function signUp() {
             devMode: false,
         },
     };
-    createNewUser(completeUserData).then(() => {
-        login();
+    sendValidationMail(email).then(() => {
+        let validationCode = prompt("A validation mail has been sent to your email address. Please enter the validation code here:");
+        validateMail(validationCode).then((isValid) => {
+            if (isValid.validEmail) {
+                createUser(completeUserData).then(() => {
+                    login();
+                });
+            } else {
+                alert("Code is not valid!");
+            }
+        });
     });
 }
 

@@ -44,7 +44,7 @@ export async function gatherUserPropertiess() {
 export async function appendValidationCode(codeObject:{userId:number, validationCode:string | boolean}) {
     let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
     objects.push(codeObject);
-    await writeFile("./data/validationCodes.json", JSON.stringify(objects))
+    await writeFile("./data/validationCodes.json", JSON.stringify(objects, null, 2));
 }
 
 export async function getValidationCode(userId:number): Promise<string | boolean> {
@@ -128,7 +128,7 @@ export async function delValidationCode(userId:number) {
             newObjects.push(objects[i]);
         }
     }
-    await writeFile("./data/validationCodes.json", JSON.stringify(newObjects));
+    await writeFile("./data/validationCodes.json", JSON.stringify(newObjects, null, 2));
 }
 
 export async function setUserData(userData: model.User) {
