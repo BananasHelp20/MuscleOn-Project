@@ -371,7 +371,7 @@ async function saveExerciseToJSON(exercise) {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(exercise);
+        body: JSON.stringify(exercise),
     }).then((response) => {
         if (response.ok) {
             return response.json();
