@@ -17,11 +17,8 @@
     "fs": "^0.0.1-security",
     "http": "^0.0.1-security",
     "http-status-codes": "^2.3.0",
-<<<<<<< HEAD:TestWebsiteV2/package.json
     "mysql2": "^3.6.5",
-=======
     "nodemailer": "^8.0.5",
->>>>>>> 01870239c1192e64b7070beaaf52b77d1870cb54:Website/package.json
     "nodemon": "^3.1.14",
     "path": "^0.12.7",
     "ts-node": "^10.9.2",
