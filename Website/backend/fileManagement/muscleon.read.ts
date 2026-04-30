@@ -75,6 +75,46 @@ export async function validateExercise(name:string): Promise<boolean> {
     return false;
 }
 
+export async function saveExercise(exercise: model.Exercise, newExercise: model.Exercise) {
+    let exercises: model.Exercise[] = await gatherUserExercises();
+    let unsupEx: model.Exercise[] = await gatherUnsupportedExercises();
+    newExercise.exerciseType = "defined";
+    let temp = -1;
+    for (let i in exercises) {
+        if (exercises[i].name == exercise.name) exercises[i] = newExercise;
+    }
+    if (temp != -1) {
+        exercises[temp] = newExercise;
+    }
+
+    temp = -1;
+
+    if (exercise.public) {
+        for (let i in unsupEx) {
+            if (unsupEx[i].name == exercise.name) unsupEx[i] = newExercise;
+        }
+    }
+
+    if (temp != -1) {
+        unsupEx[temp] = newExercise;
+    }
+
+    await writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(exercises, null, 2));
+    if (exercise.public && !newExercise.public) {
+        for (let i = 0; i < unsupEx.length; i++) {
+            if (unsupEx[i].name == exercise.name) unsupEx.splice(i, 1);
+        }
+        await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsupEx, null, 2));
+    } else if (!exercise.public && newExercise.public) {
+        newExercise.exerciseType = "unsupported";
+        unsupEx.push(newExercise);
+        await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsupEx, null, 2));
+    } else {
+        newExercise.exerciseType = "unsupported";
+        if (exercise.public) await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsupEx, null, 2));
+    }
+}
+
 export async function deleteExercise(name:string) {
     if (await existsInSupported(name)) return false;
     if (await existsInUnsupported(name) && !await existsInDefined(name)) return false;

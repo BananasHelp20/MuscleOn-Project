@@ -1,7 +1,7 @@
 import express from 'express';
-import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise } from '../fileManagement/muscleon.read';
+import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise, saveExercise } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
-import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
+// import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
 import { sendMail, validateMail } from '../mail/muscleon.mail';
 export let muscleRouter = express.Router();
 
@@ -65,13 +65,13 @@ muscleRouter.post('/setDeviceData', async (req, res) => {
 });
 
 muscleRouter.post('/loadUserData', async (req, res) => {
-    // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und username="", found=false}
+    // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und userName="", found=false}
     let data = await gatherUserData(); //provisorisch
     let answer: model.DatabaseAnswer = {
         found: true,
         userId: data.userProperties.userId,
         email: data.userProperties.email,
-        username: data.userProperties.userName,
+        userName: data.userProperties.userName,
         userProperties: data.userProperties,
         userSettings: data.userSettings,
     };
@@ -80,13 +80,13 @@ muscleRouter.post('/loadUserData', async (req, res) => {
 });
 
 muscleRouter.post('/loadUserDataById', async (req, res) => {
-    // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und username="", found=false}
+    // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und userName="", found=false}
     let data = await gatherUserData(); //provisorisch
     let answer: model.DatabaseAnswer = {
         found: true,
         userId: data.userProperties.userId,
         email: data.userProperties.email,
-        username: data.userProperties.userName,
+        userName: data.userProperties.userName,
         userProperties: data.userProperties,
         userSettings: data.userSettings,
     };
@@ -117,11 +117,40 @@ muscleRouter.post('/deleteUser', async (req, res) => {
         found: true,
         userId: 0,
         email: "willi@a.at",
-        username: "William"
+        userName: "William"
     };
     let userToDelete: model.DeviceProperties = req.body; //notwendige Daten vom Users zur löschung stengan im body drin
     res.statusCode = 200;
     res.send(answer);
+});
+
+muscleRouter.post('/getUser/byId', async (req, res) => {
+    let userIdOfUser: {userId: string | number} = req.body; //such in user aus da Datenbank via id, und sende a databaseAnswer zurück, wie bei deleteUser z.B., do schreibst du dann einfach des komplette Userobjekt in answer.userProperties eini.
+    res.sendStatus(200); //provisorisch
+});
+
+muscleRouter.post('/saveExercise', async (req, res) => {
+    let exercises: {oldExercise: model.Exercise, newExercise: model.Exercise} = req.body;
+    await saveExercise(exercises.oldExercise, exercises.newExercise).catch((err) => {
+        console.error("Error deleting Exercise:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error deleting Exercise" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "deleting Exercise successful!" });
+});
+
+muscleRouter.post('/deleteExercise', async (req, res) => {
+    let exerciseToDelete: { name: string } = req.body;
+    await deleteExercise(exerciseToDelete.name).catch((err) => {
+        console.error("Error deleting Exercise:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error deleting Exercise" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "deleting Exercise successful!" });
 });
 
 muscleRouter.post('/saveTimesNOPE', async (req, res) => {
@@ -152,45 +181,45 @@ muscleRouter.get('/getExercises/user', async (req, res) => {
 });
 
 muscleRouter.post('/session/start', async (req, res) => {
-    await startOrResumeSession().catch((err) => {
-        console.error("Error starting session", err);
-        res.statusCode = 500;
-        res.send({ message: "Error starting session" });
-        return;
-    });
+    // await startOrResumeSession().catch((err) => {
+    //     console.error("Error starting session", err);
+    //     res.statusCode = 500;
+    //     res.send({ message: "Error starting session" });
+    //     return;
+    // });
     res.statusCode = 200;
     res.send({ message: "logging out successful!" });
 });
 
 muscleRouter.post('/session/stop', async (req, res) => {
-    await stopSession().catch((err) => {
-        console.error("Error stopping session:", err);
-        res.statusCode = 500;
-        res.send({ message: "Error stopping session" });
-        return;
-    });
+    // await stopSession().catch((err) => {
+    //     console.error("Error stopping session:", err);
+    //     res.statusCode = 500;
+    //     res.send({ message: "Error stopping session" });
+    //     return;
+    // });
     res.statusCode = 200;
     res.send({ message: "logging out successful!" });
 });
 
 muscleRouter.post('/exercise/start', async (req, res) => {
-    await resumeExercise().catch((err) => {
-        console.error("Error starting exercise:", err);
-        res.statusCode = 500;
-        res.send({ message: "Error starting exercise" });
-        return;
-    });
+    // await resumeExercise().catch((err) => {
+    //     console.error("Error starting exercise:", err);
+    //     res.statusCode = 500;
+    //     res.send({ message: "Error starting exercise" });
+    //     return;
+    // });
     res.statusCode = 200;
     res.send({ message: "logging out successful!" });
 });
 
 muscleRouter.post('/exercise/stop', async (req, res) => {
-    await stopExercise().catch((err) => {
-        console.error("Error stopping session:", err);
-        res.statusCode = 500;
-        res.send({ message: "Error stopping session" });
-        return;
-    });
+    // await stopExercise().catch((err) => {
+    //     console.error("Error stopping session:", err);
+    //     res.statusCode = 500;
+    //     res.send({ message: "Error stopping session" });
+    //     return;
+    // });
     res.statusCode = 200;
     res.send({ message: "logging out successful!" });
 });
@@ -204,17 +233,6 @@ muscleRouter.post('/newExercise', async (req, res) => {
     });
     res.statusCode = 200;
     res.send({ message: "creating Exercise successful!" });
-});
-
-muscleRouter.post('/deleteExercise', async (req, res) => {
-    await deleteExercise(req.body).catch((err) => {
-        console.error("Error deleting Exercise:", err);
-        res.statusCode = 500;
-        res.send({ message: "Error deleting Exercise" });
-        return;
-    });
-    res.statusCode = 200;
-    res.send({ message: "deleting Exercise successful!" });
 });
 
 muscleRouter.post('/validateExercise', async (req, res) => {

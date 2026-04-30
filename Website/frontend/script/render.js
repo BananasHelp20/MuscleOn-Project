@@ -129,15 +129,15 @@ function showProfileSettings(userdata) {
     profileSettingsList.innerHTML = "";
     let email = document.createElement("li");
     email.innerText = "Email: " + userdata.email;
-    let username = document.createElement("li");
-    username.innerText = "Username: " + userdata.userName;
+    let userName = document.createElement("li");
+    userName.innerText = "Username: " + userdata.userName;
     let weight = document.createElement("li");
     weight.innerText = "Weight: " + userdata.weight + " kg";
     let size = document.createElement("li");
     size.innerText = "Size: " + userdata.size + " cm";
     let birthday = document.createElement("li");
     birthday.innerText = "Birthday: " + userdata.birthday;
-    profileSettingsList.appendChild(username);
+    profileSettingsList.appendChild(userName);
     profileSettingsList.appendChild(email);
     profileSettingsList.appendChild(weight);
     profileSettingsList.appendChild(size);
@@ -192,11 +192,13 @@ function renderExercises(settings) {
             exercisesToRender = [];
         }
 
-        exercisesToRender.forEach((exercise) => {
+        for (let i = 0; i < exercisesToRender.length; i++) {
+            let exercise = exercisesToRender[i];
             let isDefined = exercise.exerciseType != "supported";
             let isDefinedByUser = exercise.userIdCreated == getDeviceData().loggedInWithUserId;
             let exerciseObject = document.createElement("div");
             exerciseObject.classList.add("exerciseObject");
+            exerciseObject.id = i;
 
             let title = document.createElement("span");
             title.classList.add("exerciseTitle");
@@ -207,7 +209,7 @@ function renderExercises(settings) {
 
             let createdByUser = document.createElement("span");
             createdByUser.classList.add("exerciseCreatedBy");
-            createdByUser.innerText = "Created By User: " + exercise.userIdCreated; //getUserOfId(userIdCreated);
+            createdByUser.innerText = "Created By " + (exercise.userIdCreated == getUserPropertiesFromLocalStorage().userId ? "You" : "User: " + getUserById(exercise.userIdCreated).userName);
 
             let equipment = document.createElement("span");
             equipment.classList.add("exerciseEquipment");
@@ -268,7 +270,7 @@ function renderExercises(settings) {
             exerciseObject.appendChild(muscleGroupList);
             if (isDefinedByUser) exerciseObject.appendChild(actionDiv);
             exercisesDiv.appendChild(exerciseObject);
-        });
+        }
     }
 }
 

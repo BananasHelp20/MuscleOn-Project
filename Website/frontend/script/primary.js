@@ -113,7 +113,7 @@ function initializeLoggedOut() {
 function initializeLoggedIn(deviceData, data) {
     let settings = data.userSettings;
     if (document.getElementById("check") && settings.devMode) document.getElementById("check").addEventListener("click", () => {
-        deleteValidationCodes(0);
+        
     });
     let changePasswordButton = document.getElementById("changePasswordButton");
     let changePasswordLink = document.getElementById("changePasswordLink");

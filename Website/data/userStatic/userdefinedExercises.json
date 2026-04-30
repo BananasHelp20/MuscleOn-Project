@@ -2,50 +2,47 @@
   {
     "userIdCreated": 0,
     "name": "Frontflip",
-    "exerciseType": "defined",
+    "equipment": "None",
     "description": "!PILF A OD",
     "targetedMuscleGroups": [
       "Biceps"
     ],
-    "equipment": "None",
     "public": true,
-    "weight": false
+    "weight": false,
+    "exerciseType": "defined"
   },
   {
     "userIdCreated": 0,
     "name": "Volleyball",
-    "exerciseType": "defined",
+    "equipment": "",
     "description": "Volleyball hoid",
     "targetedMuscleGroups": [
       "Biceps"
     ],
-    "equipment": "Volleyball, Net",
     "public": true,
-    "weight": false
+    "weight": false,
+    "exerciseType": "defined"
   },
   {
     "userIdCreated": 0,
     "name": "Askö",
-    "exerciseType": "defined",
+    "equipment": "None",
     "description": "Askö Turnverein",
     "targetedMuscleGroups": [
       "Biceps"
     ],
-    "equipment": "Kasten, Trampolin, Airtrack,...",
     "public": true,
-    "weight": false
+    "weight": false,
+    "exerciseType": "defined"
   },
   {
     "userIdCreated": 0,
     "name": "Neiche Exercise",
-    "exerciseType": "defined",
-    "description": "Irgend a Description",
     "equipment": "None",
-    "targetedMuscleGroups": [
-      "- Upper Back (Traps & Rhomboids): ",
-      "- Core (Abs & Obliques): "
-    ],
+    "description": "Irgend a Description",
+    "targetedMuscleGroups": [],
     "public": true,
-    "weight": true
+    "weight": false,
+    "exerciseType": "defined"
   }
 ]

@@ -139,13 +139,13 @@ function login() {
         return;
     }
     loadDataFromSpecificUser(email, password).then((answer) => {
-        //do will i, dass, wenn nix gefunden worden is, a Json objekt mit argumente "found", "userId" und "username" returned wird.
+        //do will i, dass, wenn nix gefunden worden is, a Json objekt mit argumente "found", "userId" und "userName" returned wird.
         if (answer.found) {
             //user existiert (mit passwort)
             let newDeviceData = {
                 running: false,
                 loggedIn: true,
-                loggedInAsUser: answer.username,
+                loggedInAsUser: answer.userName,
                 loggedInWithUserId: answer.userId,
                 loadedUserData: true,
                 sessionRunning: false,
@@ -179,13 +179,13 @@ function logout() {
 }
 
 function signUp() {
-    let username = document.getElementById("username").value;
+    let userName = document.getElementById("userName").value;
     let password = document.getElementById("password").value;
     let email = document.getElementById("email").value;
     let weight = document.getElementById("weight").value;
     let size = document.getElementById("size").value;
     let birthday = document.getElementById("birthday").value;
-    if (!(username && email && email.includes("@") && email.includes(".") && weight && size && birthday)) {
+    if (!(userName && email && email.includes("@") && email.includes(".") && weight && size && birthday)) {
         alert("fill in the fields rightously");
         return;
     }
@@ -273,6 +273,8 @@ function saveExercise(exerciseSaveButton) {
         log("Error: exerciseObject not found for saveExercise");
         return;
     }
+
+    let oldExerciseJSON = JSON.parse(localStorage.getItem("exerciseBackupObject_" + exerciseSaveButton.parentElement.parentElement.getAttribute("id")));
     
     let exerciseObjectChildren = exerciseObject.children;
 
@@ -363,6 +365,7 @@ function saveExercise(exerciseSaveButton) {
     exerciseObject.appendChild(actionDiv);
 
     let exercise = {
+        userIdCreated: getUserPropertiesFromLocalStorage().userId,
         name: definedName,
         equipment: definedEqipment,
         description: definedDescription,
@@ -371,7 +374,7 @@ function saveExercise(exerciseSaveButton) {
         weight: definedWeight
     };
 
-    saveExerciseToJSON(exercise);
+    saveExerciseToJSON(exercise, oldExerciseJSON);
 }
 
 /*function saveExercise(exerciseSaveButton) {
@@ -523,10 +526,10 @@ function enableProfileEditing() {
     email.value = profileSettingsList.children.item(1).innerText.split(": ")[1];
     email.type = "email";
     email.id = "emailInput";
-    let username = document.createElement("input");
-    username.value = profileSettingsList.children.item(0).innerText.split(": ")[1];
-    username.type = "text";
-    username.id = "usernameInput";
+    let userName = document.createElement("input");
+    userName.value = profileSettingsList.children.item(0).innerText.split(": ")[1];
+    userName.type = "text";
+    userName.id = "userNameInput";
     let weight = document.createElement("input");
     weight.value = profileSettingsList.children.item(2).innerText.split(": ")[1].split(" ")[0];
     weight.type = "number";
@@ -540,7 +543,7 @@ function enableProfileEditing() {
     birthday.type = "date";
     birthday.id = "birthdayInput";
     profileSettingsList.children.item(0).innerHTML = "<span>Username: </span>";
-    profileSettingsList.children.item(0).appendChild(username);
+    profileSettingsList.children.item(0).appendChild(userName);
     profileSettingsList.children.item(1).innerHTML = "<span>Email: </span>";
     profileSettingsList.children.item(1).appendChild(email);
     profileSettingsList.children.item(2).innerHTML = "<span>Weight: </span>";
@@ -554,7 +557,7 @@ function enableProfileEditing() {
 function saveProfileSettings() {
     let profileSettingsList = document.getElementById("profileSettingsList");
     let newUserData = getUserPropertiesFromLocalStorage();
-    newUserData.userName = document.getElementById("usernameInput").value;
+    newUserData.userName = document.getElementById("userNameInput").value;
     newUserData.email = document.getElementById("emailInput").value;
     newUserData.weight = parseInt(document.getElementById("weightInput").value);
     newUserData.size = parseInt(document.getElementById("sizeInput").value);
@@ -568,6 +571,10 @@ function saveProfileSettings() {
 }
 
 function enableDeleteExercise(exerciseDeleteButton) {
+    let exerciseObjectChildren = exerciseDeleteButton.parentElement.parentElement.children;
+    let definedName = exerciseObjectChildren.item(0).innerText;
+    
+    deleteExercise(definedName);
     exerciseDeleteButton.parentElement.parentElement.remove();
 }
 
@@ -576,9 +583,10 @@ function enableEditExercise(exerciseEditButton) {
 
     let definedName = exerciseObjectChildren.item(0).innerText;
     let definedDescription = exerciseObjectChildren.item(2).innerText;
-    let definedEqipment = exerciseObjectChildren.item(6).innerText;
-    let definedWeight = exerciseObjectChildren.item(8).checked;
-    let definedVisibility = exerciseObjectChildren.item(10).checked;
+    let definedEqipment = exerciseObjectChildren.item(6).innerText.split(": ")[1];
+    if (!definedEqipment) definedEqipment = "None";
+    let definedWeight = exerciseObjectChildren.item(8).innerText.split(": ")[1] == "Yes" ? true : false;
+    let definedVisibility = exerciseObjectChildren.item(10).innerText.includes("Yes") ? true : false;
     let definedGroups = exerciseObjectChildren.item(12).children;
     let definedGroupStrings = [];
 
@@ -681,6 +689,19 @@ function enableEditExercise(exerciseEditButton) {
     }
     
     localStorage.setItem("exerciseBackup_" + definedName, object.innerHTML);
+    
+    let exerciseBackupObject = {
+        userIdCreated: getUserPropertiesFromLocalStorage().userId,
+        exerciseType: "defined",
+        name: definedName,
+        equipment: definedEqipment,
+        description: definedDescription,
+        targetedMuscleGroups: definedGroupStrings,
+        public: definedVisibility ? definedVisibility : false,
+        weight: definedWeight ? definedWeight : false,
+    };
+    
+    localStorage.setItem("exerciseBackupObject_" + exerciseEditButton.parentElement.parentElement.getAttribute("id"), JSON.stringify(exerciseBackupObject));
 
     object.innerHTML = "";
     object.appendChild(title);

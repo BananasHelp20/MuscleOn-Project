@@ -28,6 +28,20 @@ async function setUserProperties(properties) {
     });
 }
 
+async function deleteExercise(name) {
+    return fetch("/api/deleteExercise", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured while deleting into JSON:", response.statusText);
+        }
+    });
+}
+
 async function loadDataFromSpecificUser(email, password) {
     log("loading Data from Database into JSON");
     return fetch("/api/loadUserData", {
@@ -64,20 +78,6 @@ async function loadDataFromSpecificUserById(userId) {
             return response.json();
         } else {
             console.error("An error occured while loading data into JSON:", response.statusText);
-        }
-    });
-}
-
-async function deleteExercise(name) {
-    return fetch("/api/deleteExercise", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: name
-    }).then((response) => {
-        if (!response.ok) {
-            console.error("An error occured while saving new exercise into JSON:", response.statusText);
         }
     });
 }
@@ -265,6 +265,22 @@ async function getSupportedExercises() {
     });
 }
 
+async function getUserById(id) {
+    return fetch("/api/getUser/byId", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId: id }),
+    }).then((response) => {
+        if (response.ok) {
+            return { userName: id }; //response.json();
+        } else {
+            console.error("An error ocured while requesting data from backend:", response.statusText);
+        }
+    });
+}
+
 async function getUnsupportedExercises() {
     return fetch("/api/getExercises/unsupported", {
         method: "GET",
@@ -365,29 +381,13 @@ async function validateMail(code) {
     });
 }
 
-async function saveExerciseToJSON(exercise) {
+async function saveExerciseToJSON(newExercise, oldExercise) {
     return fetch("/api/saveExercise", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(exercise),
-    }).then((response) => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            console.error("An error ocured while requesting data from backend:", response.statusText);
-        }
-    });
-}
-
-async function deleteExerciseOfJSON(exerciseName) {
-    return fetch("/api/saveExercise", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({name: exerciseName})
+        body: JSON.stringify({oldExercise, newExercise}),
     }).then((response) => {
         if (response.ok) {
             return response.json();

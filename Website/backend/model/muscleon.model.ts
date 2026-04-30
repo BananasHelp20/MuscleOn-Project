@@ -118,7 +118,7 @@ export interface DatabaseAnswer {
     found: boolean,
     userId: number,
     email: string,
-    username: string,
+    userName: string,
     userProperties?: UserProperties, //is notwendig, oba nur bei gewisse anfragen
     userSettings?: UserSettings //wie bei userproperties
 }
