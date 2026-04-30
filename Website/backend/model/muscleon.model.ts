@@ -105,7 +105,7 @@ export interface Exercise {                                 //a interface, wos q
     exerciseType: string,                                   //supported / unsupported / user-defined
     description?: string,
     targetedMuscleGroups?: string[],                        //gaunz simpel: rechter arm, linker arm, rücken, bauchmuskeln, beine...
-    equipment?: string[],                                   //nur falls ma de Übung mit am Gerät oda sowos macht, sonst is des irrelevant
+    equipment?: string[] | string | null,                          //nur falls ma de Übung mit am Gerät oda sowos macht, sonst is des irrelevant
     reps?: number,
     sets?: number,
     weight?: number | boolean | null,                                        //nur falls ma de Übung mit Gewicht macht, sonst is des irrelevant // ACHTUNG: WEIGHT KANN BOOLEAN UND NUMBER SEI, depending on use hoid
