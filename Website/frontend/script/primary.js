@@ -1,18 +1,18 @@
 function init() {
     let deviceData = getDeviceData();
-    initalizeDefault(deviceData);
+    initalizeDefault(deviceData); //initializes stuff needed wheather or not the user is logged in
     initializeExerciseUpdateLoop(); //loop2
 
-    if (deviceData.loggedIn) {
-        getUserData().then((data) => {
-            saveDataToLocalStorage(data);
-            render(deviceData, data);
-            initializeLoggedIn(deviceData, data);
-            initializeDataUpdateLoop(); //loop
+    if (deviceData.loggedIn) { //if somebody is logged in
+        getUserData().then((data) => { //get Userdata for inialization
+            saveDataToLocalStorage(data); //save the data
+            render(deviceData, data); //render everything for the first time on the website
+            initializeLoggedIn(deviceData, data); //initialize everything needed if the user is logged in
+            initializeDataUpdateLoop(); //start primary data update loop
         });
     } else {
-        render(deviceData, null);
-        initializeLoggedOut();
+        render(deviceData, null); //render in "no-data-mode"
+        initializeLoggedOut(); //initialize everything needed if the user is logged out
     }
 }
 
@@ -28,10 +28,11 @@ function initalizeDefault(deviceData) {
     initializeLightSwitch();
     initializeExercises();
     initializeDevMode();
-    //nur vorerst
+
+    //editing zurücksetzen
     deviceData.editingPlanSection = false;
     localStorage.setItem("deviceData", JSON.stringify(deviceData));
-    
+
     startGame();
 }
 
@@ -135,8 +136,6 @@ function initializeLoggedIn(deviceData, data) {
     loadAndInitializeChecked(data.userSettings);
 }
 
-/* INIT */
-
+/* INIT --> MAIN ENTRY POINT */
 init();
-
 /* ^THIS CALL RUNS EVERYTHING^ DO NOT DELETE*/

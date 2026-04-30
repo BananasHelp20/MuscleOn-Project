@@ -364,3 +364,35 @@ async function validateMail(code) {
         }
     });
 }
+
+async function saveExerciseToJSON(exercise) {
+    return fetch("/api/saveExercise", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(exercise);
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error("An error ocured while requesting data from backend:", response.statusText);
+        }
+    });
+}
+
+async function deleteExerciseOfJSON(exerciseName) {
+    return fetch("/api/saveExercise", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({name: exerciseName})
+    }).then((response) => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            console.error("An error ocured while requesting data from backend:", response.statusText);
+        }
+    });
+}

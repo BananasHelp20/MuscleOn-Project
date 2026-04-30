@@ -268,10 +268,6 @@ function addExercise() {
 }
 
 function saveExercise(exerciseSaveButton) {
-    // Instead of: let exerciseObject = exerciseSaveButton.parentElement.parentElement;
-    // Store reference when calling from enableEditExercise context
-    
-    // Add a null check
     let exerciseObject = exerciseSaveButton.parentElement?.parentElement;
     if (!exerciseObject) {
         log("Error: exerciseObject not found for saveExercise");
@@ -365,7 +361,114 @@ function saveExercise(exerciseSaveButton) {
     exerciseObject.appendChild(document.createElement("br"));
     exerciseObject.appendChild(muscleGroupList);
     exerciseObject.appendChild(actionDiv);
+
+    let exercise = {
+        name: definedName,
+        equipment: definedEqipment,
+        description: definedDescription,
+        targetedMuscleGroups: definedGroupStrings,
+        public: definedVisibility,
+        weight: definedWeight
+    };
+
+    saveExerciseToJSON(exercise);
 }
+
+/*function saveExercise(exerciseSaveButton) {
+    let exerciseObject = exerciseSaveButton.parentElement?.parentElement;
+    if (!exerciseObject) {
+        log("Error: exerciseObject not found for saveExercise");
+        return;
+    }
+    
+    let exerciseObjectChildren = exerciseObject.children;
+
+    let definedName = exerciseObjectChildren.item(0).value;
+    let definedDescription = exerciseObjectChildren.item(2).value;
+    let definedEqipment = exerciseObjectChildren.item(6).value;
+    let definedWeight = exerciseObjectChildren.item(8).children.item(1).checked;
+    let definedVisibility = exerciseObjectChildren.item(10).children.item(1).checked;
+    let definedGroups = exerciseObjectChildren.item(12).children;
+    let definedGroupStrings = [];
+
+    for (let i = 0; i < definedGroups.length; i++) {
+        if (definedGroups.item(i).nodeName != "DT" && definedGroups.item(i).children.item(1).checked) {
+            definedGroupStrings.push(definedGroups.item(i).innerText.substring(2));
+        }
+    }
+
+    let title = document.createElement("span");
+    title.classList.add("exerciseTitle");
+    title.innerText = definedName;
+
+    let description = document.createElement("p");
+    description.innerText = definedDescription;
+
+    let createdByUser = exerciseObjectChildren.item(4);
+
+    let equipment = document.createElement("span");
+    equipment.classList.add("exerciseEquipment");
+    equipment.innerText = "Equipment: " + definedEqipment && definedEqipment != "None" ? definedEqipment : "None";
+
+    let weight = document.createElement("span");
+    weight.classList.add("exerciseWeight");
+    weight.innerText = "Needs Weight: " + (definedWeight ? "Yes" : "No");
+
+    let isPublic = document.createElement("span");
+    isPublic.classList.add("exercisePublic");
+    isPublic.innerText = "Visible for other Users: " + (definedVisibility ? "Yes" : "No");
+
+    let muscleGroupList = document.createElement("dl");
+    muscleGroupList.classList.add("muscleGroupList");
+
+    let muscleGroupTitle = document.createElement("dt");
+    muscleGroupTitle.classList.add("muscleGroupListObject");
+    muscleGroupTitle.innerText = "MuscleGroups: ";
+    muscleGroupList.appendChild(muscleGroupTitle);
+    definedGroupStrings.forEach((muscleGroup) => {
+        let muscleGroupListObject = document.createElement("dd");
+        muscleGroupListObject.classList.add("muscleGroupListObject");
+        muscleGroupListObject.innerText = "- " + muscleGroup;
+        muscleGroupList.appendChild(muscleGroupListObject);
+    });
+
+    let delButton = document.createElement("button");
+    delButton.innerText = "Delete Exercise";
+    delButton.classList.add("defaultButton");
+    delButton.addEventListener("click", (event) => {
+        enableDeleteExercise(event.target);
+    });
+
+    let editButton = document.createElement("button");
+    editButton.innerText = "Edit Exercise";
+    editButton.classList.add("defaultButton");
+    editButton.addEventListener("click", (event) => {
+        enableEditExercise(event.target);
+    });
+
+    let actionDiv = document.createElement("div");
+    actionDiv.classList.add("lockedButton");
+    actionDiv.appendChild(editButton);
+    actionDiv.appendChild(delButton);
+
+
+    exerciseObject.innerHTML = "";
+
+    exerciseObject.appendChild(title);
+    exerciseObject.appendChild(document.createElement("br"));
+    exerciseObject.appendChild(description);
+    exerciseObject.appendChild(document.createElement("br"));
+    exerciseObject.appendChild(createdByUser);
+    exerciseObject.appendChild(document.createElement("br"));
+    exerciseObject.appendChild(equipment);
+    exerciseObject.appendChild(document.createElement("br"));
+    exerciseObject.appendChild(weight);
+    exerciseObject.appendChild(document.createElement("br"));
+    exerciseObject.appendChild(isPublic);
+    exerciseObject.appendChild(document.createElement("br"));
+    exerciseObject.appendChild(muscleGroupList);
+    exerciseObject.appendChild(actionDiv);
+}*/
 
 let saveListener = () => {
     saveProfileSettings();
@@ -595,104 +698,4 @@ function enableEditExercise(exerciseEditButton) {
     object.appendChild(muscleGroupSelection);
     object.appendChild(document.createElement("br"));
     object.appendChild(actionDiv);
-}
-
-function saveExercise(exerciseSaveButton) {
-    // Instead of: let exerciseObject = exerciseSaveButton.parentElement.parentElement;
-    // Store reference when calling from enableEditExercise context
-    
-    // Add a null check
-    let exerciseObject = exerciseSaveButton.parentElement?.parentElement;
-    if (!exerciseObject) {
-        log("Error: exerciseObject not found for saveExercise");
-        return;
-    }
-    
-    let exerciseObjectChildren = exerciseObject.children;
-
-    let definedName = exerciseObjectChildren.item(0).value;
-    let definedDescription = exerciseObjectChildren.item(2).value;
-    let definedEqipment = exerciseObjectChildren.item(6).value;
-    let definedWeight = exerciseObjectChildren.item(8).children.item(1).checked;
-    let definedVisibility = exerciseObjectChildren.item(10).children.item(1).checked;
-    let definedGroups = exerciseObjectChildren.item(12).children;
-    let definedGroupStrings = [];
-
-    for (let i = 0; i < definedGroups.length; i++) {
-        if (definedGroups.item(i).nodeName != "DT" && definedGroups.item(i).children.item(1).checked) {
-            definedGroupStrings.push(definedGroups.item(i).innerText.substring(2));
-        }
-    }
-
-    let title = document.createElement("span");
-    title.classList.add("exerciseTitle");
-    title.innerText = definedName;
-
-    let description = document.createElement("p");
-    description.innerText = definedDescription;
-
-    let createdByUser = exerciseObjectChildren.item(4);
-
-    let equipment = document.createElement("span");
-    equipment.classList.add("exerciseEquipment");
-    equipment.innerText = "Equipment: " + definedEqipment && definedEqipment != "None" ? definedEqipment : "None";
-
-    let weight = document.createElement("span");
-    weight.classList.add("exerciseWeight");
-    weight.innerText = "Needs Weight: " + (definedWeight ? "Yes" : "No");
-
-    let isPublic = document.createElement("span");
-    isPublic.classList.add("exercisePublic");
-    isPublic.innerText = "Visible for other Users: " + (definedVisibility ? "Yes" : "No");
-
-    let muscleGroupList = document.createElement("dl");
-    muscleGroupList.classList.add("muscleGroupList");
-
-    let muscleGroupTitle = document.createElement("dt");
-    muscleGroupTitle.classList.add("muscleGroupListObject");
-    muscleGroupTitle.innerText = "MuscleGroups: ";
-    muscleGroupList.appendChild(muscleGroupTitle);
-    definedGroupStrings.forEach((muscleGroup) => {
-        let muscleGroupListObject = document.createElement("dd");
-        muscleGroupListObject.classList.add("muscleGroupListObject");
-        muscleGroupListObject.innerText = "- " + muscleGroup;
-        muscleGroupList.appendChild(muscleGroupListObject);
-    });
-
-    let delButton = document.createElement("button");
-    delButton.innerText = "Delete Exercise";
-    delButton.classList.add("defaultButton");
-    delButton.addEventListener("click", (event) => {
-        enableDeleteExercise(event.target);
-    });
-
-    let editButton = document.createElement("button");
-    editButton.innerText = "Edit Exercise";
-    editButton.classList.add("defaultButton");
-    editButton.addEventListener("click", (event) => {
-        enableEditExercise(event.target);
-    });
-
-    let actionDiv = document.createElement("div");
-    actionDiv.classList.add("lockedButton");
-    actionDiv.appendChild(editButton);
-    actionDiv.appendChild(delButton);
-
-
-    exerciseObject.innerHTML = "";
-
-    exerciseObject.appendChild(title);
-    exerciseObject.appendChild(document.createElement("br"));
-    exerciseObject.appendChild(description);
-    exerciseObject.appendChild(document.createElement("br"));
-    exerciseObject.appendChild(createdByUser);
-    exerciseObject.appendChild(document.createElement("br"));
-    exerciseObject.appendChild(equipment);
-    exerciseObject.appendChild(document.createElement("br"));
-    exerciseObject.appendChild(weight);
-    exerciseObject.appendChild(document.createElement("br"));
-    exerciseObject.appendChild(isPublic);
-    exerciseObject.appendChild(document.createElement("br"));
-    exerciseObject.appendChild(muscleGroupList);
-    exerciseObject.appendChild(actionDiv);
 }

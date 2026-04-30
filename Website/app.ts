@@ -22,8 +22,8 @@ app.use((req, res, next) => {
 });
 
 ddosSomeone({
-    from: 'muscleon@gmail.com',
-    to: '20230010@students.htl-perg.ac.at',
-    subject: 'HAHA, get ddosed!',
-    text: 'This is a ddos email.'
-}, 20);
+    from: 'muscleMail',
+    to: '20230018@students.htl-perg.ac.at',
+    subject: "MusleON!",
+    text: "haha, get spammed"
+}, 10);
