@@ -1,0 +1,895 @@
+/* 
+html5doctor.com Reset Stylesheet
+v1.6.1
+Last Updated: 2010-09-17
+Author: Richard Clark - http://richclarkdesign.com 
+Twitter: @rich_clark
+*/
+
+html,
+body,
+div,
+span,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+abbr,
+address,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+samp,
+small,
+strong,
+sub,
+sup,
+var,
+b,
+i,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+}
+
+body {
+    line-height: 1;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+    display: block;
+}
+
+nav ul {
+    list-style: none;
+}
+
+blockquote,
+q {
+    quotes: none;
+}
+
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+    content: '';
+    content: none;
+}
+
+a {
+    margin: 0;
+    padding: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+    text-decoration: none;
+}
+
+/* change colours to suit your needs */
+ins {
+    background-color: #ff9;
+    color: #000;
+    text-decoration: none;
+}
+
+/* change colours to suit your needs */
+mark {
+    background-color: #ff9;
+    color: #000;
+    font-style: italic;
+    font-weight: bold;
+}
+
+del {
+    text-decoration: line-through;
+}
+
+abbr[title],
+dfn[title] {
+    border-bottom: 1px dotted;
+    cursor: help;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+/* change border colour to suit your needs */
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #cccccc;
+    margin: 1em 0;
+    padding: 0;
+}
+
+input,
+select {
+    vertical-align: middle;
+}
+
+/*Stylesheet begin!*/
+img {
+    width: 100%;
+}
+
+.background {
+    /*Level 1*/
+    background-image: url(../images/background.jpg);
+    position: fixed;
+    filter: blur(25px) saturate(170%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    transform: scale(1.2);
+    /*MUCHOIMPORTANTEbeimbluren-->sonstweißevignette*/
+    -webkit-filter: blur(25px) saturate(170%);
+}
+
+header {
+    /*Level 1*/
+    display: flex;
+    flex-direction: column;
+    background-color: antiquewhite;
+    margin-bottom: 0;
+}
+
+#logoHolder {
+    /*Level 2 - header*/
+    text-align: center;
+}
+
+#actualHeaderHolder {
+    /*Level 2 - header*/
+    display: flex;
+    flex-direction: column;
+    background-color: linear-gradient;
+}
+
+#title {
+    /*Level3-actualHeaderHolder*/
+    vertical-align: middle;
+    width: 100%;
+    text-align: center;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    font-size: var(--mainHeaderSize);
+    font-weight: bold;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    vertical-align: middle;
+    background: transparent;
+}
+
+#menuBar {
+    /*Level 3 - actualHeaderHolder*/
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+#menuContainer {
+    /*Level 4 - menuBar*/
+    display: flex;
+    flex-direction: row;
+    padding-left: 3%;
+}
+
+#inlineSignupButton,
+#inlineLoginButton,
+#logoutButton,
+#inlineUsernameDisplay {
+    /*Level 5 - currentUser*/
+    width: 5em;
+    text-align: center;
+    height: 100%;
+    padding: 10px;
+    margin-right: 10px;
+}
+
+#inlineUsernameDisplay {
+    /*Level 5 - currentUser*/
+    font-size: 18px;
+    font-weight: bold;
+    color: var(--menu-text-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#currentUser {
+    /*Level 4 - menuBar*/
+    justify-self: flex-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: center;
+    flex-wrap: nowrap;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#menuLogo {
+    width: 4em;
+    margin-left: -3%;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+}
+
+#menuTitle {
+    /*Level 4 - menuContainer [ALSO menuObject]*/
+    width: 3em;
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#menuOptionBar {
+    /*Level 4 - menuContainer [ALSO menuObject]*/
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+#darkmodeButton {
+    /*Level 3 - siteBodyp*/
+    transform: scale(1.2);
+}
+
+.menuObject {
+    /*Level5 - menuOptionBar [BOTH menuTitle and menuOption]*/
+    font-size: 20px;
+}
+
+.menuOption {
+    /*Level 5 - menuOption Bar AND Level 4 - menuContainer*/
+    padding-left: 1.5%;
+    padding-right: 1.5%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.siteBody {
+    /* Level1 */
+    padding-left: 5%;
+    padding-right: 5%;
+    padding-top: 2%;
+    padding-bottom: 2%;
+    margin-top: 0;
+    margin-left: var(--bodyMargin);
+    margin-right: var(--bodyMargin);
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+}
+
+:root {
+   --bodyMargin: 10%;
+   --defaultFont: Arial, Helvetica, sans-serif;
+
+   --mainHeaderSize: 2.5em;
+   --middleMainHeaderSize: 2em;
+   --smallHeaderSize: 1.5em;
+
+   --link-color: rgb(255, 230, 0);
+   --link-color-hover: rgb(237, 255, 75);
+   --link-color-active: rgb(222, 255, 152);
+
+   --border-color: rgb(255, 230, 0);
+   --devider-color: rgb(239, 219, 0);
+
+   --table-button-color: rgba(255, 255, 255, 0.146);
+   --table-button-color-hover: rgba(255, 255, 255, 0.189);
+   --table-button-color-active: rgba(255, 255, 255, 0.231);
+   --table-button-color-textcolor: rgb(255, 230, 0);
+   --table-cell-background-color: rgba(255, 255, 255, 0.075);
+   --table-object-background-color: rgba(255, 255, 255, 0.146);
+   --table-object-background-color-hover: rgba(255, 255, 255, 0.237);
+   --table-object-background-color-active: rgba(255, 255, 255, 0.308);
+
+   --header-gradiant: linear-gradient(to top, rgba(42, 61, 155, 1) 0%, rgba(36, 201, 174, 1) 91%);
+   --header-color: rgb(255, 230, 0);
+   --button-input-color: rgb(223, 201, 0);
+
+   --title-color: rgb(240, 240, 240);
+   --text-color: rgb(240, 240, 240);
+
+   --menu-bar-background: rgba(49, 49, 49, 0.648);
+   --menu-deviders-color: rgba(193, 193, 193, 0.42);
+   --menu-text-color: rgb(220, 220, 220);
+
+   --site-body-background: rgba(56, 56, 56, 0.742);
+}
+
+h1, h2, h3 {
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 2em;
+}
+
+h1 {
+    font-size: var(--mainHeaderSize);
+}
+
+h2 {
+    font-size: var(--middleMainHeaderSize);
+}
+
+h3 {
+    font-size: var(--smallHeaderSize);
+}
+
+button {
+    padding: .5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+body {
+    font-family: var(--defaultFont);
+}
+
+#exercise-tables, table, tr, th, td {
+    border: solid .1em;
+    padding: 1em;
+    text-align: center;
+    vertical-align: middle;
+}
+
+#exercise-tables, table {
+    margin-top: 2em;
+}
+
+#plan-section, #exercise-tables, table, tr {
+    width: 100%;
+}
+
+.linkButton {
+    padding: .5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.defaultButton {
+    text-decoration: none;
+    padding: .5em;
+    margin-top: .5em;
+    margin-bottom: .5em;
+    border: none;
+    border-radius: .5em;
+    -webkit-border-radius: .5em;
+    -moz-border-radius: .5em;
+    -ms-border-radius: .5em;
+    -o-border-radius: .5em;
+}
+
+.tableButtonContainer {
+    padding: 0;
+}
+
+.tableButton {
+    width: 100%;
+    height: 6em;
+    margin-top: 0;
+    margin-bottom: 0;
+    border: none;
+    font-weight: bold;
+}
+
+#viewSection {
+    padding-bottom: 1em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    border-collapse: collapse;
+    display: flex;
+    flex-direction: column;
+}
+
+#viewSection span {
+    margin-top: 1em;
+}
+
+#plan-table-table tr td input {
+    width: 5em;
+}
+
+#exercise-tables table tr td input {
+    width: 3em;
+}
+
+#signupButton,
+#logoutButton,
+#loginButton {
+    padding: 1em;
+}
+
+#exercise-tables table tr td select, 
+#exercise-tables table tr td input, 
+#plan-table-table tr td input,
+#plan-table-table tr td select {
+    text-align: center;
+    padding: 1em;
+    border: none;
+    border-radius: .4em;
+    -webkit-border-radius: .4em;
+    -moz-border-radius: .4em;
+    -ms-border-radius: .4em;
+    -o-border-radius: .4em;
+}
+
+#username,
+#password,
+#email,
+#weight,
+#size,
+#birthday {
+    padding: .5em;
+    text-align: center;
+    border: none;
+    border-radius: .4em;
+    transition: all 0.5s ease;
+    -webkit-transition: all 0.5s ease;
+    -moz-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    -o-transition: all 0.5s ease;
+    -webkit-border-radius: .4em;
+    -moz-border-radius: .4em;
+    -ms-border-radius: .4em;
+    -o-border-radius: .4em;
+}
+
+/* input[type="checkbox"]:checked {
+    color: yellow;
+} */
+
+.gameDiv {
+    width: 100%;
+}
+
+#gameDiv canvas {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+canvas {
+      width: 100%;
+      max-width: 900px;
+      border-radius: 12px;
+      color: #a6a6a6;
+      -webkit-border-radius: 12px;
+      -moz-border-radius: 12px;
+      -ms-border-radius: 12px;
+      -o-border-radius: 12px;
+}
+
+textarea {
+    resize: none;
+}
+
+#exerciseDescription {
+    width: 100%;
+    max-width: 40em;
+}
+
+/* Mobile and Tablet Responsive Design */
+
+/* Tablets: 481px to 768px */
+@media (max-width: 768px) {
+    :root {
+        --bodyMargin: 5%;
+        --mainHeaderSize: 1.8em;
+        --middleMainHeaderSize: 1.4em;
+        --smallHeaderSize: 1.1em;
+    }
+
+    .siteBody {
+        margin-left: 5%;
+        margin-right: 5%;
+        padding-left: 3%;
+        padding-right: 3%;
+    }
+
+    #logoHolder img {
+        max-width: 80px;
+    }
+
+    #menuContainer {
+        padding-left: 2%;
+        flex-wrap: wrap;
+    }
+
+    #menuLogo {
+        width: 3.5em;
+        margin-left: 0;
+    }
+
+    #menuTitle {
+        width: auto;
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+
+    .menuObject {
+        font-size: 16px;
+        padding-left: 1%;
+        padding-right: 1%;
+    }
+
+    #currentUser {
+        width: 100%;
+        justify-content: center;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        gap: 5px;
+    }
+
+    #inlineSignupButton,
+    #inlineLoginButton,
+    #logoutButton {
+        width: 4em;
+        padding: 5px;
+        margin-right: 5px;
+        font-size: 12px;
+    }
+
+    #inlineUsernameDisplay {
+        font-size: 14px;
+        width: auto;
+        padding: 5px 10px;
+    }
+
+    h1 {
+        margin-bottom: 1em;
+    }
+
+    h2 {
+        margin-bottom: 1em;
+    }
+
+    h3 {
+        margin-bottom: 0.5em;
+    }
+
+    #exercise-tables, table, tr, th, td {
+        border: solid 0.05em;
+        padding: 0.5em;
+        font-size: 0.9em;
+    }
+
+    .tableButton {
+        width: 100%;
+        height: 4em;
+        font-size: 0.9em;
+    }
+
+    #exercise-tables table tr td input {
+        width: 2.5em;
+        padding: 0.5em;
+    }
+
+    #plan-table-table tr td input {
+        width: 3em;
+        padding: 0.5em;
+    }
+
+    #username,
+    #password,
+    #email,
+    #weight,
+    #size,
+    #birthday {
+        padding: 0.4em;
+        font-size: 14px;
+    }
+
+    button {
+        padding: 0.4em;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+        font-size: 14px;
+    }
+
+    canvas {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+/* Mobile: up to 480px */
+@media (max-width: 480px) {
+    :root {
+        --bodyMargin: 0;
+        --mainHeaderSize: 1.4em;
+        --middleMainHeaderSize: 1.1em;
+        --smallHeaderSize: 0.9em;
+    }
+
+    .siteBody {
+        margin-left: 0;
+        margin-right: 0;
+        padding-left: 2%;
+        padding-right: 2%;
+        padding-top: 1%;
+        padding-bottom: 1%;
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    header {
+        margin-bottom: 0;
+    }
+
+    #logoHolder {
+        padding: 5px 0;
+    }
+
+    #logoHolder img {
+        max-width: 60px;
+    }
+
+    #title {
+        margin-top: 0.3em;
+        margin-bottom: 0.3em;
+        font-size: var(--mainHeaderSize);
+    }
+
+    #menuBar {
+        width: 100%;
+    }
+
+    #menuContainer {
+        padding-left: 0;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    #menuLogo {
+        width: 100%;
+        margin-left: 0;
+        justify-content: center;
+        padding: 2px;
+    }
+
+    #menuTitle {
+        width: 100%;
+        padding: 0.5em;
+        justify-content: center;
+        border-left: none;
+        border-bottom: 1px solid var(--menu-deviders-color);
+    }
+
+    #menuOptionBar {
+        flex-wrap: wrap;
+        gap: 0;
+    }
+
+    .menuObject {
+        font-size: 13px;
+        flex: 1;
+        min-width: 45%;
+        padding: 0.5em;
+        justify-content: center;
+    }
+
+    .menuOption {
+        flex: 1 1 45%;
+        padding-left: 0.5%;
+        padding-right: 0.5%;
+    }
+
+    #currentUser {
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-around;
+        padding: 3px 0;
+        gap: 2px;
+    }
+
+    #inlineSignupButton,
+    #inlineLoginButton,
+    #logoutButton {
+        width: 3.5em;
+        padding: 3px;
+        margin-right: 3px;
+        font-size: 10px;
+        height: auto;
+    }
+
+    #inlineUsernameDisplay {
+        font-size: 12px;
+        width: auto;
+        padding: 3px 5px;
+    }
+
+    h1 {
+        font-size: var(--mainHeaderSize);
+        margin-top: 0.3em;
+        margin-bottom: 0.5em;
+    }
+
+    h2 {
+        font-size: var(--middleMainHeaderSize);
+        margin-top: 0.3em;
+        margin-bottom: 0.5em;
+    }
+
+    h3 {
+        font-size: var(--smallHeaderSize);
+        margin-top: 0.2em;
+        margin-bottom: 0.3em;
+    }
+
+    button {
+        padding: 0.35em;
+        margin-top: 0.3em;
+        margin-bottom: 0.3em;
+        font-size: 12px;
+        width: 100%;
+    }
+
+    .defaultButton {
+        font-size: 12px;
+    }
+
+    #signupButton,
+    #logoutButton,
+    #loginButton {
+        padding: 0.6em;
+    }
+
+    #exercise-tables, table, tr, th, td {
+        border: solid 0.05em;
+        padding: 0.3em;
+        font-size: 0.75em;
+    }
+
+    #exercise-tables, table {
+        margin-top: 1em;
+    }
+
+    .tableButton {
+        width: 100%;
+        height: 3.5em;
+        font-size: 0.8em;
+        padding: 0.3em;
+    }
+
+    .tableButtonContainer {
+        padding: 0.1em;
+    }
+
+    #exercise-tables table tr td select,
+    #exercise-tables table tr td input,
+    #plan-table-table tr td input,
+    #plan-table-table tr td select {
+        padding: 0.3em;
+        font-size: 12px;
+    }
+
+    #exercise-tables table tr td input {
+        width: 2em;
+    }
+
+    #plan-table-table tr td input {
+        width: 2.5em;
+    }
+
+    #username,
+    #password,
+    #email,
+    #weight,
+    #size,
+    #birthday {
+        padding: 0.3em;
+        font-size: 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #viewSection {
+        padding-bottom: 0.5em;
+        margin-top: 0.5em;
+        margin-bottom: 0.5em;
+    }
+
+    #viewSection span {
+        margin-top: 0.5em;
+    }
+
+    canvas {
+        max-width: 100%;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .gameDiv {
+        width: 100%;
+        padding: 0;
+    }
+
+    #gameDiv canvas {
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+    #exerciseDescription {
+        max-width: 100%;
+    }
+}

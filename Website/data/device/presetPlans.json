@@ -1,0 +1,147 @@
+[
+    {
+        "name": "Willi's Special",
+        "sessions": [
+            {
+                "sessionId": "0",
+                "primaryMuscleGroup": "Core (Abs & Obliques)",
+                "exercises": [
+                    {
+                        "exerciseType": "defined-by-user",
+                        "name": "Askö",
+                        "targetedMuscleGroups": ["Biceps"],
+                        "equipment": "Kasten, Trampolin, Airtrack,...",
+                        "reps": "1",
+                        "sets": "1",
+                        "weight": null
+                    }
+                ],
+                "times": {
+                    "weekday": "Saturday",
+                    "fromTime": "10:00",
+                    "toTime": "12:00"
+                }
+            },
+            {
+                "sessionId": "1",
+                "primaryMuscleGroup": "Shoulders (Deltoids)",
+                "exercises": [
+                    {
+                        "exerciseType": "defined-by-user",
+                        "name": "Volleyball",
+                        "targetedMuscleGroups": ["Biceps"],
+                        "equipment": "Volleyball, Net",
+                        "reps": "1",
+                        "sets": "1",
+                        "weight": null
+                    }
+                ],
+                "times": {
+                    "weekday": "Monday",
+                    "fromTime": "19:45",
+                    "toTime": "22:00"
+                }
+            },
+            {
+                "sessionId": "2",
+                "primaryMuscleGroup": "Shoulders (Deltoids)",
+                "exercises": [
+                    {
+                        "exerciseType": "defined-by-user",
+                        "name": "Volleyball",
+                        "targetedMuscleGroups": ["Biceps"],
+                        "equipment": "Volleyball, Net",
+                        "reps": "1",
+                        "sets": "1",
+                        "weight": null
+                    }
+                ],
+                "times": {
+                    "weekday": "Tuesday",
+                    "fromTime": "19:45",
+                    "toTime": "22:00"
+                }
+            },
+            {
+                "sessionId": "3",
+                "primaryMuscleGroup": "Shoulders (Deltoids)",
+                "exercises": [
+                    {
+                        "exerciseType": "defined-by-user",
+                        "name": "Volleyball",
+                        "targetedMuscleGroups": ["Biceps"],
+                        "equipment": "Volleyball, Net",
+                        "reps": "1",
+                        "sets": "1",
+                        "weight": null
+                    }
+                ],
+                "times": {
+                    "weekday": "Wednesday",
+                    "fromTime": "15:15",
+                    "toTime": "17:10"
+                }
+            },
+            {
+                "sessionId": "4",
+                "primaryMuscleGroup": "Shoulders (Deltoids)",
+                "exercises": [
+                    {
+                        "exerciseType": "defined-by-user",
+                        "name": "Volleyball",
+                        "targetedMuscleGroups": ["Biceps"],
+                        "equipment": "Volleyball, Net",
+                        "reps": "1",
+                        "sets": "1",
+                        "weight": null
+                    }
+                ],
+                "times": {
+                    "weekday": "Tuesday",
+                    "fromTime": "18:45",
+                    "toTime": "19:45"
+                }
+            },
+            {
+                "sessionId": "5",
+                "primaryMuscleGroup": "Shoulders (Deltoids)",
+                "exercises": [
+                    {
+                        "exerciseType": "defined-by-user",
+                        "name": "Volleyball",
+                        "targetedMuscleGroups": ["Biceps"],
+                        "equipment": "Volleyball, Net",
+                        "reps": "1",
+                        "sets": "2",
+                        "weight": null
+                    }
+                ],
+                "times": {
+                    "weekday": "Thursday",
+                    "fromTime": "19:45",
+                    "toTime": "22:00"
+                }
+            },
+            {
+                "sessionId": "6",
+                "primaryMuscleGroup": "Shoulders (Deltoids)",
+                "exercises": [
+                    {
+                        "exerciseType": "defined-by-user",
+                        "name": "Volleyball",
+                        "targetedMuscleGroups": ["Biceps"],
+                        "equipment": "Volleyball, Net",
+                        "reps": "1",
+                        "sets": "1",
+                        "weight": null
+                    }
+                ],
+                "times": {
+                    "weekday": "Friday",
+                    "fromTime": "18:00",
+                    "toTime": "20:00"
+                }
+            }
+        ]
+    }
+]

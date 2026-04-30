@@ -1,0 +1,251 @@
+:root {
+   --bodyMargin: 15%;
+   --defaultFont: Arial, Helvetica, sans-serif;
+
+   --mainHeaderSize: 2.5em;
+   --middleMainHeaderSize: 2em;
+   --smallHeaderSize: 1.5em;
+
+   --link-color: rgb(255, 230, 0);
+   --link-color-hover: rgb(237, 255, 75);
+   --link-color-active: rgb(222, 255, 152);
+
+   --table-button-color: rgba(255, 255, 255, 0.146);
+   --table-button-color-hover: rgba(255, 255, 255, 0.189);
+   --table-button-color-active: rgba(255, 255, 255, 0.231);
+   --table-button-color-textcolor: rgb(255, 230, 0);
+   --table-cell-background-color: rgba(255, 255, 255, 0.075);
+   --table-object-background-color: rgba(255, 255, 255, 0.146);
+   --table-object-background-color-hover: rgba(255, 255, 255, 0.237);
+   --table-object-background-color-active: rgba(255, 255, 255, 0.308);
+
+   --header-gradiant: linear-gradient(to top, rgba(42, 61, 155, 1) 0%, rgba(36, 201, 174, 1) 91%);
+   --header-color: rgb(255, 230, 0);
+
+   --button-input-color: rgb(223, 201, 0);
+   --title-color: rgb(240, 240, 240);
+   --text-color: rgb(240, 240, 240);
+   --site-body-background: rgba(56, 56, 56, 0.742);
+   --border-color: rgb(187, 187, 187);
+   --main-border-color: rgb(255, 230, 0);
+   --devider-color: rgb(239, 219, 0);
+
+   --menu-bar-background: rgba(49, 49, 49, 0.648);
+   --menu-deviders-color: rgba(193, 193, 193, 0.42);
+   --menu-text-color: rgb(220, 220, 220);
+}
+
+body {
+    background-color: black;
+    color: white;
+}
+
+table,
+tbody,
+th,
+td,
+tr {
+    border-color: var(--border-color);
+}
+
+img {
+    width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    color: var(--header-color);
+}
+
+.styledLink {
+    color: var(--link-color);
+}
+
+.styledLink:hover {
+    color: var(--link-color-hover);
+}
+
+.styledLink:active {
+    color: var(--link-color-active);
+}
+
+header {
+    /*Level 1*/
+    background-color: antiquewhite;
+    border-bottom: 5px var(--devider-color) solid;
+    background: var(--header-gradiant);
+}
+
+#title {
+    /*Level3-actualHeaderHolder*/
+    color: var(--title-color);
+}
+
+#menuBar {
+    /*Level 3 - actualHeaderHolder*/
+    background-color: var(--menu-bar-background);
+}
+
+#menuTitle {
+    /*Level 4 - menuBar [ALSO menuObject]*/
+    border-left: 1px solid var(--menu-deviders-color);
+}
+
+.menuObject {
+    /*Level5 - menuOptionBar [BOTH menuTitle and menuOption]*/
+    border-right: 1px solid var(--menu-deviders-color);
+    color: var(--menu-text-color);
+}
+
+.siteBody {
+    /*Level1*/
+    background-color: var(--site-body-background);
+    color: var(--text-color);
+}
+
+#loginLink, #signupLink, #returnLink {
+    color: var(--link-color);
+}
+
+#loginLink:hover,
+#signupLink:hover,
+#returnLink:hover {
+    color: var(--link-color-hover);
+}
+
+#loginLink:active,
+#signupLink:active,
+#returnLink:active {
+    color: var(--link-color-active);
+}
+
+body {
+    font-family: var(--defaultFont);
+}
+
+canvas {
+      background: #616161ad;
+      border: 2px solid var(--main-border-color);
+}
+
+#exercise-tables {
+    border-color: var(--main-border-color);
+}
+
+.defaultButton {
+    background-color: #0000004f;
+    color: var(--button-input-color);
+}
+
+.defaultButton:hover {
+    background-color: #00000071;
+}
+
+.defaultButton:active {
+    background-color: #00000087;
+}
+
+.tableButton {
+    background-color: var(--table-button-color);
+    color: var(--table-button-color-textcolor);
+}
+
+.tableButton:hover {
+    background-color: var(--table-button-color-hover);
+}
+
+.tableButton:active {
+    background-color: var(--table-button-color-active);
+}
+
+td, th {
+    background-color: var(--table-cell-background-color);
+}
+
+#exercise-tables table tr td select, 
+#exercise-tables table tr td input, 
+#plan-table-table tr td input,
+#plan-table-table tr td select {
+    color: var(--button-input-color);
+    background-color: var(--table-object-background-color);
+}
+
+#username,
+#password,
+#email,
+#weight,
+#size,
+#birthday {
+    color: var(--button-input-color);
+    background-color: var(--table-object-background-color);
+}
+
+#username:focus,
+#password:focus,
+#email:focus,
+#weight:focus,
+#size:focus,
+#birthday:focus {
+    outline: none;
+    outline: .1em solid var(--border-color);
+    box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
+}
+
+#username:hover,
+#password:hover,
+#email:hover,
+#weight:hover,
+#size:hover,
+#birthday:hover,
+#exercise-tables table tr td select:hover,
+#exercise-tables table tr td input:hover,
+#plan-table-table tr td input:hover,
+#plan-table-table tr td select:hover {
+    background-color: var(--table-object-background-color-hover);
+}
+
+#username:active,
+#password:active,
+#email:active,
+#weight:active,
+#size:active,
+#birthday:active,
+#exercise-tables table tr td select:active,
+#exercise-tables table tr td input:active,
+#plan-table-table tr td input:active,
+#plan-table-table tr td select:active {
+    background-color: var(--table-object-background-color-active);
+}
+
+#plan-table-table tr td select option,
+#exercise-tables table tr td select option,
+#exercise-tables table tr td select optgroup {
+    color:black;
+    background-color: #00000059;
+}
+
+#plan-table-table tr td select option:checked,
+#exercise-tables table tr td select option:checked {
+    color: var(--button-input-color);
+    background-color: #00000070;
+}
+
+/* Mobile and Tablet Responsive Design */
+
+/* Tablets: 481px to 768px */
+@media (max-width: 768px) {
+    :root {
+        --bodyMargin: 5%;
+    }
+}
+
+/* Mobile: up to 480px */
+@media (max-width: 480px) {
+    :root {
+        --bodyMargin: 0;
+    }
+}

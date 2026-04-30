@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" style="background-color: #181818;">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Muscle ON!</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
+    <link rel="stylesheet" type="text/css" href="./css/light.css" id="modeStylesheet">
+    <script src="./script/initalize.js" defer></script>
+    <script src="./script/localStorage.js" defer></script>
+    <script src="./script/router.js" defer></script>
+    <script src="./script/helper.js" defer></script>
+    <script src="./script/render.js" defer></script>
+    <script src="./script/game.js" defer></script>
+    <script src="./script/dev.js" defer></script>
+    <script src="./script/feature.js" defer></script>
+    <script src="./script/primary.js" defer></script>
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body style="background-color: transparent">
+    <header>
+        <div id="logoHolder">
+        </div>
+        <div id="actualHeaderHolder">
+            <div id="title">
+                Muscle-ON!
+            </div>
+            <div id="menuBar">
+                <div id="menuContainer">
+                    <a id="menuLogo" class="menuObject" href="./index.html">
+                        <img src="./images/logo.png" alt="">
+                    </a>
+                    <div id="menuTitle" class="menuObject">
+                        Menu:
+                    </div>
+                    <div id="menuOptionBar">
+                        <a class="menuObject menuOption" href="./about.html">
+                            <span>About</span>
+                        </a>
+                        <a class="menuObject menuOption locked" href="./settings.html">
+                            <span>Settings</span>
+                        </a>
+                        <a class="menuObject menuOption locked" href="./session.html">
+                            <span>Session</span>
+                        </a>
+                        <a class="menuObject menuOption" href="./exercises.html">
+                            <span>Exercises</span>
+                        </a>
+                    </div>
+                    <div id="currentUser"></div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="siteBody">
+        <h1>Session</h1>
+        <div id="viewSection">
+            <span>Show Session data: <input type="checkbox" id="viewingSession"></span>
+            <span>Show Live data: <input type="checkbox" id="viewingRealTime"></span>
+            <span>Show Long-term data: <input type="checkbox" id="viewingLongterm"></span>
+        </div>
+        <div id="lockedFromLogin" hidden>
+            <button id="startStopSession">Start Session</button><br>
+            <div id="sessionDiv" hidden>
+                Current Exercise: <span id="currentExercise">Curls</span><br>
+                <button id="startStopExercise" class="defaultButton">Start Exercise</button><br>
+            </div>
+            <div id="dynamicHeadline" hidden>
+                <h2>Dynamic data</h2>
+            </div>
+            <div id="dynamicDiv" hidden>
+                <h3>current Session (updated every 250 milliseconds)</h3>
+                <!-- Average Heart Rate: <span id="averageHeartFrequence"></span><br>
+                    Average Oxygen: <span id="averageOxygen"></span><br>
+                    Average Muscle Usage: <span id="averageMuscleUsageInPercent"></span><br>
+                    Trained Muscles: <span id="trainedMuscles"></span> -->
+            </div>
+            <div id="realTimeDiv" hidden>
+                <h3>current data (also updated every 250 milliseconds)</h3>
+                <h3>muscle usage graph (live)</h3>
+                <!-- Heart Rate: <span id="heartFrequence"></span><br>
+                    Oxygen: <span id="oxygen"></span><br>
+                    Current Muscle Being Trained: <span id="currentMuscleBeingTrained"></span><br>
+                    Current Exercise: <span id="currentExercise"></span> -->
+            </div>
+            <div id="staticDiv" hidden>
+                <h2>Static data</h2>
+                <h3>All-Time Average</h3>
+                <!-- Average Time Trained: <span id="averageTimeTrained"></span><br>
+                    Average Heart Rate: <span id="averageHeartFrequence"></span><br>
+                    Average Oxygen: <span id="averageOxygen"></span><br>
+                    Average Muscle Usage In Percent: <span id="averageMuscleUsageInPercent"></span><br>
+                    Weekly burned calories: <span id="weeklyBurnedCalories"></span><br>
+                    Monthly strength increase: <span id="monthlyStrengthIncrease"></span><br>
+                    Average weekly training Time: <span id="weeklyTrainingTime"></span><br>
+                    Most trained Muscle ever: <span id="mostTrainedMuscle"></span><br>
+                    Most done exercise ever: <span id="mostDoneExercise"></span><br> -->
+        
+                <h3>All-Time Highscores</h3>
+                <!-- Max Time Trained: <span id="maxTimeTrained"></span><br>
+                    Max Done In One For Each Exercise: <span id="maxDoneInOneForEachExercise"></span><br>
+                    Max Heart Rate: <span id="maxHeartRate"></span><br> -->
+            </div>
+        </div>
+    </div>
+    <div class="background"></div>
+</body>
