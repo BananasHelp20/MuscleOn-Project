@@ -25,6 +25,35 @@ export interface UserProperties {
     usualSessionTimes?: ExerciseSelection[];                         //Eingestellter Trainingsplan, sofern eingestellt [[tag, startzeit, endzeit], [...]]
 }
 
+export interface RealTimeData { //nur zum anzeigen
+    // heartFrequence: number;
+    trainingMuscle: string;
+    doingExercise: string;
+    currentReps: number;
+    currentSets: number;
+}
+
+export interface DynamicData { //nur zum anzeigen
+    exercisesAhead: Exercise[];
+    finishedExercises: Exercise[];
+    trainedMuscles: string[];
+    averageMuscleUsageInPercent: number;
+    // averageHeartFrequence: number;
+}
+
+export interface StaticData { //nur zum anzeigen
+    averageSessionTime: number;
+    // averageHeartRate: number;
+    averageUsageInPercent: number;
+    monthlyStrengthIncrease: number | null; //erste 2 Monate null, dann erst ausgerechent
+    averageWeeklySessionTime: number | null //erste 2 Wochen null
+    mostTrainedMuscleGroup: string;
+    mostDoneExercise: Exercise;
+    // maxHeartRate: number;
+    maxSessionTime: number;
+    maxSetReps: number;
+}
+
 export interface UserSessionData {
     averageHeartFrequence: number,
     averageOxygen: number,
@@ -99,6 +128,7 @@ export interface Time {
  * - Exercises anlegen (name, description, equipment, public, targetedMuscleGroups, (unc und uic kommen automatisch))
  * - Exercises definieren (im trainingsplan) (name, targetedMuscleGroups, equipment, reps, sets, (weight))#
  * und i glaub nu anders iwie, musst da bissi durchlesen srry
+ * oida ka, des wird fü zu oft verwendet
  */
 export interface Exercise {                                 //a interface, wos quasi überall eingesetzt werden kann, je noch dem wos eingesetzt wird, werden unterschiedliche properties benötigt
     name: string

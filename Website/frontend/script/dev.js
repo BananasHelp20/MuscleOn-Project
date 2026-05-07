@@ -3,6 +3,7 @@
  */
 let tasks = [
     "add lightmode style",
+    "add Documentary",
     "About Page",
     "add Preset Plans [OPTIONAL]",
     "Style/layout for tablets/phones",

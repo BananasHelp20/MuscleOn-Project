@@ -14,7 +14,7 @@ muscleRouter.get('/getSupportedExercises', async (req, res) => {
     res.statusCode = 200;
     res.send(await gatherSupportedExercises());
 });
-6
+
 muscleRouter.get('/getDeviceData', async (req, res) => {
     res.statusCode = 200;
     res.send(await gatherDeviceData());
@@ -287,6 +287,11 @@ muscleRouter.post('/deleteValidationCodes', async (req, res) => {
         res.send({ message: "Error deleting validation code" });
         return;
     });
+    res.statusCode = 200;
+    res.send({ message: "validation code deleted successfully!" });
+});
+
+muscleRouter.post('/data/getRealTime', async (req, res) => {
     res.statusCode = 200;
     res.send({ message: "validation code deleted successfully!" });
 });
