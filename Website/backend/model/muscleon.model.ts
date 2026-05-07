@@ -25,7 +25,15 @@ export interface UserProperties {
     usualSessionTimes?: ExerciseSelection[];                         //Eingestellter Trainingsplan, sofern eingestellt [[tag, startzeit, endzeit], [...]]
 }
 
-export interface RealTimeData { //nur zum anzeigen
+export interface UserSessionData {
+    exercisesAhead: Exercise[];
+    finishedExercises: Exercise[];
+    trainedMuscles: string[];
+    averageMuscleUsageInPercent: number;
+    // averageHeartFrequence: number;                              //ois wos in da Session scho trainiert worden is
+}
+
+export interface UserShortTermData {
     // heartFrequence: number;
     trainingMuscle: string;
     doingExercise: string;
@@ -33,20 +41,7 @@ export interface RealTimeData { //nur zum anzeigen
     currentSets: number;
 }
 
-export interface DynamicData { //nur zum anzeigen
-    exercisesAhead: Exercise[];
-    finishedExercises: Exercise[];
-    trainedMuscles: string[];
-    averageMuscleUsageInPercent: number;
-    // averageHeartFrequence: number;
-}
-
-export interface StaticData { //nur zum anzeigen
-    averageSessionTime: number;
-    // averageHeartRate: number;
-    averageUsageInPercent: number;
-    monthlyStrengthIncrease: number | null; //erste 2 Monate null, dann erst ausgerechent
-    averageWeeklySessionTime: number | null //erste 2 Wochen null
+export interface UserHighscoreData {
     mostTrainedMuscleGroup: string;
     mostDoneExercise: Exercise;
     // maxHeartRate: number;
@@ -54,34 +49,12 @@ export interface StaticData { //nur zum anzeigen
     maxSetReps: number;
 }
 
-export interface UserSessionData {
-    averageHeartFrequence: number,
-    averageOxygen: number,
-    averageMuscleUsageInPercent: number,
-    alreadyTrained: ExerciseSelection[]                                //ois wos in da Session scho trainiert worden is
-}
-
-export interface UserShortTermData {
-    heartFrequence: number,
-    oxygen: number,
-    muscleUsageInPercent: number,
-}
-
-export interface UserHighscoreData {
-    maxTimeTrained: string,                                 //maximale sessiontime
-    maxDoneInOneForEachExercise: Exercise[],                //do wird werden reps/sets als statische Anzahlen verwendet
-    maxHeartRate: number,
-}
-
 export interface UserLongTermAverageData {
-    averageTimeTrained: string,
-    averageLongtermHeartFrequence: number,
-    averageLongtermOxygen: number,
-    averageLongtermMuscleUsageInPercent: number,
-    monthlyStrengthIncrease: number,                        //wenn messbar (in % zum vorherigen Monat)
-    weeklyTrainingTime: string,
-    mostTrainedMuscleGroup: string,
-    mostDoneExercise: Exercise                              //do braucht ma kane reps/sets ABER eventuell a weight, wenn ers imma mit weight macht
+    averageSessionTime: number;
+    // averageHeartRate: number;
+    averageUsageInPercent: number;
+    monthlyStrengthIncrease: number | null; //erste 2 Monate null, dann erst ausgerechent
+    totalWeeklySessionTime: number | null //erste 2 Wochen null
 }
 
 export interface UserSettings {

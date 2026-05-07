@@ -290,8 +290,3 @@ muscleRouter.post('/deleteValidationCodes', async (req, res) => {
     res.statusCode = 200;
     res.send({ message: "validation code deleted successfully!" });
 });
-
-muscleRouter.post('/data/getRealTime', async (req, res) => {
-    res.statusCode = 200;
-    res.send({ message: "validation code deleted successfully!" });
-});
