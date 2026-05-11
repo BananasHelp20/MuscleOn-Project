@@ -129,9 +129,9 @@ function showLongtermData(userdata) {
     let data = userdata.userLongTermAverages;
     let data2 = userdata.userHighscores;
 
-    if (data) {
+    if (data && data2) {
         document.getElementById("staticDataDiv").hidden = false;
-        maxTimeTrainedDisplay.innerText = data.mostTrainedMuscleGroup;
+        maxTimeTrainedDisplay.innerText = data2.mostTrainedMuscleGroup;
         maxDoneInOneForEachExerciseDisplay.innerText = data2.maxSetReps;
         // maxHeartRateDisplay.innerText = data.maxHeartRate;
         averageTimeTrainedDisplay.innerText = data.averageSessionTime;
