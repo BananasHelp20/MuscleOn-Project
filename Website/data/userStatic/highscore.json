@@ -1,5 +1,5 @@
 {
-    "maxTimeTrained": "03:41:02",
+    "maxSessionTime": "03:41:02",
     "maxDoneInSetForEachExercise": [
         {
             "name": "Curls",
@@ -8,5 +8,15 @@
             "equipment": "Dumbbells"
         }
     ],
-    "maxHeartRate": 160
+    "mostTrainedMuscleGroup": "Muscle",
+    "maxSetReps": 134,
+    "maxHeartRate": 160,
+    "mostDoneExercise": {
+        "exerciseType": "supported",
+        "name": "Push-Up",
+        "description": "A bodyweight exercise that primarily targets the chest, shoulders, and triceps.",
+        "targetedMuscleGroups": ["Chest", "Shoulders", "Triceps"],
+        "equipment": "None",
+        "weight": false
+    }
 }

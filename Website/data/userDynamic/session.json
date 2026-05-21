@@ -1,7 +1,7 @@
 {
     "averageHeartFrequence": 120,
-    "averageOxygen": 98,
-    "alreadyTrained": [
+    "averageMuscleUsageInPercent": 75,
+    "finishedExercises": [
         {
             "primaryMuscleGroup": "Biceps",
             "exercise": [
@@ -15,5 +15,24 @@
                 }
             ]
         }
+    ],
+    "exercisesAhead": [
+        {
+            "primaryMuscleGroup": "Biceps",
+            "exercise": [
+                {
+                    "name": "Biceps Curls",
+                    "targetedMuscleGroups": ["Biceps"],
+                    "equipment": "Dumbbells",
+                    "reps": 10,
+                    "sets": 3,
+                    "weight": 20
+                }
+            ]
+        }
+    ],
+    "trainedMuscles": [
+        "Muscle",
+        "Muscle2"
     ]
 }

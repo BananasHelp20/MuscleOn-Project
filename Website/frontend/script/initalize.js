@@ -137,7 +137,7 @@ function initializeSignUp() {
     document.getElementById("inlineSignupButton").addEventListener("click", () => {
         window.location.href = "./signup.html";
     });
-    if (!document.getElementById("signupButton")) return; 
+    if (!document.getElementById("signupButton")) return;
     document.getElementById("plan").checked = false;
     document.getElementById("plan-table").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
     document.getElementById("signupButton").addEventListener("click", () => {
@@ -266,7 +266,7 @@ function initializeExercises() {
         document.getElementById("cancelExerciseAddition").hidden = true;
         document.getElementById("exerciseForm").hidden = true;
         for (let i = 0; i < muscleGroupSelection.children; i++) {
-        let liElem = muscleGroupSelection.children.item(i);
+            let liElem = muscleGroupSelection.children.item(i);
             if (liElem.nodeName == "dd" && liElem.children.item(1).checked) liElem.children.item(1).checked = false;
         }
         document.getElementById("public").checked = false;
@@ -302,18 +302,19 @@ function loadAndInitializeChecked(settings) {
     let realTimeStatsSection = document.getElementById("realTimeDiv");
     let longtermStatsSection = document.getElementById("staticDiv");
 
+    if (settings && document.getElementById("viewingRealTime") && document.getElementById("viewingSession") && document.getElementById("viewingLongterm")) {
+        document.getElementById("viewingRealTime").checked = settings.viewing.realTimeStats;
+        document.getElementById("viewingSession").checked = settings.viewing.sessionStats;
+        document.getElementById("viewingLongterm").checked = settings.viewing.longtermStats;
+    } else if (document.getElementById("viewingRealTime") && document.getElementById("viewingSession") && document.getElementById("viewingLongterm")) {
+        document.getElementById("viewingRealTime").checked = true;
+        document.getElementById("viewingSession").checked = true;
+        document.getElementById("viewingLongterm").checked = true;
+    }
+
     if (!sessionStatsSection || !realTimeStatsSection || !longtermStatsSection) return;
     localStorage.setItem("userSettings", JSON.stringify(settings));
     if (document.getElementById("viewingRealTime") && document.getElementById("viewingSession") && document.getElementById("viewingLongterm")) {
-        if (settings) {
-            document.getElementById("viewingRealTime").checked = settings.viewing.realTimeStats;
-            document.getElementById("viewingSession").checked = settings.viewing.sessionStats;
-            document.getElementById("viewingLongterm").checked = settings.viewing.longtermStats;
-        } else {
-            document.getElementById("viewingRealTime").checked = true;
-            document.getElementById("viewingSession").checked = true;
-            document.getElementById("viewingLongterm").checked = true;
-        }
 
         if (sessionStatsSection) sessionStatsSection.hidden = !settings.viewing.sessionStats;
         if (realTimeStatsSection) realTimeStatsSection.hidden = !settings.viewing.realTimeStats;

@@ -59,7 +59,6 @@ function render(deviceData, data) {
             /* */
             //syncModes();
             setModes(data.userSettings); //des im localstorage is nur placeholdermäßig bis zum Einloggen, des wos im json steht is des wos braucht wird
-
         }
     } else {
         console.log(document.getElementsByClassName("loggedOutNotice"));

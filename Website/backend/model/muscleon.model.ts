@@ -36,7 +36,8 @@ export interface UserSessionData {
 export interface UserShortTermData {
     // heartFrequence: number;
     trainingMuscle: string;
-    doingExercise: string;
+    muscleUsageInPercent: number,
+    currentExercise: string;
     currentReps: number;
     currentSets: number;
 }
@@ -47,10 +48,14 @@ export interface UserHighscoreData {
     // maxHeartRate: number;
     maxSessionTime: number;
     maxSetReps: number;
+    maxDoneInSetForEachExercise: Exercise[];
 }
 
 export interface UserLongTermAverageData {
     averageSessionTime: number;
+    weeklyTrainingTime: string;
+    mostTrainedMuscleGroup: string;
+    mostDoneExercise: Exercise;
     // averageHeartRate: number;
     averageUsageInPercent: number;
     monthlyStrengthIncrease: number | null; //erste 2 Monate null, dann erst ausgerechent

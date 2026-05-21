@@ -1,8 +1,7 @@
 {
-    "averageTimeTrained": "00:34:27",
-    "averageLongtermHeartFrequence": 68,
-    "averageLongtermOxygen": 98,
-    "averageLongtermMuscleUsageInPercent": 85,
+    "averageSessionTime": "00:34:27",
+    "averageHeartRate": 68,
+    "averageUsageInPercent": 85,
     "monthlyStrengthIncrease": 2,
     "weeklyTrainingTime": "03:43:21",
     "mostTrainedMuscleGroup": "Biceps",

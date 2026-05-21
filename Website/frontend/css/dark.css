@@ -179,7 +179,9 @@ td, th {
 #email,
 #weight,
 #size,
-#birthday {
+#birthday,
+.styledInput,
+.styledArea {
     color: var(--button-input-color);
     background-color: var(--table-object-background-color);
 }
@@ -189,7 +191,9 @@ td, th {
 #email:focus,
 #weight:focus,
 #size:focus,
-#birthday:focus {
+#birthday:focus,
+.styledInput:focus,
+.styledArea:focus {
     outline: none;
     outline: .1em solid var(--border-color);
     box-shadow: 0 0 5px rgba(0, 102, 204, 0.3);
@@ -204,7 +208,9 @@ td, th {
 #exercise-tables table tr td select:hover,
 #exercise-tables table tr td input:hover,
 #plan-table-table tr td input:hover,
-#plan-table-table tr td select:hover {
+#plan-table-table tr td select:hover,
+.styledInput:hover,
+.styledArea:hover {
     background-color: var(--table-object-background-color-hover);
 }
 
@@ -217,7 +223,9 @@ td, th {
 #exercise-tables table tr td select:active,
 #exercise-tables table tr td input:active,
 #plan-table-table tr td input:active,
-#plan-table-table tr td select:active {
+#plan-table-table tr td select:active,
+.styledInput:active,
+.styledArea:active {
     background-color: var(--table-object-background-color-active);
 }
 

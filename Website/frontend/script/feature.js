@@ -430,22 +430,27 @@ function enableProfileEditing() {
     email.value = profileSettingsList.children.item(1).innerText.split(": ")[1];
     email.type = "email";
     email.id = "emailInput";
+    email.classList.add("styledInput");
     let userName = document.createElement("input");
     userName.value = profileSettingsList.children.item(0).innerText.split(": ")[1];
     userName.type = "text";
     userName.id = "userNameInput";
+    userName.classList.add("styledInput");
     let weight = document.createElement("input");
     weight.value = profileSettingsList.children.item(2).innerText.split(": ")[1].split(" ")[0];
     weight.type = "number";
     weight.id = "weightInput";
+    weight.classList.add("styledInput");
     let size = document.createElement("input");
     size.value = profileSettingsList.children.item(3).innerText.split(": ")[1].split(" ")[0];
     size.type = "number";
     size.id = "sizeInput";
+    size.classList.add("styledInput");
     let birthday = document.createElement("input");
     birthday.value = profileSettingsList.children.item(4).innerText.split(": ")[1];
     birthday.type = "date";
     birthday.id = "birthdayInput";
+    birthday.classList.add("styledInput");
     profileSettingsList.children.item(0).innerHTML = "<span>Username: </span>";
     profileSettingsList.children.item(0).appendChild(userName);
     profileSettingsList.children.item(1).innerHTML = "<span>Email: </span>";
@@ -502,17 +507,20 @@ function enableEditExercise(exerciseEditButton) {
 
     let title = document.createElement("input");
     title.classList.add("exerciseTitle");
+    title.classList.add("styledInput");
     title.value = definedName;
     title.placeholder = "Bicep Curls";
     title.setAttribute("type", "text");
 
     let description = document.createElement("textarea");
+    description.classList.add("styledArea");
     description.value = definedDescription;
     description.placeholder = "You Curl A Bicep, or idk something like that";
 
     let createdBy = exerciseObjectChildren.item(4);
 
     let equipment = document.createElement("input");
+    equipment.classList.add("styledInput");
     equipment.setAttribute("type", "text");
     equipment.classList.add("exerciseEquipment");
     equipment.value = definedEqipment;

@@ -498,7 +498,9 @@ body {
 #email,
 #weight,
 #size,
-#birthday {
+#birthday,
+.styledInput,
+.styledArea {
     padding: .5em;
     text-align: center;
     border: none;
@@ -654,7 +656,9 @@ textarea {
     #email,
     #weight,
     #size,
-    #birthday {
+    #birthday,
+    .styledInput,
+    .styledArea {
         padding: 0.4em;
         font-size: 14px;
     }
@@ -856,7 +860,9 @@ textarea {
     #email,
     #weight,
     #size,
-    #birthday {
+    #birthday,
+    .styledInput,
+    .styledArea {
         padding: 0.3em;
         font-size: 12px;
         width: 100%;

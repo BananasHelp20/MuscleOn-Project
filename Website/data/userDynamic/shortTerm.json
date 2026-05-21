@@ -1,5 +1,15 @@
 {
-    "heartFrequency": 80,
-    "oxygen": 98,
-    "muscleUsageInPercent": 75
+    "heartFrequence": 80,
+    "muscleUsageInPercent": 75,
+    "currentExercise": {
+        "exerciseType": "supported",
+        "name": "Push-Up",
+        "description": "A bodyweight exercise that primarily targets the chest, shoulders, and triceps.",
+        "targetedMuscleGroups": ["Chest", "Shoulders", "Triceps"],
+        "equipment": "None",
+        "weight": false
+    },
+    "trainingMuscle": "Muscle",
+    "currentReps": 12,
+    "currentSets": 4
 }
