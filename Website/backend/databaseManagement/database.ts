@@ -1,30 +1,30 @@
-// import mysql from 'mysql2/promise';
-// import path from 'path';
+//database.ts
+import mysql from 'mysql2/promise';
 
-// // MySQL connection configuration
-// const dbConfig = {
-//     host: '192.168.1.100', // Replace with your Raspberry Pi's IP address
-//     user: 'muscleon_user', // Replace with your MySQL username
-//     password: 'your_password', // Replace with your MySQL password
-//     database: 'muscleon_db', // Replace with your database name
-//     waitForConnections: true,
-//     connectionLimit: 10,
-//     queueLimit: 0
-// };
+// MySQL connection configuration
+const dbConfig = {
+    host: '192.168.1.100', // Replace with your Raspberry Pi's IP address
+    user: 'muscleon_user', // Replace with your MySQL username
+    password: 'your_password', // Replace with your MySQL password
+    database: 'muscleon_db', // Replace with your database name
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+};
 
-// export const pool = mysql.createPool(dbConfig);
+export const pool = mysql.createPool(dbConfig);
 
-// // Test connection
-// export async function testConnection(): Promise<void> {
-//     try {
-//         const connection = await pool.getConnection();
-//         console.log('Connected to MySQL database on Raspberry Pi');
-//         connection.release();
-//     } catch (error) {
-//         console.error('Error connecting to MySQL:', error);
-//         throw error;
-//     }
-// }
+// Test connection
+export async function testConnection(): Promise<void> {
+    try {
+        const connection = await pool.getConnection();
+        console.log('Connected to MySQL database on Raspberry Pi');
+        connection.release();
+    } catch (error) {
+        console.error('Error connecting to MySQL:', error);
+        throw error;
+    }
+}
 
 // export async function initializeDatabase(): Promise<void> {
 //     try {
