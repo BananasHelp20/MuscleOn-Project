@@ -1,4 +1,5 @@
 //.db.ts
+import * as sql from 'mysql2';
 import * as model from '../model/muscleon.model';
 import { pool } from './database';
 
@@ -147,10 +148,12 @@ export async function getExercises(type: 'supported' | 'unsupported' | 'user', u
     }
 }
 
-export async function saveExercise(exercise: model.Exercise, userId?: number): Promise<boolean> {
+export async function saveExercise(exercise: model.Exercise, userId: number): Promise<boolean> {
     try {
         const equipmentStr = Array.isArray(exercise.equipment) ? exercise.equipment.join(';') : (exercise.equipment || '');
         const weightNeeded = exercise.weight === true ? 1 : 0;
+
+        if (!exercise.description) exercise.description = '';
 
         const [result] = await pool.execute(`
             INSERT INTO exercises (name, description, exercise_type, created_by, public, equipment, weight_needed)
@@ -160,7 +163,7 @@ export async function saveExercise(exercise: model.Exercise, userId?: number): P
             exercise.description,
             exercise.exerciseType,
             userId,
-            exercise.public ? 1 : 0,
+            exercise.public ? true : false,
             equipmentStr,
             weightNeeded
         ]);
@@ -272,6 +275,8 @@ export async function saveTrainingUnit(userId: number, start: Date, end?: Date):
 // Session functions (only save, not retrieve as per requirements)
 export async function saveSession(session: { start: Date; end?: Date; trainingUnitId?: number }): Promise<number> {
     try {
+        if (!session.trainingUnitId) session.trainingUnitId = -1;
+
         const [result] = await pool.execute(`
             INSERT INTO session (start, end, training_unit)
             VALUES (?, ?, ?)
@@ -350,7 +355,6 @@ export async function saveSensor(sensor: { macAddress: string; type: string }): 
 // Muscle functions
 export async function getMuscles(): Promise<{ name: string; muscleGroup: string }[]> {
     try {
-        // Return predefined muscle groups
         return [
             { name: "Chest", muscleGroup: "Upper Body" },
             { name: "Back", muscleGroup: "Upper Body" },
@@ -369,5 +373,42 @@ export async function getMuscles(): Promise<{ name: string; muscleGroup: string 
     } catch (error) {
         console.error('Error getting muscles:', error);
         return [];
+    }
+}
+
+export async function getRawData(sessionId: number): Promise<{ stress: number, time: Date }[]>;
+export async function getRawData(sessionId: number, userId: number): Promise<{ stress: number, time: Date }[]>;
+export async function getRawData(userId: number): Promise<{ stress: number, time: Date }[]>;
+
+export async function getRawData(sessionId?: number, userId?: number): Promise<{ stress: number, time: Date }[]> {
+    if (!sessionId) {
+        const [results] = await pool.execute(`
+            SELECT td.stress, td.time FROM trainingData td
+            JOIN session s ON td.session_id = s.id
+            WHERE s.user_id = ?
+            ORDER BY td.time ASC
+        `, [userId!]);
+        return (results as any[]).map(row => ({ stress: row.stress, time: new Date(row.time) }));
+    }
+    if (userId) {
+        const [results] = await pool.execute(`
+                SELECT stress, time FROM trainingData td
+                JOIN session s ON td.session_id = s.id
+                WHERE s.user_id = ? AND td.session_id = ?
+                ORDER BY td.time ASC
+            `, [userId, sessionId]);
+        return (results as any[]).map(row => ({ stress: row.stress, time: new Date(row.time) }));
+    } else {
+        try {
+            const [results] = await pool.execute(`
+                SELECT stress, time FROM trainingData
+                WHERE session_id = ?
+                ORDER BY time ASC
+            `, [sessionId]);
+            return (results as any[]).map(row => ({ stress: row.stress, time: new Date(row.time) }));
+        } catch (error) {
+            console.error('Error getting raw data:', error);
+            return [];
+        }
     }
 }

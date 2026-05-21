@@ -3,7 +3,7 @@ import mysql from 'mysql2/promise';
 
 // MySQL connection configuration
 const dbConfig = {
-    host: '192.168.1.100', // Replace with your Raspberry Pi's IP address
+    host: '127.0.0.1', // Replace with your Raspberry Pi's IP address
     user: 'muscleon_user', // Replace with your MySQL username
     password: 'your_password', // Replace with your MySQL password
     database: 'muscleon_db', // Replace with your database name
