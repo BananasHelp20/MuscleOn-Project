@@ -6,31 +6,32 @@
    --middleMainHeaderSize: 2em;
    --smallHeaderSize: 1.5em;
 
-   --link-color: rgb(190, 171, 0);
+   --link-color: rgb(227, 204, 0);
    --link-color-hover: rgb(237, 255, 75);
    --link-color-active: rgb(222, 255, 152);
 
-   --table-button-color: rgba(255, 255, 255, 0.146);
-   --table-button-color-hover: rgba(255, 255, 255, 0.189);
-   --table-button-color-active: rgba(255, 255, 255, 0.231);
-   --table-button-color-textcolor: rgb(255, 230, 0);
-   --table-cell-background-color: rgba(255, 255, 255, 0.075);
-   --table-object-background-color: rgba(255, 255, 255, 0.146);
-   --table-object-background-color-hover: rgba(255, 255, 255, 0.237);
-   --table-object-background-color-active: rgba(255, 255, 255, 0.308);
+   --table-button-color: rgba(255, 255, 255, 0.404);
+   --table-button-color-hover: rgba(255, 255, 255, 0.404);
+   --table-button-color-active: rgba(255, 255, 255, 0.404);
+   --table-button-color-textcolor: rgb(3, 163, 172);
+   --table-cell-background-color: rgba(255, 255, 255, 0.244);
+   --table-object-background-color: rgba(255, 255, 255, 0.313);
+   --table-object-background-color-hover: rgba(255, 255, 255, 0.411);
+   --table-object-background-color-active: rgba(255, 255, 255, 0.505);
 
-   --header-gradiant: linear-gradient(to top, rgba(42, 61, 155, 1) 0%, rgba(36, 201, 174, 1) 91%);
+   --header-gradiant: linear-gradient(to top, rgb(23, 140, 176) 0%, rgb(128, 244, 221) 91%);
    --header-color: rgb(255, 230, 0);
 
-   --button-input-color: rgb(223, 201, 0);
-   --title-color: rgb(240, 240, 240);
-   --text-color: rgb(240, 240, 240);
-   --site-body-background: rgba(56, 56, 56, 0.742);
+   --button-input-color: rgb(0, 169, 166);
+   --button-background-color: rgba(255, 255, 255, 0.726);
+   --title-color: rgb(255, 255, 255);
+   --text-color: antiquewhite;
+   --site-body-background: rgba(147, 147, 147, 0.701);
    --border-color: black;
-   --main-border-color: rgb(255, 230, 0); 
+   --main-border-color: rgb(255, 230, 0);
    --devider-color: rgb(239, 219, 0);
 
-   --menu-bar-background: rgba(49, 49, 49, 0.648);
+   --menu-bar-background: linear-gradient(to top, rgba(48, 113, 133, 0.66) 0%, rgb(23, 140, 176) 91%);
    --menu-deviders-color: rgba(193, 193, 193, 0.42);
    --menu-text-color: rgb(220, 220, 220);
 }
@@ -131,17 +132,37 @@ body {
     border-color: var(--main-border-color);
 }
 
+.background {
+    /*Level 1*/
+    background-image: url(../images/background2.jpg);
+    position: fixed;
+    filter: blur(25px) saturate(170%);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: -1;
+    transform: scale(1.2);
+    /*MUCHOIMPORTANTEbeimbluren-->sonstweißevignette*/
+    -webkit-filter: blur(25px) saturate(170%);
+}
+
 .defaultButton {
-    background-color: #0000004f;
+    background-color: var(--button-background-color);
     color: var(--button-input-color);
 }
 
 .defaultButton:hover {
-    background-color: #00000071;
+    background-color: var(--button-background-color);
 }
 
 .defaultButton:active {
-    background-color: #00000087;
+    background-color: var(--button-background-color);
 }
 
 .tableButton {
@@ -158,7 +179,7 @@ body {
 }
 
 canvas {
-      background: #474747ad;
+      background: #a1a1a1ad;
       border: 2px solid var(--main-border-color);
 }
 
@@ -225,13 +246,13 @@ td, th {
 #exercise-tables table tr td select option,
 #exercise-tables table tr td select optgroup {
     color:black;
-    background-color: #00000059;
+    background-color: #7b7b7b59;
 }
 
 #plan-table-table tr td select option:checked,
 #exercise-tables table tr td select option:checked {
     color: var(--button-input-color);
-    background-color: #00000070;
+    background-color: var(--button-background-color);
 }
 
 /* Mobile and Tablet Responsive Design */

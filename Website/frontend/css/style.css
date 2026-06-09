@@ -178,26 +178,6 @@ img {
     width: 100%;
 }
 
-.background {
-    /*Level 1*/
-    background-image: url(../images/background.jpg);
-    position: fixed;
-    filter: blur(25px) saturate(170%);
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    width: 100%;
-    height: 100%;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    z-index: -1;
-    transform: scale(1.2);
-    /*MUCHOIMPORTANTEbeimbluren-->sonstweißevignette*/
-    -webkit-filter: blur(25px) saturate(170%);
-}
-
 header {
     /*Level 1*/
     display: flex;
@@ -373,8 +353,6 @@ header {
    --menu-bar-background: rgba(49, 49, 49, 0.648);
    --menu-deviders-color: rgba(193, 193, 193, 0.42);
    --menu-text-color: rgb(220, 220, 220);
-
-   --site-body-background: rgba(56, 56, 56, 0.742);
 }
 
 h1, h2, h3 {

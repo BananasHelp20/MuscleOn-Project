@@ -1,10 +1,10 @@
 {
-  "mode": "darkmode",
+  "mode": "lightmode",
   "viewing": {
     "sessionStats": false,
     "realTimeStats": true,
     "longtermStats": true
   },
   "devMode": true,
-  "viewingExercises": "All Exercises"
+  "viewingExercises": "User-defined Exercises"
 }

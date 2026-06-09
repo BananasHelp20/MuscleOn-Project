@@ -15,20 +15,6 @@ function initializeLightSwitch() {
     });
 }
 
-function initializeDevMode() {
-    if (!document.getElementById("dev")) return;
-    let on = getSettingsFromLocalStorage().devMode;
-    let devModeSwitch = document.getElementById("dev");
-    devModeSwitch.innerText = on ? "devmode" : "usermode";
-
-    devModeSwitch.addEventListener("click", () => {
-        let settings = getSettingsFromLocalStorage();
-        settings.devMode = !settings.devMode;
-        devModeSwitch.innerText = settings.devMode ? "devmode" : "usermode";
-        setUserSettings(settings);
-    });
-}
-
 function initializeLogoutAndDelete() {
     let logoutButton;
     let deleteButton;

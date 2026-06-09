@@ -22,8 +22,12 @@ let tasks = [
     "finish MuscleOn :pray:",
 ];
 
+let noahTasks = [
+    "do database"
+];
+
 //added olle tasks vom task array in des todo display auf da Hauptseite.
-function addAllTasks() {
+function addAllTasks(list) {
     let features = document.getElementById("upcomingFeatures");
     if (!features) return;
     features.innerHTML = "";
@@ -41,4 +45,18 @@ function addAllTasks() {
         elem.appendChild(box);
         features.appendChild(elem);
     }
+}
+
+function initializeDevMode() {
+    if (!document.getElementById("dev")) return;
+    let on = getSettingsFromLocalStorage().devMode;
+    let devModeSwitch = document.getElementById("dev");
+    devModeSwitch.innerText = on ? "devmode" : "usermode";
+
+    devModeSwitch.addEventListener("click", () => {
+        let settings = getSettingsFromLocalStorage();
+        settings.devMode = !settings.devMode;
+        devModeSwitch.innerText = settings.devMode ? "devmode" : "usermode";
+        setUserSettings(settings);
+    });
 }
