@@ -41,6 +41,19 @@ body {
     color: black;
 }
 
+.exerciseObject {
+    background-color: var(--table-object-background-color);
+    transition: all 0.5s ease;
+}
+
+.exerciseObject:hover {
+    background-color: var(--table-object-background-color-hover);
+}
+
+.exerciseTitle {
+    color: var(--header-color);
+}
+
 table,
 tbody,
 th,

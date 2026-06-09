@@ -53,7 +53,8 @@ function render(deviceData, data) {
         if (data) {
             /* NED WICHTIG, NUR DEVMODE */
             if (document.getElementById("upcomingFeatures") && data.userSettings.devMode) {
-                addAllTasks();
+                addAllTasks(document.getElementById("upcomingFeatures"), generalTasks);
+                addAllTasks(document.getElementById("needsNoah"), noahTasks);
             } else if (document.getElementById("upcomingFeatures"))
                 document.getElementById("upcomingFeatures").parentElement.hidden = true;
             /* */

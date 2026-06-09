@@ -2,19 +2,14 @@
   {
     "userIdCreated": 0,
     "name": "Frontflip",
-    "equipment": "None",
-    "description": "!PILF A OD",
-    "targetedMuscleGroups": [
-      "Biceps"
-    ],
-    "public": true,
-    "weight": false,
+    "description": "Yes",
+    "targetedMuscleGroups": [],
     "exerciseType": "defined"
   },
   {
     "userIdCreated": 0,
     "name": "Volleyball",
-    "equipment": "",
+    "equipment": "None",
     "description": "Volleyball hoid",
     "targetedMuscleGroups": [
       "Biceps"

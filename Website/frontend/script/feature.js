@@ -303,7 +303,7 @@ function saveExercise(exerciseSaveButton) {
 
     let equipment = document.createElement("span");
     equipment.classList.add("exerciseEquipment");
-    equipment.innerText = "Equipment: " + definedEqipment && definedEqipment != "None" ? definedEqipment : "None";
+    equipment.innerText = "Equipment: " + ((definedEqipment && definedEqipment != "None") ? definedEqipment : "None");
 
     let weight = document.createElement("span");
     weight.classList.add("exerciseWeight");

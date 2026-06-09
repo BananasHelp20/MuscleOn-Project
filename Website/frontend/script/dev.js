@@ -1,7 +1,7 @@
 /**
  * dev.js is fürn devmode, oiso grundsätzlich wos temporäres.
  */
-let tasks = [
+let generalTasks = [
     "add lightmode style",
     "add Documentary",
     "About Page",
@@ -27,8 +27,8 @@ let noahTasks = [
 ];
 
 //added olle tasks vom task array in des todo display auf da Hauptseite.
-function addAllTasks(list) {
-    let features = document.getElementById("upcomingFeatures");
+function addAllTasks(listElem, tasks) {
+    let features = listElem;
     if (!features) return;
     features.innerHTML = "";
     for (let i = 0; i < tasks.length; i++) {
