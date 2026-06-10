@@ -1,48 +1,11 @@
 /**
  * dev.js is fürn devmode, oiso grundsätzlich wos temporäres.
  */
-let generalTasks = [
-    "add lightmode style",
-    "add Documentary",
-    "About Page",
-    "add Preset Plans [OPTIONAL]",
-    "Style/layout for tablets/phones",
-    "display data how it should be [waiting on tobi, der mir erklärt wos wir jetzt wirkli an Daten haum]",
-    "display Username in Exerciselist [waiting for database]",
-    "verify Email upon signining up [waiting for database]",
-    "live graph [waiting for database + connection to esp]",
-    "finsish session starting [waiting for database]",
-    "finish data transfer [waiting for database]",
-    "finish login existence check [waiting for database]",
-    "finish signup existence check [waiting for database]",
-    "finish loading data to json [waiting for databse]",
-    "finish logout saving data [waiting for database]",
-    "finish deleting account [waiting for database]",
-    "finish creating account [waiting for database]",
-    "finish MuscleOn :pray:",
-];
+let generalTasks = [];
 
-let noahTasks = [
-    "startSession()",
-    "endSession()",
-    "skipExercise() //oder goToNextExercise()",
-    "goToExercise()",
-    "pauseSession()",
-    "getSessionExercises()",
-    "getWholeSessionData()",
-    "validateMail()",
-    "validateSignup()",
-    "isExistantUser(mail)",
-    "isExistantUsername(username)",
-    "createUser(userData)",
-    "deleteUser(userId)",
-    "loadUserDataToJSON(userId)",
-    "saveUserData(userID)",
-    "getUsers",
-    "getUserExercises(userId) // nur wenn public flag = true",
-    "Mitteilungen wenn Training ansteht (z.B. 10min oder stunde vorher)",
-    "Mitteilung wenn Training verpasst"
-];
+let noahTasks = [];
+
+let tobiTasks = [];
 
 //added olle tasks vom task array in des todo display auf da Hauptseite.
 function addAllTasks(listElem, tasks) {

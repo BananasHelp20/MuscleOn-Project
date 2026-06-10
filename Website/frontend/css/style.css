@@ -225,7 +225,7 @@ header {
     /*Level 4 - menuBar*/
     display: flex;
     flex-direction: row;
-    padding-left: 3em;
+    padding-left: 3%;
 }
 
 #inlineSignupButton,
@@ -273,8 +273,8 @@ header {
 #menuTitle {
     /*Level 4 - menuContainer [ALSO menuObject]*/
     width: 3em;
-    padding-left: 1.5em;
-    padding-right: 1.5em;
+    padding-left: 0.3em;
+    padding-right: 0.3em;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -299,8 +299,8 @@ header {
 
 .menuOption {
     /*Level 5 - menuOption Bar AND Level 4 - menuContainer*/
-    padding-left: 1.5em;
-    padding-right: 1.5em;
+    padding-left: 1em;
+    padding-right: 1em;
     display: flex;
     flex-direction: row;
     align-items: center;

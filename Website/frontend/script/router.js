@@ -249,6 +249,21 @@ async function getAllExercises() {
     });
 }
 
+async function getTasks() {
+    return fetch("/api/getTasks", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(resp => {
+        if (resp.ok) {
+            return resp.json;
+        } else {
+            console.log("Fatal error occured while getting tasks");
+        }
+    });
+}
+
 async function getSupportedExercises() {
     return fetch("/api/getExercises/supported", {
         method: "GET",

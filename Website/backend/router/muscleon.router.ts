@@ -1,5 +1,5 @@
 import express from 'express';
-import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise, saveExercise } from '../fileManagement/muscleon.read';
+import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise, saveExercise, getTasks } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 // import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
 import { sendMail, validateMail } from '../mail/muscleon.mail';
@@ -8,6 +8,11 @@ export let muscleRouter = express.Router();
 muscleRouter.get('/getUserData', async (req, res) => {
     res.statusCode = 200;
     res.send(await gatherUserData());
+});
+
+muscleRouter.get('/getTasks', async (req, res) => {
+    res.statusCode = 200;
+    res.send(await getTasks());
 });
 
 muscleRouter.get('/getSupportedExercises', async (req, res) => {

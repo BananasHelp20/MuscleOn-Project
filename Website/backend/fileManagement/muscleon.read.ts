@@ -41,6 +41,13 @@ export async function gatherUserPropertiess() {
     return userProperties;
 }
 
+export async function getTasks(): Promise<string[][]> {
+    let noah = await readFile("./data/devmode/noahTasks.json", "utf-8").then((data) => JSON.parse(data));
+    let willi = await readFile("./data/devmode/williTasks.json", "utf-8").then((data) => JSON.parse(data));
+    let tobi = await readFile("./data/devmode/tobiTasks.json", "utf-8").then((data) => JSON.parse(data));
+    return [willi, noah, tobi];
+}
+
 export async function appendValidationCode(codeObject:{userId:number, validationCode:string | boolean}) {
     let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
     objects.push(codeObject);
