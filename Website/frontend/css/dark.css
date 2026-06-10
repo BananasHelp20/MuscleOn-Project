@@ -19,7 +19,7 @@
    --table-object-background-color-hover: rgba(255, 255, 255, 0.237);
    --table-object-background-color-active: rgba(255, 255, 255, 0.308);
 
-   --header-gradiant: linear-gradient(to top, rgba(42, 61, 155, 1) 0%, rgba(36, 201, 174, 1) 91%);
+   --header-gradiant: linear-gradient(to top, rgb(9, 70, 140) 0%, rgb(57, 224, 213) 100%);
    --header-color: rgb(255, 230, 0);
 
    --button-input-color: rgb(223, 201, 0);
@@ -30,7 +30,7 @@
    --main-border-color: rgb(255, 230, 0);
    --devider-color: rgb(239, 219, 0);
 
-   --menu-bar-background: rgba(49, 49, 49, 0.648);
+   --menu-bar-background: linear-gradient(to top, rgba(48, 113, 133, 0.66) 0%, rgb(9, 30, 140) 91%);
    --menu-deviders-color: rgba(193, 193, 193, 0.42);
    --menu-text-color: rgb(220, 220, 220);
 }
@@ -38,6 +38,19 @@
 body {
     background-color: black;
     color: white;
+}
+
+.exerciseObject {
+    background-color: var(--table-object-background-color);
+    transition: all 0.5s ease;
+}
+
+.exerciseObject:hover {
+    background-color: var(--table-object-background-color-hover);
+}
+
+.exerciseTitle {
+    color: var(--header-color);
 }
 
 table,
@@ -118,8 +131,7 @@ header {
 }
 
 .background {
-    /*Level 1*/
-    background-image: url(../images/background.jpg);
+    /*Level1*/background-image: url(../images/background.jpg);
     position: fixed;
     filter: blur(25px) saturate(170%);
     background-position: center;
@@ -133,7 +145,7 @@ header {
     bottom: 0;
     z-index: -1;
     transform: scale(1.2);
-    /*MUCHOIMPORTANTEbeimbluren-->sonstweißevignette*/
+    /*MUCHOIMPORTANTEbeimbluren-->sonstweißevignette*/-webkit-filter: blur(25px) saturate(170%);
     -webkit-filter: blur(25px) saturate(170%);
 }
 
