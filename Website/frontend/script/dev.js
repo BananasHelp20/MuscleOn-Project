@@ -23,7 +23,25 @@ let generalTasks = [
 ];
 
 let noahTasks = [
-    "do database"
+    "startSession()",
+    "endSession()",
+    "skipExercise() //oder goToNextExercise()",
+    "goToExercise()",
+    "pauseSession()",
+    "getSessionExercises()",
+    "getWholeSessionData()",
+    "validateMail()",
+    "validateSignup()",
+    "isExistantUser(mail)",
+    "isExistantUsername(username)",
+    "createUser(userData)",
+    "deleteUser(userId)",
+    "loadUserDataToJSON(userId)",
+    "saveUserData(userID)",
+    "getUsers",
+    "getUserExercises(userId) // nur wenn public flag = true",
+    "Mitteilungen wenn Training ansteht (z.B. 10min oder stunde vorher)",
+    "Mitteilung wenn Training verpasst"
 ];
 
 //added olle tasks vom task array in des todo display auf da Hauptseite.
