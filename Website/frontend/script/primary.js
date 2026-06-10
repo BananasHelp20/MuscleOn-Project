@@ -54,6 +54,7 @@ function render(deviceData, data) {
             /* NED WICHTIG, NUR DEVMODE */
             if (document.getElementById("upcomingFeatures") && data.userSettings.devMode) {
                 getTasks().then((data) => {
+                    tasks = data;
                     addAllTasks(document.getElementById("upcomingFeatures"), data[0]);
                     addAllTasks(document.getElementById("needsNoah"), data[1]);
 

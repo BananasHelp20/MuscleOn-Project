@@ -7,6 +7,8 @@ let noahTasks = [];
 
 let tobiTasks = [];
 
+let tasks = [];
+
 //added olle tasks vom task array in des todo display auf da Hauptseite.
 function addAllTasks(listElem, tasks) {
     let features = listElem;
@@ -16,7 +18,8 @@ function addAllTasks(listElem, tasks) {
         let box = document.createElement("input");
         box.setAttribute("type", "checkbox");
         box.addEventListener("click", (event) => {
-            tasks.splice(tasks.indexOf(event.target.parentElement.children.item(0).innerText), 1);
+            // tasks.splice(tasks.indexOf(event.target.parentElement.children.item(0).innerText), 1);
+            deleteTask(event.target.parentElement.children.item(0).innerText);
             event.target.parentElement.remove();
         });
         let text = document.createElement("span");
@@ -26,6 +29,20 @@ function addAllTasks(listElem, tasks) {
         elem.appendChild(box);
         features.appendChild(elem);
     }
+}
+
+function deleteTask(task) {
+    task = task.trim();
+    console.log(tasks);
+    if (tasks.length == 0) return;
+    if (tasks[0].indexOf(task) != -1) {
+        tasks[0].splice(tasks[0].indexOf(task), 1);
+    } else if (tasks[1].indexOf(task) != -1) {
+        tasks[1].splice(tasks[1].indexOf(task), 1);
+    } else if (tasks[2].indexOf(task) != -1) {
+        tasks[2].splice(tasks[2].indexOf(task), 1);
+    }
+    saveTasks(tasks);
 }
 
 function initializeDevMode() {

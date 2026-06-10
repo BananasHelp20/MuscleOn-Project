@@ -1,5 +1,5 @@
 import express from 'express';
-import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise, saveExercise, getTasks } from '../fileManagement/muscleon.read';
+import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise, saveExercise, getTasks, saveTasks } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 // import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
 import { sendMail, validateMail } from '../mail/muscleon.mail';
@@ -134,8 +134,8 @@ muscleRouter.post('/getUser/byId', async (req, res) => {
     res.sendStatus(200); //provisorisch
 });
 
-muscleRouter.post('/saveExercise', async (req, res) => {
-    let exercises: {oldExercise: model.Exercise, newExercise: model.Exercise} = req.body;
+muscleRouter.post("/saveExercise", async (req, res) => {
+    let exercises: { oldExercise: model.Exercise; newExercise: model.Exercise } = req.body;
     await saveExercise(exercises.oldExercise, exercises.newExercise).catch((err) => {
         console.error("Error deleting Exercise:", err);
         res.statusCode = 500;
@@ -144,6 +144,18 @@ muscleRouter.post('/saveExercise', async (req, res) => {
     });
     res.statusCode = 200;
     res.send({ message: "deleting Exercise successful!" });
+});
+
+muscleRouter.post("/saveTasks", async (req, res) => {
+    let tasks: string[][] = req.body;
+    await saveTasks(tasks).catch((err) => {
+        console.error("Error saving tasks:", err);
+        res.statusCode = 500;
+        res.send({ message: "Error saving tasks" });
+        return;
+    });
+    res.statusCode = 200;
+    res.send({ message: "saving tasks successful!" });
 });
 
 muscleRouter.post('/deleteExercise', async (req, res) => {

@@ -82,6 +82,12 @@ export async function validateExercise(name:string): Promise<boolean> {
     return false;
 }
 
+export async function saveTasks(tasks:string[][]) {
+    await writeFile("./data/devmode/williTasks.json", JSON.stringify(tasks[0], null, 2));
+    await writeFile("./data/devmode/noahTasks.json", JSON.stringify(tasks[1], null, 2));
+    await writeFile("./data/devmode/tobiTasks.json", JSON.stringify(tasks[2], null, 2));
+}
+
 export async function saveExercise(exercise: model.Exercise, newExercise: model.Exercise) {
     let exercises: model.Exercise[] = await gatherUserExercises();
     let unsupEx: model.Exercise[] = await gatherUnsupportedExercises();

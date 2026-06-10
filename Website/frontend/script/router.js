@@ -98,6 +98,20 @@ async function validateExerciseName(name) {
     });
 }
 
+async function saveTasks(tasks) {
+    return fetch("/api/saveTasks", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify(tasks),
+    }).then((resp) => {
+        if (!resp.ok) {
+            console.log("Fatal error occured while saving tasks");
+        }
+    });
+}
+
 async function appendExercise(exercise) {
     return fetch("/api/newExercise", {
         method: "POST",
@@ -257,7 +271,7 @@ async function getTasks() {
         }
     }).then(resp => {
         if (resp.ok) {
-            return resp.json;
+            return resp.json();
         } else {
             console.log("Fatal error occured while getting tasks");
         }
