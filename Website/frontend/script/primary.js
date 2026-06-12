@@ -55,9 +55,7 @@ function render(deviceData, data) {
             if (document.getElementById("upcomingFeatures") && data.userSettings.devMode) {
                 getTasks().then((data) => {
                     tasks = data;
-                    addAllTasks(document.getElementById("upcomingFeatures"), data[0]);
-                    addAllTasks(document.getElementById("needsNoah"), data[1]);
-
+                    addAllTasks(data);
                 })
             } else if (document.getElementById("upcomingFeatures"))
                 document.getElementById("upcomingFeatures").parentElement.hidden = true;
@@ -116,9 +114,7 @@ function initializeLoggedOut() {
 
 function initializeLoggedIn(deviceData, data) {
     let settings = data.userSettings;
-    if (document.getElementById("check") && settings.devMode) document.getElementById("check").addEventListener("click", () => {
-        
-    });
+    if (document.getElementById("check") && settings.devMode) document.getElementById("check").addEventListener("click", checkListener);
     let changePasswordButton = document.getElementById("changePasswordButton");
     let changePasswordLink = document.getElementById("changePasswordLink");
     let editProfileButton = document.getElementById("editProfileButton");

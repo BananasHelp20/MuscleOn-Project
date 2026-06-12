@@ -298,7 +298,10 @@ function loadAndInitializeChecked(settings) {
         document.getElementById("viewingLongterm").checked = true;
     }
 
-    if (!sessionStatsSection || !realTimeStatsSection || !longtermStatsSection) return;
+    if (
+        !(sessionStatsSection || realTimeStatsSection || longtermStatsSection) &&
+        !(document.getElementById("viewingRealTime") || document.getElementById("viewingSession") || document.getElementById("viewingLongterm"))
+    ) return;
     localStorage.setItem("userSettings", JSON.stringify(settings));
     if (document.getElementById("viewingRealTime") && document.getElementById("viewingSession") && document.getElementById("viewingLongterm")) {
 

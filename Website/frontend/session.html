@@ -62,47 +62,53 @@
                 Current Exercise: <span id="currentExercise">Curls</span><br>
                 <button id="startStopExercise" class="setting defaultButton">Start Exercise</button><br>
             </div>
-            <div id="dynamicHeadline" hidden>
-                <h2>Dynamic data</h2>
-            </div>
-            <div id="dynamicDiv" hidden>
-                <h3>current Session (updated every 250 milliseconds)</h3>
-                <div id="dynamicDataDiv">
-                    Average Heart Rate: <span id="averageHeartFrequence" class="coming-soon-text">Coming Soon (:pray:)</span><br>
-                    Average Muscle Usage: <span id="averageMuscleUsageInPercent"></span><br>
-                    Trained Muscles: <span id="trainedMuscles"></span><br>
-                    Done Exercises: <span id="exercisesFinished"></span>
-                </div>
-            </div>
-            <div id="realTimeDiv" hidden>
-                <h3>current data (also updated every 250 milliseconds)</h3>
-                <div id="realTimeDataDiv">
-                    Heart Rate: <span id="heartFrequence" class="coming-soon-text">Coming Soon (:pray:)</span><br>
-                    Current Muscle Being Trained: <span id="currentMuscleBeingTrained"></span><br>
-                    Current Exercise: <span id="currentExercise"></span><br>
-                    Rep Count: <span id="repDisplay"></span> Reps<br>
-                    Set Count: <span id="setDisplay"></span> Sets<br>
-                </div>
-                <h3>muscle usage graph (live)</h3>
-                <div id="liveGraph">
+            <div id="sections">
+                <div class="section">
+                    <div id="dynamicHeadline" hidden>
+                        <h2>Dynamic data</h2>
+                    </div>
+                    <div id="dynamicDiv" hidden>
+                        <h3>current Session (updated every 250 milliseconds)</h3>
+                        <div id="dynamicDataDiv">
+                            Average Heart Rate: <span id="averageHeartFrequence" class="coming-soon-text">Coming Soon (:pray:)</span><br>
+                            Average Muscle Usage: <span id="averageMuscleUsageInPercent"></span><br>
+                            Trained Muscles: <span id="trainedMuscles"></span><br>
+                            Done Exercises: <span id="exercisesFinished"></span>
+                        </div>
+                    </div>
+                    <div id="realTimeDiv" hidden>
+                        <h3>current data (also updated every 250 milliseconds)</h3>
+                        <div id="realTimeDataDiv">
+                            Heart Rate: <span id="heartFrequence" class="coming-soon-text">Coming Soon (:pray:)</span><br>
+                            Current Muscle Being Trained: <span id="currentMuscleBeingTrained"></span><br>
+                            Current Exercise: <span id="currentExercise"></span><br>
+                            Rep Count: <span id="repDisplay"></span> Reps<br>
+                            Set Count: <span id="setDisplay"></span> Sets<br>
+                        </div>
+                        <h3>muscle usage graph (live)</h3>
+                        <div id="liveGraph">
 
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div id="staticDiv" hidden>
-                <h2>Static data</h2>
-                <div id="staticDataDiv">
-                    <h3>All-Time Average</h3>
-                    Average Time Trained: <span id="averageTimeTrained"></span><br>
-                    Average Heart Rate: <span id="averageHeartFrequence">Coming Soon (:pray:)</span><br>
-                    Average Muscle Usage In Percent: <span id="averageMuscleUsageInPercent"></span><br>
-                    Monthly strength increase: <span id="monthlyStrengthIncrease"></span><br>
-                    Average weekly training Time: <span id="weeklyTrainingTime"></span><br>
-                    <h3>All-Time Highscores</h3>
-                    Most trained Muscle ever: <span id="mostTrainedMuscle"></span><br>
-                    Most done exercise ever: <span id="mostDoneExercise"></span><br>
-                    Max Heart Rate: <span id="maxHeartRate" class="coming-soon-text">Coming Soon (:pray:)</span><br>
-                    Max Time Trained: <span id="maxTimeTrained"></span><br>
-                    Max Done in one Set for each Exercise: <span id="maxDoneInOneForEachExercise"></span><br>
+                <div class="section">
+                    <div id="staticDiv" hidden>
+                        <h2>Static data</h2>
+                        <div id="staticDataDiv">
+                            <h3>All-Time Average</h3>
+                            Average Time Trained: <span id="averageTimeTrained"></span><br>
+                            Average Heart Rate: <span id="averageHeartFrequence">Coming Soon (:pray:)</span><br>
+                            Average Muscle Usage In Percent: <span id="averageMuscleUsageInPercent"></span><br>
+                            Monthly strength increase: <span id="monthlyStrengthIncrease"></span><br>
+                            Average weekly training Time: <span id="weeklyTrainingTime"></span><br>
+                            <h3>All-Time Highscores</h3>
+                            Most trained Muscle ever: <span id="mostTrainedMuscle"></span><br>
+                            Most done exercise ever: <span id="mostDoneExercise"></span><br>
+                            Max Heart Rate: <span id="maxHeartRate" class="coming-soon-text">Coming Soon (:pray:)</span><br>
+                            Max Time Trained: <span id="maxTimeTrained"></span><br>
+                            Max Done in one Set for each Exercise: <span id="maxDoneInOneForEachExercise"></span><br>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

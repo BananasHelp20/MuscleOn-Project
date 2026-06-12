@@ -7,27 +7,51 @@ let noahTasks = [];
 
 let tobiTasks = [];
 
+let checkListener = () => { //zum testen
+        
+}
+
 let tasks = [];
 
-//added olle tasks vom task array in des todo display auf da Hauptseite.
-function addAllTasks(listElem, tasks) {
-    let features = listElem;
+//added olle tasks vom task array in des todo display auf da Hauptseite. (wos ma nur mitn devmode siagt)
+function addAllTasks(allTasks) {
+    let tasks = allTasks;
+    let features = document.getElementById("devLists");
     if (!features) return;
     features.innerHTML = "";
-    for (let i = 0; i < tasks.length; i++) {
-        let box = document.createElement("input");
-        box.setAttribute("type", "checkbox");
-        box.addEventListener("click", (event) => {
-            // tasks.splice(tasks.indexOf(event.target.parentElement.children.item(0).innerText), 1);
-            deleteTask(event.target.parentElement.children.item(0).innerText);
-            event.target.parentElement.remove();
-        });
-        let text = document.createElement("span");
-        text.innerText = tasks[i] + " ";
-        let elem = document.createElement("li");
-        elem.appendChild(text);
-        elem.appendChild(box);
-        features.appendChild(elem);
+    for (let j = 0; j < tasks.length; j++) {
+        let header = document.createElement("h3");
+        header.innerHTML = getHeader(j);
+        let list = document.createElement("ul");
+        for (let i = 0; i < tasks[j].length; i++) {
+            let box = document.createElement("input");
+            box.setAttribute("type", "checkbox");
+            box.addEventListener("click", (event) => {
+                // tasks.splice(tasks.indexOf(event.target.parentElement.children.item(0).innerText), 1);
+                deleteTask(event.target.parentElement.children.item(0).innerText);
+                event.target.parentElement.remove();
+            });
+            let text = document.createElement("span");
+            text.innerText = tasks[j][i] + " ";
+            let elem = document.createElement("li");
+            elem.appendChild(text);
+            elem.appendChild(box);
+            list.appendChild(elem)
+        }
+        if (tasks[j].length != 0) {
+            if (j != 0) features.appendChild(document.createElement("br"));
+            features.appendChild(header);
+            features.appendChild(list);
+        }
+    }
+}
+
+function getHeader(j) {
+    switch(j) {
+        case 0: return "Willi Tasks"; 
+        case 1: return "Noah Tasks"; 
+        case 2: return "Tobi Tasks"; 
+        default: return "general Tasks"
     }
 }
 

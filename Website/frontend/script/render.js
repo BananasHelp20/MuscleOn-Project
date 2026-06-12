@@ -6,9 +6,11 @@ function syncModes() {
     if (getSettingsFromLocalStorage().devMode && document.getElementById("check")) {
         document.getElementById("check").hidden = false;
         document.getElementById("checkbr").hidden = false;
+        document.getElementById("devLists").hidden = false;
     } else if (document.getElementById("check")) {
         document.getElementById("check").hidden = true;
         document.getElementById("checkbr").hidden = true;
+        document.getElementById("devLists").hidden = true;
     }
 }
 

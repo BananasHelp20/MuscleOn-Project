@@ -1,7 +1,7 @@
 {
-  "mode": "darkmode",
+  "mode": "lightmode",
   "viewing": {
-    "sessionStats": false,
+    "sessionStats": true,
     "realTimeStats": true,
     "longtermStats": true
   },
