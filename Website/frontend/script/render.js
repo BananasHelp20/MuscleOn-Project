@@ -1,9 +1,10 @@
 function syncModes() {
-    if (document.getElementById("dev")) document.getElementById("dev").innerText = getSettingsFromLocalStorage().devMode ? "devmode" : "usermode";
-    if (document.getElementById("lightSwitch")) document.getElementById("lightSwitch").innerText = getSettingsFromLocalStorage().mode;
-    document.getElementById("modeStylesheet").href = getSettingsFromLocalStorage().mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
+    let settings = getSettingsFromLocalStorage();
+    if (document.getElementById("dev")) document.getElementById("dev").innerText = settings.devMode ? "devmode" : "usermode";
+    if (document.getElementById("lightSwitch")) document.getElementById("lightSwitch").innerText = settings.mode;
+    document.getElementById("modeStylesheet").href = settings.mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
 
-    if (getSettingsFromLocalStorage().devMode && document.getElementById("check")) {
+    if (settings.devMode && document.getElementById("check")) {
         document.getElementById("check").hidden = false;
         document.getElementById("checkbr").hidden = false;
         document.getElementById("devLists").hidden = false;
@@ -55,7 +56,7 @@ function setModes(data) {
     let devModeSwitch = document.getElementById("dev");
     if (data) {
         localStorage.setItem("lightSwitch", (data.mode == "lightmode") + "");
-        localStorage.setItem("lightSwitch", data.devMode + "");
+        localStorage.setItem("devmode", data.devMode + "");
     } else {
         localStorage.setItem("lightSwitch", true);
         localStorage.setItem("devmode", true);
