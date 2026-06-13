@@ -80,6 +80,8 @@ export interface DeviceProperties {
     loggedInWithUserId?: number,
     loadedUserData?: boolean,
     editingPlanSection: boolean
+    startedSession: boolean;
+    startedExercise: boolean;
 }
 
 export interface SupportedExercises {

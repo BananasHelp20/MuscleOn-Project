@@ -6,8 +6,8 @@
   "weight": 70,
   "size": 175,
   "birthday": "1990-01-01",
-  "currentlyTraining": false,
-  "currentlyInExercise": true,
+  "currentlyTraining": true,
+  "currentlyInExercise": false,
   "createdPlan": true,
   "verifiedEmail": false,
   "usualSessionTimes": [

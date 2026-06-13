@@ -4,5 +4,7 @@
     "loggedInAsUser": "dev",
     "loggedInWithUserId": 0,
     "loadedUserData": true,
-    "editingPlanSection": false
+    "editingPlanSection": false,
+    "startedSession": false,
+    "startedExercise": false
 }

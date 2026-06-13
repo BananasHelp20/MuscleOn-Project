@@ -221,6 +221,33 @@ header {
     margin-right: 0;
 }
 
+#control {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#sessionControlDiv {
+    /*Level 4 - menuBar*/
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2em;
+    border-radius: 1em;
+    width: 50%;
+}
+
+#sessionControlDiv * {
+    margin: 0.5em;
+}
+
+#sessionDiv {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
 #menuContainer {
     /*Level 4 - menuBar*/
     display: flex;

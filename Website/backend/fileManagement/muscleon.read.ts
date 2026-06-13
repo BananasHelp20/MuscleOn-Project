@@ -1,61 +1,62 @@
 import { readFile, writeFile } from "fs/promises";
 import * as model from "../model/muscleon.model";
 import { error, log } from "console";
+import { join } from "path";
 
 export async function gatherUserData() {
     let userData: model.User = {
-        userProperties: await readFile("./data/userProperties.json", 'utf-8').then((data) => JSON.parse(data)),
-        additionalSessions: await readFile("./data/userStatic/additionalSessions.json", 'utf-8').then((data) => JSON.parse(data)),
-        userSessionData: await readFile("./data/userDynamic/session.json", 'utf-8').then((data) => JSON.parse(data)),
-        userShortTerm: await readFile("./data/userDynamic/shortTerm.json", 'utf-8').then((data) => JSON.parse(data)),
-        userHighscores: await readFile("./data/userStatic/highscore.json", 'utf-8').then((data) => JSON.parse(data)),
-        userLongTermAverages: await readFile("./data/userStatic/average.json", 'utf-8').then((data) => JSON.parse(data)),
-        userSettings: await readFile("./data/userStatic/settings.json", 'utf-8').then((data) => JSON.parse(data)),
-        userDefinedExercises: await readFile("./data/userStatic/userdefinedExercises.json", 'utf-8').then((data) => JSON.parse(data)),
+        userProperties: await readFile(join(__dirname, "..", "..", "data", "userProperties.json"), 'utf-8').then((data) => JSON.parse(data)),
+        additionalSessions: await readFile(join(__dirname, "..", "..", "data", "userStatic", "additionalSessions.json"), 'utf-8').then((data) => JSON.parse(data)),
+        userSessionData: await readFile(join(__dirname, "..", "..", "data", "userDynamic", "session.json"), 'utf-8').then((data) => JSON.parse(data)),
+        userShortTerm: await readFile(join(__dirname, "..", "..", "data", "userDynamic", "shortTerm.json"), 'utf-8').then((data) => JSON.parse(data)),
+        userHighscores: await readFile(join(__dirname, "..", "..", "data", "userStatic", "highscore.json"), 'utf-8').then((data) => JSON.parse(data)),
+        userLongTermAverages: await readFile(join(__dirname, "..", "..", "data", "userStatic", "average.json"), 'utf-8').then((data) => JSON.parse(data)),
+        userSettings: await readFile(join(__dirname, "..", "..", "data", "userStatic", "settings.json"), 'utf-8').then((data) => JSON.parse(data)),
+        userDefinedExercises: await readFile(join(__dirname, "..", "..", "data", "userStatic", "userdefinedExercises.json"), 'utf-8').then((data) => JSON.parse(data)),
     };
     return userData;
 }
 
 export async function gatherDeviceData() {
-    let deviceData: model.DeviceProperties = await readFile("./data/device/currentProperties.json", 'utf-8').then((data) => JSON.parse(data));
+    let deviceData: model.DeviceProperties = await readFile(join(__dirname, "..", "..", "data", "device", "currentProperties.json"), 'utf-8').then((data) => JSON.parse(data));
     return deviceData;
 }
 
 export async function gatherSupportedExercises() {
-    let supportedExercises: model.Exercise[] = await readFile("./data/device/supportedExercises.json", 'utf-8').then((data) => JSON.parse(data));
+    let supportedExercises: model.Exercise[] = await readFile(join(__dirname, "..", "..", "data", "device", "supportedExercises.json"), 'utf-8').then((data) => JSON.parse(data));
     return supportedExercises;
 }
 
 export async function gatherUnsupportedExercises() {
-    let supportedExercises: model.Exercise[] = await readFile("./data/device/unsupportedExercises.json", 'utf-8').then((data) => JSON.parse(data));
+    let supportedExercises: model.Exercise[] = await readFile(join(__dirname, "..", "..", "data", "device", "unsupportedExercises.json"), 'utf-8').then((data) => JSON.parse(data));
     return supportedExercises;
 }
 
 export async function gatherUserExercises() {
-    let supportedExercises: model.Exercise[] = await readFile("./data/userStatic/userdefinedExercises.json", 'utf-8').then((data) => JSON.parse(data));
+    let supportedExercises: model.Exercise[] = await readFile(join(__dirname, "..", "..", "data", "userStatic", "userdefinedExercises.json"), 'utf-8').then((data) => JSON.parse(data));
     return supportedExercises;
 }
 
 export async function gatherUserPropertiess() {
-    let userProperties: model.UserProperties = await readFile("./data/userProperties.json", 'utf-8').then((data) => JSON.parse(data));
+    let userProperties: model.UserProperties = await readFile(join(__dirname, "..", "..", "data", "userProperties.json"), 'utf-8').then((data) => JSON.parse(data));
     return userProperties;
 }
 
 export async function getTasks(): Promise<string[][]> {
-    let noah = await readFile("./data/devmode/noahTasks.json", "utf-8").then((data) => JSON.parse(data));
-    let willi = await readFile("./data/devmode/williTasks.json", "utf-8").then((data) => JSON.parse(data));
-    let tobi = await readFile("./data/devmode/tobiTasks.json", "utf-8").then((data) => JSON.parse(data));
+    let noah = await readFile(join(__dirname, "..", "..", "data", "devmode", "noahTasks.json"), "utf-8").then((data) => JSON.parse(data));
+    let willi = await readFile(join(__dirname, "..", "..", "data", "devmode", "williTasks.json"), "utf-8").then((data) => JSON.parse(data));
+    let tobi = await readFile(join(__dirname, "..", "..", "data", "devmode", "tobiTasks.json"), "utf-8").then((data) => JSON.parse(data));
     return [willi, noah, tobi];
 }
 
 export async function appendValidationCode(codeObject:{userId:number, validationCode:string | boolean}) {
-    let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
+    let objects: {userId:number, validationCode:string | boolean}[] = await readFile(join(__dirname, "..", "..", "data", "validationCodes.json"), 'utf-8').then(data => JSON.parse(data));
     objects.push(codeObject);
-    await writeFile("./data/validationCodes.json", JSON.stringify(objects, null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "validationCodes.json"), JSON.stringify(objects, null, 2));
 }
 
 export async function getValidationCode(userId:number): Promise<string | boolean> {
-    let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
+    let objects: {userId:number, validationCode:string | boolean}[] = await readFile(join(__dirname, "..", "..", "data", "validationCodes.json"), 'utf-8').then(data => JSON.parse(data));
     for (let i = 0; i < objects.length; i++) {
         if (objects[i].userId == userId) {
             return objects[i].validationCode;
@@ -70,8 +71,8 @@ export async function addExercise(exercise:model.Exercise) {
     if (exercise.public) unsuppExercises.push(exercise);
     userExercises.push(exercise);
 
-    await writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(userExercises, null, 2));
-    if (exercise.public) await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsuppExercises, null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "userStatic", "userdefinedExercises.json"), JSON.stringify(userExercises, null, 2));
+    if (exercise.public) await writeFile(join(__dirname, "..", "..", "data", "device", "unsupportedExercises.json"), JSON.stringify(unsuppExercises, null, 2));
 }
 
 export async function validateExercise(name:string): Promise<boolean> {
@@ -83,9 +84,9 @@ export async function validateExercise(name:string): Promise<boolean> {
 }
 
 export async function saveTasks(tasks:string[][]) {
-    await writeFile("./data/devmode/williTasks.json", JSON.stringify(tasks[0], null, 2));
-    await writeFile("./data/devmode/noahTasks.json", JSON.stringify(tasks[1], null, 2));
-    await writeFile("./data/devmode/tobiTasks.json", JSON.stringify(tasks[2], null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "devmode", "williTasks.json"), JSON.stringify(tasks[0], null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "devmode", "noahTasks.json"), JSON.stringify(tasks[1], null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "devmode", "tobiTasks.json"), JSON.stringify(tasks[2], null, 2));
 }
 
 export async function saveExercise(exercise: model.Exercise, newExercise: model.Exercise) {
@@ -112,19 +113,19 @@ export async function saveExercise(exercise: model.Exercise, newExercise: model.
         unsupEx[temp] = newExercise;
     }
 
-    await writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(exercises, null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "userStatic", "userdefinedExercises.json"), JSON.stringify(exercises, null, 2));
     if (exercise.public && !newExercise.public) {
         for (let i = 0; i < unsupEx.length; i++) {
             if (unsupEx[i].name == exercise.name) unsupEx.splice(i, 1);
         }
-        await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsupEx, null, 2));
+        await writeFile(join(__dirname, "..", "..", "data", "device", "unsupportedExercises.json"), JSON.stringify(unsupEx, null, 2));
     } else if (!exercise.public && newExercise.public) {
         newExercise.exerciseType = "unsupported";
         unsupEx.push(newExercise);
-        await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsupEx, null, 2));
+        await writeFile(join(__dirname, "..", "..", "data", "device", "unsupportedExercises.json"), JSON.stringify(unsupEx, null, 2));
     } else {
         newExercise.exerciseType = "unsupported";
-        if (exercise.public) await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsupEx, null, 2));
+        if (exercise.public) await writeFile(join(__dirname, "..", "..", "data", "device", "unsupportedExercises.json"), JSON.stringify(unsupEx, null, 2));
     }
 }
 
@@ -143,9 +144,9 @@ export async function deleteExercise(name:string) {
         for (let i = 0; i < unsup.length; i++) {
             if (unsup[i].name == name) unsup.splice(i, 1);
         }
-        await writeFile("./data/device/unsupportedExercises.json", JSON.stringify(unsup, null, 2));
+        await writeFile(join(__dirname, "..", "..", "data", "device", "unsupportedExercises.json"), JSON.stringify(unsup, null, 2));
     }
-    await writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(own, null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "userStatic", "userdefinedExercises.json"), JSON.stringify(own, null, 2));
     return true;
 }
 
@@ -174,39 +175,39 @@ export async function existsInSupported(name:string) {
 }
 
 export async function delValidationCode(userId:number) {
-    let objects: {userId:number, validationCode:string | boolean}[] = await readFile("./data/validationCodes.json", 'utf-8').then(data => JSON.parse(data));
+    let objects: {userId:number, validationCode:string | boolean}[] = await readFile(join(__dirname, "..", "..", "data", "validationCodes.json"), 'utf-8').then(data => JSON.parse(data));
     let newObjects: {userId:number, validationCode:string | boolean}[] = [];
     for (let i = 0; i < objects.length; i++) {
         if (objects[i].userId != userId) {
             newObjects.push(objects[i]);
         }
     }
-    await writeFile("./data/validationCodes.json", JSON.stringify(newObjects, null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "validationCodes.json"), JSON.stringify(newObjects, null, 2));
 }
 
 export async function setUserData(userData: model.User) {
     await Promise.all([
-        writeFile("./data/userProperties.json", JSON.stringify(userData.userProperties, null, 2)),
-        writeFile("./data/userStatic/additionalSessions.json", JSON.stringify(userData.additionalSessions, null, 2)),
-        writeFile("./data/userDynamic/session.json", JSON.stringify(userData.userSessionData, null, 2)),
-        writeFile("./data/userDynamic/shortTerm.json", JSON.stringify(userData.userShortTerm, null, 2)),
-        writeFile("./data/userStatic/highscore.json", JSON.stringify(userData.userHighscores, null, 2)),
-        writeFile("./data/userStatic/average.json", JSON.stringify(userData.userLongTermAverages, null, 2)),
-        writeFile("./data/userStatic/settings.json", JSON.stringify(userData.userSettings, null, 2)),
-        writeFile("./data/userStatic/userdefinedExercises.json", JSON.stringify(userData.userDefinedExercises, null, 2))
+        writeFile(join(__dirname, "..", "..", "data", "userProperties.json"), JSON.stringify(userData.userProperties, null, 2)),
+        writeFile(join(__dirname, "..", "..", "data", "userStatic", "additionalSessions.json"), JSON.stringify(userData.additionalSessions, null, 2)),
+        writeFile(join(__dirname, "..", "..", "data", "userDynamic", "session.json"), JSON.stringify(userData.userSessionData, null, 2)),
+        writeFile(join(__dirname, "..", "..", "data", "userDynamic", "shortTerm.json"), JSON.stringify(userData.userShortTerm, null, 2)),
+        writeFile(join(__dirname, "..", "..", "data", "userStatic", "highscore.json"), JSON.stringify(userData.userHighscores, null, 2)),
+        writeFile(join(__dirname, "..", "..", "data", "userStatic", "average.json"), JSON.stringify(userData.userLongTermAverages, null, 2)),
+        writeFile(join(__dirname, "..", "..", "data", "userStatic", "settings.json"), JSON.stringify(userData.userSettings, null, 2)),
+        writeFile(join(__dirname, "..", "..", "data", "userStatic", "userdefinedExercises.json"), JSON.stringify(userData.userDefinedExercises, null, 2))
     ]);
 }
 
 export async function setUserSettings(userSettings: model.UserSettings) {
-    await writeFile("./data/userStatic/settings.json", JSON.stringify(userSettings, null, 2)).catch(error => {console.error(error)});
+    await writeFile(join(__dirname, "..", "..", "data", "userStatic", "settings.json"), JSON.stringify(userSettings, null, 2)).catch(error => {console.error(error)});
 }
 
 export async function setUserProperties(userProperties: model.UserProperties) {
-    await writeFile("./data/userProperties.json", JSON.stringify(userProperties, null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "userProperties.json"), JSON.stringify(userProperties, null, 2));
 }
 
 export async function setDeviceData(deviceData: model.DeviceProperties) {
-    await writeFile("./data/device/currentProperties.json", JSON.stringify(deviceData, null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "device", "currentProperties.json"), JSON.stringify(deviceData, null, 2));
 }
 
 export async function saveTrainingsPlan(times: model.ExerciseSelection[]) {
@@ -225,7 +226,7 @@ export async function saveTrainingsPlan(times: model.ExerciseSelection[]) {
         currentlyInExercise: userProperties.currentlyInExercise,
         usualSessionTimes: times 
     };
-    await writeFile("./data/userProperties.json", JSON.stringify(newUserProperties, null, 2));
+    await writeFile(join(__dirname, "..", "..", "data", "userProperties.json"), JSON.stringify(newUserProperties, null, 2));
 }
 
 export async function clearUserData(userSettings: model.UserSettings) {
@@ -233,11 +234,11 @@ export async function clearUserData(userSettings: model.UserSettings) {
     //saveUserDataFromFilesToDatabase(); //including settings since they are being changed by the user pretty often (lightswitch, devmode, viewstuff)
     setUserSettings(userSettings);
     /* dont clear testfiles yet
-    writeFile("./data/userProperties.json", "");
-    writeFile("./data/userStatic/additionalSessions.json", "");
-    writeFile("./data/userDynamic/session.json", "");
-    writeFile("./data/userDynamic/shortTerm.json", "");
-    writeFile("./data/userStatic/highscore.json", "");
-    writeFile("./data/userStatic/average.json", "");
+    writeFile(join(__dirname, "..", "..", "data", "userProperties.json"), "");
+    writeFile(join(__dirname, "..", "..", "data", "userStatic", "additionalSessions.json"), "");
+    writeFile(join(__dirname, "..", "..", "data", "userDynamic", "session.json"), "");
+    writeFile(join(__dirname, "..", "..", "data", "userDynamic", "shortTerm.json"), "");
+    writeFile(join(__dirname, "..", "..", "data", "userStatic", "highscore.json"), "");
+    writeFile(join(__dirname, "..", "..", "data", "userStatic", "average.json"), "");
     */
 }

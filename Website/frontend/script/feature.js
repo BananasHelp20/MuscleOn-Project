@@ -149,6 +149,8 @@ function login() {
                 loggedInWithUserId: answer.userId,
                 loadedUserData: true,
                 sessionRunning: false,
+                startedExercise: false,
+                startedSession: false,
             };
             localStorage.setItem("deviceData", JSON.stringify(newDeviceData));
             localStorage.setItem("userSettings", JSON.stringify(answer.userSettings));
@@ -171,11 +173,18 @@ function logout() {
         loggedInWithUserId: -1,
         loadedUserData: false,
         sessionRunning: false,
+        startedExercise: false,
+        startedSession: false,
     };
-    localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
-    clearUserData();
-    showLoggedIn(defaultDeviceData);
-    location.href = "./index.html";
+    let props = getUserPropertiesFromLocalStorage();
+    props.currentlyTraining = false;
+    props.currentlyInExercise = false;
+    setUserProperties(props).then(() => {
+        localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
+        clearUserData();
+        showLoggedIn(defaultDeviceData);
+        location.href = "./index.html";
+    });
 }
 
 function signUp() {

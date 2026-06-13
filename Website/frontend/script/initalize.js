@@ -37,26 +37,82 @@ function initializeLogoutAndDelete() {
 function initializeSession() {
     sessionButtonCheck();
     if (document.getElementById("startStopSession")) document.getElementById("startStopSession").addEventListener("click", () => {
-        let device = getUserPropertiesFromLocalStorage();
-        device.currentlyTraining = !device.currentlyTraining;
-        if (device.currentlyTraining) {
-            startSession();
-        } else {
+        let data = getUserPropertiesFromLocalStorage();
+        let deviceProperties = getDeviceData();
+        if (deviceProperties.startedSession) {
             stopSession();
+            deviceProperties.startedSession = false;
+            data.currentlyInExercise = false;
+            data.currentlyTraining = false;
+            deviceProperties.startedExercise = false;
+            document.getElementById("resumePauseSession").hidden = true;
+        } else {
+            startSession().then((sessionData) => {
+                // sessionData.exercises is a exercise Array mit alle Exercises de in der session gemacht werden.
+            });
+            if (document.getElementById("sessionDiv")) document.getElementById("sessionDiv").hidden = false;
+            document.getElementById("currentExercise").innerText = "Not started yet";
+            document.getElementById("resumePauseSession").hidden = true;
+            deviceProperties.startedSession = true;
+            data.currentlyTraining = true;
         }
-        localStorage.setItem("deviceData", JSON.stringify(device));
+        setUserProperties(data);
+        localStorage.setItem("deviceData", JSON.stringify(deviceProperties));
+        localStorage.setItem("userProperties", JSON.stringify(data));
         sessionButtonCheck();
     });
 
-    if (document.getElementById("startStopExercise")) document.getElementById("startStopExercise").addEventListener("click", () => {
-        let device = getUserPropertiesFromLocalStorage();
-        device.currentlyInExercise = !device.currentlyInExercise;
-        if (device.currentlyInExercise) {
-            startExercise();
+    if (document.getElementById("startSkipExercise")) document.getElementById("startSkipExercise").addEventListener("click", () => {
+        let data = getUserPropertiesFromLocalStorage();
+        let deviceProperties = getDeviceData();
+        if (data.currentlyInExercise == true) {
+            skipExercise().then(exData => {
+                if (!exData.hasNextExercise) {
+                    stopSession();
+                    deviceProperties.startedSession = false;
+                    data.currentlyInExercise = false;
+                    data.currentlyTraining = false;
+                    deviceProperties.startedExercise = false;
+                    document.getElementById("resumePauseSession").hidden = true;
+                } else {
+                    if (deviceProperties.startedExercise) document.getElementById("currentExercise").innerText = exData.nextExercise.name;
+                }
+            });
         } else {
-            stopExercise();
+            deviceProperties.startedExercise = true;
+            data.currentlyInExercise = true;
+            startExercise().then((exData) => {
+                if (!exData.hasNextExercise) {
+                    console.log("No Exercise in Plan, something went horribly wrong bro");
+                    stopSession();
+                    data.currentlyTraining = false;
+                    deviceProperties.startedExercise = false;
+                    data.currentlyInExercise = false;
+                    document.getElementById("resumePauseSession").hidden = false;
+                } else {
+                    deviceProperties.startedExercise = true;
+                    if (deviceProperties.startedExercise) document.getElementById("currentExercise").innerText = exData.nextExercise.name;
+                }
+            });
         }
-        localStorage.setItem("userProperties", JSON.stringify(device));
+        localStorage.setItem("deviceData", JSON.stringify(deviceProperties));
+        localStorage.setItem("userProperties", JSON.stringify(data));
+        setUserProperties(data);
+        sessionButtonCheck();
+    });
+
+    if (document.getElementById("resumePauseSession")) document.getElementById("resumePauseSession").addEventListener("click", () => {
+        let data = getUserPropertiesFromLocalStorage();
+        let deviceProperties = getDeviceData();
+        if (!data.currentlyInExercise) {
+            data.currentlyInExercise = true;
+            resumeSession();
+        } else {
+            data.currentlyInExercise = false;
+            pauseSession();
+        }
+        localStorage.setItem("userProperties", JSON.stringify(data));
+        setUserProperties(data);
         sessionButtonCheck();
     });
 
@@ -106,6 +162,14 @@ function initializeSession() {
     });
 
     initializePlanTable();
+}
+
+function initializeLogout() {
+    let logoutButton = document.getElementById("logoutButton");
+    if (!logoutButton) return;
+    logoutButton.addEventListener("click", () => {
+        logout();
+    });
 }
 
 function initializeLogin() {

@@ -197,15 +197,47 @@ muscleRouter.get('/getExercises/user', async (req, res) => {
     res.send(await gatherUserExercises());
 });
 
-muscleRouter.post('/session/start', async (req, res) => {
-    // await startOrResumeSession().catch((err) => {
+muscleRouter.get('/session/start', async (req, res) => {
+    // await startSession().catch((err) => {
     //     console.error("Error starting session", err);
     //     res.statusCode = 500;
     //     res.send({ message: "Error starting session" });
     //     return;
     // });
     res.statusCode = 200;
-    res.send({ message: "logging out successful!" });
+    res.send({ // provisorisch
+        exercises: (await gatherSupportedExercises()).concat(await gatherUserExercises()),
+        exercisesAhead: await gatherSupportedExercises(),
+        finishedExercises: await gatherUserExercises(),
+    });
+});
+
+muscleRouter.get("/exercise/start", async (req, res) => {
+    // await startExercise().catch((err) => {
+    //     console.error("Error starting exercise:", err);
+    //     res.statusCode = 500;
+    //     res.send({ message: "Error starting exercise" });
+    //     return;
+    // });
+    res.statusCode = 200;
+    res.send({ //provisorisch
+        nextExercise: (await gatherSupportedExercises())[0], //provisorisch
+        hasNextExercise: (await gatherSupportedExercises()).length > 1, //provisorisch
+    });
+});
+
+muscleRouter.get("/exercise/skip", async (req, res) => {
+    // await skipExercise().catch((err) => {
+    //     console.error("Error skipping exercise:", err);
+    //     res.statusCode = 500;
+    //     res.send({ message: "Error skipping exercise" });
+    //     return;
+    // });
+    res.statusCode = 200;
+    res.send({
+        nextExercise: (await gatherSupportedExercises())[1], //provisorisch
+        hasNextExercise: (await gatherSupportedExercises()).length > 2, //provisorisch
+    });
 });
 
 muscleRouter.post('/session/stop', async (req, res) => {
@@ -216,29 +248,29 @@ muscleRouter.post('/session/stop', async (req, res) => {
     //     return;
     // });
     res.statusCode = 200;
-    res.send({ message: "logging out successful!" });
+    res.send({ message: "stopping session successful!" });
 });
 
-muscleRouter.post('/exercise/start', async (req, res) => {
-    // await resumeExercise().catch((err) => {
-    //     console.error("Error starting exercise:", err);
+muscleRouter.post('/session/pause', async (req, res) => {
+    // await pauseSession().catch((err) => {
+    //     console.error("Error pausing session", err);
     //     res.statusCode = 500;
-    //     res.send({ message: "Error starting exercise" });
+    //     res.send({ message: "Error pausing session" });
     //     return;
     // });
     res.statusCode = 200;
-    res.send({ message: "logging out successful!" });
+    res.send({ message: "pausing session successful!" });
 });
 
-muscleRouter.post('/exercise/stop', async (req, res) => {
-    // await stopExercise().catch((err) => {
-    //     console.error("Error stopping session:", err);
+muscleRouter.post('/session/resume', async (req, res) => {
+    // await resumeSession().catch((err) => {
+    //     console.error("Error resuming session", err);
     //     res.statusCode = 500;
-    //     res.send({ message: "Error stopping session" });
+    //     res.send({ message: "Error resuming session" });
     //     return;
     // });
     res.statusCode = 200;
-    res.send({ message: "logging out successful!" });
+    res.send({ message: "resuming session successful!" });
 });
 
 muscleRouter.post('/newExercise', async (req, res) => {

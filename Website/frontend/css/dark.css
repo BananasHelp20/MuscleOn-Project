@@ -124,6 +124,10 @@ header {
     color: var(--link-color);
 }
 
+#sessionControlDiv {
+    background-color: var(--table-cell-background-color);
+}
+
 #loginLink:hover,
 #signupLink:hover,
 #returnLink:hover {

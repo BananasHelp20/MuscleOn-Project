@@ -24,7 +24,17 @@
     "equipment": "None",
     "description": "Askö Turnverein",
     "targetedMuscleGroups": [
-      "Biceps"
+      "Chest",
+      "Upper Back (Traps & Rhomboids)",
+      "Mid-Back (Lats)",
+      "Lower Back (Erector Spinae)",
+      "Shoulders (Deltoids)",
+      "Biceps",
+      "Core (Abs & Obliques)",
+      "Glutes",
+      "Quadriceps",
+      "Hamstrings",
+      "Calves, (Gastrocnemius & Soleus)"
     ],
     "public": true,
     "weight": false,
@@ -35,7 +45,10 @@
     "name": "Neiche Exercise",
     "equipment": "None",
     "description": "Irgend a Description",
-    "targetedMuscleGroups": [],
+    "targetedMuscleGroups": [
+      "Biceps",
+      "Triceps"
+    ],
     "public": true,
     "weight": false,
     "exerciseType": "defined"

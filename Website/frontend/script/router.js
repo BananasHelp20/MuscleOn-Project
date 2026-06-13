@@ -180,24 +180,23 @@ async function createNewUser(userData) {
     });
 }
 
-async function startSession() {
-    /*return fetch("/api/session/start", {
+async function saveTimes(times) {
+    return fetch("/api/saveTimes", {
         method: "POST",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
         },
-        body: {
-            message: "start!"
-        }
     }).then((response) => {
         if (!response.ok) {
-            console.error("An error occured when trying to start or resume Session:", response.statusText);
+            console.error("An error occured when trying to alter or create the trainingsplan:", response.statusText);
         }
-    });*/
+    });
 }
 
+//session management {
+
 async function stopSession() {
-    /*return fetch("/api/session/stop", {
+    return fetch("/api/session/stop", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
@@ -206,47 +205,78 @@ async function stopSession() {
         if (!response.ok) {
             console.error("An error occured when trying to stop Session:", response.statusText);
         }
-    });*/
+    });
 }
 
-async function startExercise() {
-    /*return fetch("/api/exercise/start", {
+async function pauseSession() {
+    return fetch("/api/session/pause", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
+        },
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to pause Session:", response.statusText);
+        }
+    });
+}
+
+async function resumeSession() {
+    return fetch("/api/session/resume", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to resume Session:", response.statusText);
+        }
+    });
+}
+
+async function startSession() {
+    return fetch("/api/session/start", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
+        },
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to start or resume Session:", response.statusText);
+        }
+        return response.json();
+    });
+}
+
+async function startExercise() {
+    return fetch("/api/exercise/start", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json",
         },
     }).then((response) => {
         if (!response.ok) {
             console.error("An error occured when trying to resume Exercise", response.statusText);
         }
-    });*/
-}
-
-async function stopExercise() {
-    /*return fetch("/api/exercise/stop", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-    }).then((response) => {
-        if (!response.ok) {
-            console.error("An error occured when trying to stop Exercise:", response.statusText);
-        }
-    });*/
-}
-
-async function saveTimes(times) {
-    return fetch("/api/saveTimes", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-    }).then((response) => {
-        if (!response.ok) {
-            console.error("An error occured when trying to alter or create the trainingsplan:", response.statusText);
-        }
+        return response.json();
     });
 }
+
+async function skipExercise() {
+    return fetch("/api/exercise/skip", {
+        method: "GET",
+        headers: {
+            "Content-Type": "application/json"
+        },
+    }).then((response) => {
+        if (!response.ok) {
+            console.error("An error occured when trying to skip Exercise:", response.statusText);
+        }
+        return response.json();
+    });
+}
+
+// }
 
 async function getAllExercises() {
     return fetch("/api/getExercises/all", {

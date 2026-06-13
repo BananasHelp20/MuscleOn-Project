@@ -27,18 +27,36 @@ function sessionButtonCheck() {
     }
     if (document.getElementById("plan-section")) document.getElementById("plan-section").hidden = !deviceProperties.editingPlanSection;
 
-    if (properties.currentlyInExercise && document.getElementById("startStopExercise")) {
-        document.getElementById("startStopExercise").innerText = "End Exercise";
-    } else if (document.getElementById("startStopExercise")) {
-        document.getElementById("startStopExercise").innerText = "Start Exercise";
+    if (deviceProperties.startedExercise && document.getElementById("startSkipExercise")) {
+        document.getElementById("startSkipExercise").innerText = "Skip Exercise";
+    } else if (document.getElementById("startSkipExercise")) {
+        document.getElementById("startSkipExercise").innerText = "Start Exercise";
     }
 
-    if (deviceProperties.sessionRunning && document.getElementById("startStopSession")) {
-        document.getElementById("startStopSession").innerText = "End Session";
-        if (document.getElementById("sessionDiv")) document.getElementById("sessionDiv").hidden = false;
+    if (deviceProperties.startedSession && document.getElementById("startStopSession")) {
+        document.getElementById("startStopSession").innerText = "Exit Session";
     } else if (document.getElementById("startStopSession")) {
+
         document.getElementById("startStopSession").innerText = "Start Session";
-        if (document.getElementById("sessionDiv")) document.getElementById("sessionDiv").hidden = true;
+    }
+
+    const resumeBtn = document.getElementById("resumePauseSession");
+    if (resumeBtn) {
+        if (properties.currentlyInExercise) {
+            resumeBtn.hidden = false;
+            resumeBtn.innerText = "Pause Session";
+        } else if (deviceProperties.startedExercise) {
+            resumeBtn.hidden = false;
+            resumeBtn.innerText = "Resume Session";
+        } else {
+            resumeBtn.hidden = true;
+        }
+    }
+
+    if (deviceProperties.startedSession && document.getElementById("sessionDiv")) {
+        document.getElementById("sessionDiv").hidden = false;
+    } else if (document.getElementById("sessionDiv")) {
+        document.getElementById("sessionDiv").hidden = true;
     }
 }
 
@@ -46,6 +64,7 @@ function showLoggedIn(deviceData) {
     let loggedInAsDisplay = document.getElementById("currentUser");
     if (deviceData.loggedIn && loggedInAsDisplay) {
         loggedInAsDisplay.innerHTML = "<span id='inlineUsernameDisplay'>" + deviceData.loggedInAsUser + "</span><button id='logoutButton' class='defaultButton'>Logout</button>";
+        initializeLogout();
     } else if (loggedInAsDisplay) {
         loggedInAsDisplay.innerHTML = "<button href='./login.html' class='defaultButton' id='inlineLoginButton'>Login</button><button href='./signup.html' id='inlineSignupButton' class='defaultButton'>Signup Now</button>";
     }
@@ -69,7 +88,6 @@ function setModes(data) {
 function showRealTimeData(userdata) {
     let heartRateDisplay = document.getElementById("heartFrequence");
     let currentMuscleBeingTrainedDisplay = document.getElementById("currentMuscleBeingTrained");
-    let currentExerciseDisplay = document.getElementById("currentExercise");
     let repDisplay = document.getElementById("repDisplay");
     let setDisplay = document.getElementById("setDisplay");
 
@@ -79,14 +97,12 @@ function showRealTimeData(userdata) {
         document.getElementById("realTimeDataDiv").hidden = false;
         // heartRateDisplay.innerText = data.heartFrequency + " bpm";
         currentMuscleBeingTrainedDisplay.innerText = data.trainingMuscle;
-        currentExerciseDisplay.innerText = data.currentExercise.name;
         repDisplay.innerText = data.currentReps;
         setDisplay.innerText = data.currentSets;
     } else {
         document.getElementById("realTimeDataDiv").hidden = true;
         // heartRateDisplay.innerText = "0 bpm";
         currentMuscleBeingTrainedDisplay.innerText = "";
-        currentExerciseDisplay.innerText = "";
         repDisplay.innerText = "0";
         setDisplay.innerHTML = "0";
     }
@@ -308,13 +324,10 @@ function renderSessionAndExercise(data) {
     if (!document.getElementById("sessionDiv") || !document.getElementById("startStopSession")) return;
 
     let settings = data.userProperties;
-    if (document.getElementById("startStopExercise")) {
-        document.getElementById("startStopExercise").innerText = settings.currentlyInExercise ? "Stop Exercise" : "Start Exercise";
-        if (!document.getElementById("startStopExercise").classList.contains("defaultButton")) document.getElementById("startStopExercise").classList.add("defaultButton");
+    if (document.getElementById("startSkipExercise")) {
+        if (!document.getElementById("startSkipExercise").classList.contains("defaultButton")) document.getElementById("startSkipExercise").classList.add("defaultButton");
     }
     if (document.getElementById("startStopSession")) {
-        document.getElementById("startStopSession").innerText = settings.currentlyTraining ? "Stop Session" : "Start Session";
         if (!document.getElementById("startStopSession").classList.contains("defaultButton")) document.getElementById("startStopSession").classList.add("defaultButton");
     }
-    document.getElementById("sessionDiv").hidden = !settings.currentlyTraining;
 }

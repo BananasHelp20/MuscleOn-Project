@@ -90,5 +90,7 @@ function getDeviceData() {
         loggedInWithUserId: -1,
         loadedUserData: false,
         sessionRunning: false,
+        startedExercise: false,
+        startedSession: false,
     };
 }
