@@ -22,6 +22,7 @@ export interface UserProperties {
     verifiedEmail: boolean;
     createdPlan: boolean;
     currentlyInExercise: boolean;
+    pausedSession: boolean;
     usualSessionTimes?: ExerciseSelection[];                         //Eingestellter Trainingsplan, sofern eingestellt [[tag, startzeit, endzeit], [...]]
 }
 

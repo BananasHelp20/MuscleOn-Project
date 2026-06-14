@@ -5,8 +5,6 @@ function init() {
 
     if (deviceData.loggedIn) { //if somebody is logged in
         getUserData().then((data) => { //get Userdata for inialization
-            data.userProperties.currentlyTraining = false;
-            data.userProperties.currentlyInExercise = false;
             saveDataToLocalStorage(data); //save the data
             render(deviceData, data); //render everything for the first time on the website
             initializeLoggedIn(deviceData, data); //initialize everything needed if the user is logged in
@@ -33,8 +31,6 @@ function initalizeDefault(deviceData) {
 
     //editing zurücksetzen
     deviceData.editingPlanSection = false;
-    deviceData.startedExercise = false;
-    deviceData.startedSession = false;
     localStorage.setItem("deviceData", JSON.stringify(deviceData));
 
     startGame();

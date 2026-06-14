@@ -223,6 +223,7 @@ export async function saveTrainingsPlan(times: model.ExerciseSelection[]) {
         verifiedEmail: userProperties.verifiedEmail,
         currentlyTraining: userProperties.currentlyTraining,
         createdPlan: userProperties.createdPlan,
+        pausedSession: userProperties.pausedSession,
         currentlyInExercise: userProperties.currentlyInExercise,
         usualSessionTimes: times 
     };

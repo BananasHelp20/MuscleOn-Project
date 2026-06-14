@@ -18,6 +18,7 @@ function syncModes() {
 function sessionButtonCheck() {
     let deviceProperties = getDeviceData();
     let properties = getUserPropertiesFromLocalStorage();
+
     if (properties.createdPlan && !deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
         document.getElementById("createTrainingsPlan").innerText = "Edit Trainings Plan";
     } else if (!deviceProperties.editingPlanSection && document.getElementById("createTrainingsPlan")) {
@@ -27,36 +28,36 @@ function sessionButtonCheck() {
     }
     if (document.getElementById("plan-section")) document.getElementById("plan-section").hidden = !deviceProperties.editingPlanSection;
 
-    if (deviceProperties.startedExercise && document.getElementById("startSkipExercise")) {
-        document.getElementById("startSkipExercise").innerText = "Skip Exercise";
-    } else if (document.getElementById("startSkipExercise")) {
-        document.getElementById("startSkipExercise").innerText = "Start Exercise";
-    }
+    let sessionDiv = document.getElementById("sessionDiv");
+    let startStopSess = document.getElementById("startStopSession");
+    let startSkipEx = document.getElementById("startSkipExercise");
+    let resumePauseSess = document.getElementById("resumePauseSession");
+    if (sessionDiv) {
+        if (properties.currentlyTraining) {
+            sessionDiv.hidden = false;
+            startStopSess.innerText = "Exit Session";
 
-    if (deviceProperties.startedSession && document.getElementById("startStopSession")) {
-        document.getElementById("startStopSession").innerText = "Exit Session";
-    } else if (document.getElementById("startStopSession")) {
-
-        document.getElementById("startStopSession").innerText = "Start Session";
-    }
-
-    const resumeBtn = document.getElementById("resumePauseSession");
-    if (resumeBtn) {
-        if (properties.currentlyInExercise) {
-            resumeBtn.hidden = false;
-            resumeBtn.innerText = "Pause Session";
-        } else if (deviceProperties.startedExercise) {
-            resumeBtn.hidden = false;
-            resumeBtn.innerText = "Resume Session";
         } else {
-            resumeBtn.hidden = true;
+            sessionDiv.hidden = true;
+            startStopSess.innerText = "Start Session";
+            document.getElementById("currentExercise").innerText = "not yet started";
+            resumePauseSess.hidden = true;
         }
-    }
 
-    if (deviceProperties.startedSession && document.getElementById("sessionDiv")) {
-        document.getElementById("sessionDiv").hidden = false;
-    } else if (document.getElementById("sessionDiv")) {
-        document.getElementById("sessionDiv").hidden = true;
+        if (properties.currentlyInExercise) {
+            startSkipEx.innerText = "Skip Exercise";
+            resumePauseSess.hidden = false;
+            document.getElementById("currentExercise").innerText = getDeviceData().currentExercise ? getDeviceData().currentExercise.name : "unknown exercise";
+        } else {
+            startSkipEx.innerText = "Start Exercise";
+            resumePauseSess.hidden = true;
+        }
+
+        if (properties.pausedSession) {
+            resumePauseSess.innerText = "Resume Exercise";
+        } else {
+            resumePauseSess.innerText = "Pause Exercise";
+        }
     }
 }
 

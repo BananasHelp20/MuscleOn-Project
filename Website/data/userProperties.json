@@ -7,7 +7,8 @@
   "size": 175,
   "birthday": "1990-01-01",
   "currentlyTraining": true,
-  "currentlyInExercise": false,
+  "currentlyInExercise": true,
+  "pausedSession": true,
   "createdPlan": true,
   "verifiedEmail": false,
   "usualSessionTimes": [
