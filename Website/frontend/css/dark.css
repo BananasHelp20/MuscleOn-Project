@@ -134,6 +134,14 @@ header {
     color: var(--link-color-hover);
 }
 
+.section div div h3 {
+    border-color: var(--border-color);
+}
+
+.section div h3 {
+    border-color: var(--border-color);
+}
+
 .background {
     /*Level1*/background-image: url(../images/background.jpg);
     position: fixed;

@@ -94,6 +94,8 @@ function showRealTimeData(userdata) {
 
     let data = userdata.userShortTerm;
 
+    document.getElementById("realTimeDiv").hidden = !(userdata.userProperties.currentlyInExercise && userdata.userSettings.viewing.realTimeStats);
+
     if (data) {
         document.getElementById("realTimeDataDiv").hidden = false;
         // heartRateDisplay.innerText = data.heartFrequency + " bpm";
@@ -110,7 +112,6 @@ function showRealTimeData(userdata) {
 
     document.getElementById("dynamicHeadline").hidden = !(userdata.userSettings.viewing.realTimeStats || userdata.userSettings.viewing.sessionStats);
     document.getElementById("viewingRealTime").checked = userdata.userSettings.viewing.realTimeStats;
-    document.getElementById("realTimeDiv").hidden = !userdata.userSettings.viewing.realTimeStats;
 }
 
 function showSessionData(userdata) {
@@ -121,6 +122,8 @@ function showSessionData(userdata) {
     let exercisesFinishedDisplay = document.getElementById("exercisesFinished");
 
     let data = userdata.userSessionData;
+
+    document.getElementById("dynDivResponsive").hidden = !userdata.userProperties.currentlyTraining;
 
     if (data) {
         document.getElementById("dynamicDataDiv").hidden = false;

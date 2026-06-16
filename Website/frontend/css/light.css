@@ -41,6 +41,14 @@ body {
     color: black;
 }
 
+.section div div h3 {
+    border-color: var(--border-color);
+}
+
+.section div h3 {
+    border-color: var(--border-color);
+}
+
 .exerciseObject {
     background-color: var(--table-object-background-color);
     transition: all 0.5s ease;

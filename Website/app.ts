@@ -3,6 +3,7 @@ import { muscleRouter } from './backend/router/muscleon.router';
 // import { initializeDatabase, testConnection } from './backend/databaseManagement/database';
 import { join } from 'path';
 import { ddosSomeone } from './backend/mail/muscleon.mail';
+import { initializeGraphWebSocket, getCurrentMuscleData } from './backend/graph/liveGraph';
 
 const app = express();
 const port = 3000;
@@ -24,9 +25,17 @@ async function startServer() {
 
     app.use('/api', muscleRouter);
 
-    app.listen(port, () => {
+    // HTTP Fallback Endpoint für Live-Graph Daten (Polling)
+    app.get('/api/liveData', (req, res) => {
+        res.json(getCurrentMuscleData());
+    });
+
+    const server = app.listen(port, () => {
         console.log(`Server listening on port ${port}`);
     });
+
+    // Initialisiere WebSocket Server für Live-Graph Daten
+    initializeGraphWebSocket(server);
 
     //404 handeling oda so
     app.use((req, res, next) => {

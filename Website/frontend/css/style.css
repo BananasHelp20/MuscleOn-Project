@@ -248,6 +248,10 @@ header {
     justify-content: center;
 }
 
+#sessionDiv[hidden] {
+    display: none !important;
+}
+
 #menuContainer {
     /*Level 4 - menuBar*/
     display: flex;
@@ -431,9 +435,24 @@ body {
     margin-bottom: 1em;
 }
 
+.section div div h3, .section div h3 {
+    padding-bottom: 0.5em;
+    padding-top: 0.5em;
+    border-top: solid;
+    border-bottom: solid;
+    margin-top: 2em;
+}
+
+.section div h2 {
+    margin-top: 2em;
+    margin-bottom: -0.5em;
+}
+
 .defaultButton {
     text-decoration: none;
-    padding: .5em;
+    padding: .75em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
     margin-top: .5em;
     margin-bottom: .5em;
     border: none;
