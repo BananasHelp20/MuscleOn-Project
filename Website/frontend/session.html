@@ -61,12 +61,12 @@
         <div id="lockedFromLogin" hidden>
             <div id="control">
                 <div id="sessionControlDiv">
-                    <button id="startStopSession">Start Session</button>
+                    <button id="startStopSession" class="sessionCtrlButton">Start Session</button>
                     <div id="sessionDiv" hidden>
                         <span>Current Exercise:</span>
                         <span id="currentExercise">Curls</span>
-                        <button id="startSkipExercise" class="setting defaultButton">Start Exercise</button> <!-- start/skip -->
-                        <button id="resumePauseSession" class="setting defaultButton" hidden>Pause Session</button>
+                        <button id="startSkipExercise" class="setting defaultButton sessionCtrlButton">Start Exercise</button> <!-- start/skip -->
+                        <button id="resumePauseSession" class="setting defaultButton sessionCtrlButton" hidden>Pause Session</button>
                     </div>
                 </div>
             </div>
@@ -95,7 +95,6 @@
                         </div>
                         <h3>muscle usage graph (live)</h3>
                         <div id="liveGraph">
-
                         </div>
                     </div>
                 </div>

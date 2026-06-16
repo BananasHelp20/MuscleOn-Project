@@ -1,7 +1,14 @@
+//graph style
+let borderColor;
+let backgroundColor;
+let pointBorderColor;
+let pointBackgroundColor;
+
 function init() {
     let deviceData = getDeviceData();
     initalizeDefault(deviceData); //initializes stuff needed wheather or not the user is logged in
     initializeExerciseUpdateLoop(); //loop2
+    initLiveGraph(); // websocckets
 
     if (deviceData.loggedIn) { //if somebody is logged in
         getUserData().then((data) => { //get Userdata for inialization
@@ -112,6 +119,40 @@ function initializeLoggedOut() {
     initializeSignUp(); //nach signup -> login() // oder eventuell ned?
 }
 
+function initializeGraphStyle() {
+    borderColor = "rgb(255, 230, 0)";
+    backgroundColor = "rgba(49, 49, 49, 0.648)";
+    pointBorderColor = "rgb(255, 230, 0)";
+    pointBackgroundColor = "rgb(255, 230, 0)";
+}
+
+function initLiveGraph() {
+    // Initialisiere Graph wenn DOM geladen ist
+    initializeGraphStyle();
+    document.addEventListener('DOMContentLoaded', function () {
+        // Kleine Verzögerung um sicherzustellen, dass alle DOM-Elemente vorhanden sind
+        setTimeout(() => {
+            initializeLiveGraph();
+        }, 500);
+    });
+
+    // Cleanup beim Beenden der Seite
+    window.addEventListener('beforeunload', function () {
+        stopFetchingData();
+    });
+
+    // Cleanup wenn Seite sichtbarkeit ändert (z.B. Tab wechsel)
+    document.addEventListener('visibilitychange', function () {
+        if (document.hidden) {
+            console.log('Seite ist nicht sichtbar - stoppe Graph Updates');
+            stopFetchingData();
+        } else {
+            console.log('Seite ist sichtbar - starte Graph Updates erneut');
+            startFetchingData();
+        }
+    });
+}
+
 function initializeLoggedIn(deviceData, data) {
     let settings = data.userSettings;
     if (document.getElementById("check") && settings.devMode) document.getElementById("check").addEventListener("click", checkListener);
@@ -131,6 +172,7 @@ function initializeLoggedIn(deviceData, data) {
             changePassword();
         }
     });
+
     initializeSession();
     initializeLogoutAndDelete(); //wenn logout -> login und signup initialisieren // oder eventuell ned?
     loadAndInitializeChecked(data.userSettings);

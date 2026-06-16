@@ -448,6 +448,16 @@ body {
     margin-bottom: -0.5em;
 }
 
+#sessionDiv {
+    width: 100%;
+}
+
+#startStopSession, #startSkipExercise, #resumePauseSession {
+    width: 100%;
+    height: 5em;
+    font-size: large;
+}
+
 .defaultButton {
     text-decoration: none;
     padding: .75em;
@@ -567,6 +577,12 @@ canvas {
 
 textarea {
     resize: none;
+}
+
+#liveGraph {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
 
 #exerciseDescription {

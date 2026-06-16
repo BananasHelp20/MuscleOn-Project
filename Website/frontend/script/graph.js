@@ -8,6 +8,42 @@ let ws = null;
 let reconnectAttempts = 0;
 const maxReconnectAttempts = 5;
 let reconnectDelay = 1000; // Startverzögerung für Reconnect in ms
+let set = [{
+                label: 'Raw Muscle Usage',
+                data: [],
+                borderColor: borderColor,
+                backgroundColor: backgroundColor,
+                borderWidth: 2,
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4,
+                pointBackgroundColor: pointBackgroundColor,
+                pointBorderColor: pointBorderColor,
+                pointBorderWidth: 1,
+                pointHoverRadius: 6
+            }];
+
+
+// Client-ID für WebSocket Session Tracking
+let clientId = null;
+
+/**
+ * Generiert oder lädt eine eindeutige Client-ID
+ */
+function getOrCreateClientId() {
+    const STORAGE_KEY = 'muscleOn_websocket_clientId';
+    
+    let id = localStorage.getItem(STORAGE_KEY);
+    if (!id) {
+        // Generiere eine neue eindeutige ID (UUID v4 Style)
+        id = 'client_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem(STORAGE_KEY, id);
+        console.log('Neue Client-ID erstellt:', id);
+    } else {
+        console.log('Existierende Client-ID geladen:', id);
+    }
+    return id;
+}
 
 /**
  * Initialisiert den Live-Graph für Muscle Usage
@@ -33,24 +69,11 @@ function initializeLiveGraph() {
         type: 'line',
         data: {
             labels: [],
-            datasets: [{
-                label: 'Muscle Usage',
-                data: [],
-                borderColor: '#4CAF50',
-                backgroundColor: 'rgba(76, 175, 80, 0.1)',
-                borderWidth: 2,
-                fill: true,
-                tension: 0.4,
-                pointRadius: 4,
-                pointBackgroundColor: '#4CAF50',
-                pointBorderColor: '#fff',
-                pointBorderWidth: 1,
-                pointHoverRadius: 6
-            }]
+            datasets: set
         },
         options: {
             responsive: true,
-            maintainAspectRatio: true,
+            maintainAspectRatio: false,
             plugins: {
                 legend: {
                     display: true,
@@ -164,6 +187,9 @@ function updateYAxisMax() {
  * Startet das Abrufen von Daten vom Server
  */
 function startFetchingData() {
+    // Initialisiere Client-ID für WebSocket Session Tracking
+    clientId = getOrCreateClientId();
+    
     // Versuche zuerst WebSocket, falls nicht verfügbar, nutze Polling
     if (window.WebSocket) {
         startWebSocketConnection();
@@ -185,10 +211,12 @@ function startWebSocketConnection() {
 
         // Passe die WebSocket URL an deine Server-Konfiguration an
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        ws = new WebSocket(`${wsProtocol}//${window.location.host}/ws/liveData`);
+        const wsUrl = `${wsProtocol}//${window.location.host}/ws/liveData?clientId=${clientId}`;
+        console.log(`WebSocket Connect mit ClientId: ${clientId}`);
+        ws = new WebSocket(wsUrl);
 
         ws.onopen = function() {
-            console.log('✓ WebSocket verbunden');
+            console.log('✓ WebSocket verbunden mit ClientId:', clientId);
             reconnectAttempts = 0;
             reconnectDelay = 1000; // Reset Reconnect Delay
         };
@@ -205,17 +233,17 @@ function startWebSocketConnection() {
         };
 
         ws.onerror = function(error) {
-            console.error('✗ WebSocket Error:', error);
+            console.error('✗ WebSocket Error (ClientId: ' + clientId + '):', error);
         };
 
         ws.onclose = function() {
-            console.log('✗ WebSocket geschlossen');
+            console.log('✗ WebSocket geschlossen (ClientId: ' + clientId + ')');
             ws = null;
             
             // Versuche Reconnection mit exponentiellem Backoff
             if (reconnectAttempts < maxReconnectAttempts) {
                 reconnectAttempts++;
-                console.log(`Reconnect Versuch ${reconnectAttempts}/${maxReconnectAttempts} in ${reconnectDelay}ms`);
+                console.log(`Reconnect Versuch ${reconnectAttempts}/${maxReconnectAttempts} für ClientId ${clientId} in ${reconnectDelay}ms`);
                 setTimeout(startWebSocketConnection, reconnectDelay);
                 reconnectDelay = Math.min(reconnectDelay * 2, 30000); // Max 30 Sekunden
             } else {
@@ -303,27 +331,3 @@ function addTestData() {
     const randomMuscleUsage = Math.random() * 4500;
     addDataPoint(randomMuscleUsage);
 }
-
-// Initialisiere Graph wenn DOM geladen ist
-document.addEventListener('DOMContentLoaded', function() {
-    // Kleine Verzögerung um sicherzustellen, dass alle DOM-Elemente vorhanden sind
-    setTimeout(() => {
-        initializeLiveGraph();
-    }, 500);
-});
-
-// Cleanup beim Beenden der Seite
-window.addEventListener('beforeunload', function() {
-    stopFetchingData();
-});
-
-// Cleanup wenn Seite sichtbarkeit ändert (z.B. Tab wechsel)
-document.addEventListener('visibilitychange', function() {
-    if (document.hidden) {
-        console.log('Seite ist nicht sichtbar - stoppe Graph Updates');
-        stopFetchingData();
-    } else {
-        console.log('Seite ist sichtbar - starte Graph Updates erneut');
-        startFetchingData();
-    }
-});

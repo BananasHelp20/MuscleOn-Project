@@ -1,6 +1,6 @@
 import WebSocket from 'ws';
 import { Server as HttpServer } from 'http';
-import * as url from 'url';
+import { URL } from 'url';
 
 /**
  * WebSocket Server für Live-Grafhdaten (Muskelrohdaten)
@@ -8,6 +8,14 @@ import * as url from 'url';
 
 interface MuscleClient extends WebSocket {
     isAlive?: boolean;
+    clientId?: string;
+}
+
+interface ClientSession {
+    clientId: string;
+    ws: MuscleClient;
+    connectedAt: Date;
+    reconnectCount: number;
 }
 
 let wss: WebSocket.Server | null = null;
@@ -18,6 +26,12 @@ const muscleChangeRate: number = 50; // Änderungsrate pro Update
 const minMuscleValue: number = 0;
 const maxMuscleValue: number = 4500;
 const updateInterval: number = 100; // Update alle 100ms
+
+// Map um Client-IDs auf WebSocket-Verbindungen zu mappen
+const clientSessions = new Map<string, ClientSession>();
+
+// Timeout um verwaiste Sessions zu bereinigen (z.B. wenn Reconnect nicht innerhalb dieser Zeit stattfindet)
+const CLIENT_TIMEOUT = 60000; // 60 Sekunden
 
 /**
  * Initialisiert den WebSocket Server für Live-Graph Daten
@@ -33,21 +47,60 @@ export function initializeGraphWebSocket(server: HttpServer): void {
 
         // Upgrade Handler für HTTP Requests zu WebSocket
         server.on('upgrade', (request, socket, head) => {
-            const pathname = url.parse(request.url!).pathname;
+            try {
+                const urlObj = new URL(request.url!, `http://${request.headers.host}`);
+                const pathname = urlObj.pathname;
+                const clientId = urlObj.searchParams.get('clientId');
 
-            if (pathname === '/ws/liveData') {
-                console.log('WebSocket Upgrade Request auf /ws/liveData');
-                wss!.handleUpgrade(request, socket, head, (ws) => {
-                    wss!.emit('connection', ws, request);
-                });
-            } else {
+                if (pathname === '/ws/liveData') {
+                    // console.log(`WebSocket Upgrade Request auf /ws/liveData (clientId: ${clientId})`);
+                    
+                    if (!clientId) {
+                        console.warn('WebSocket Verbindung ohne clientId abgelehnt');
+                        socket.destroy();
+                        return;
+                    }
+
+                    wss!.handleUpgrade(request, socket, head, (ws) => {
+                        wss!.emit('connection', ws, request, clientId);
+                    });
+                } else {
+                    socket.destroy();
+                }
+            } catch (error) {
+                console.error('Fehler beim Parsen der WebSocket URL:', error);
                 socket.destroy();
             }
         });
 
         // Connection Handler
-        wss.on('connection', (ws: MuscleClient) => {
-            console.log('Neuer WebSocket Client verbunden. Aktuelle Clients:', wss?.clients.size || 0);
+        wss.on('connection', (ws: MuscleClient, request: any, clientId: string) => {
+            ws.clientId = clientId;
+
+            // Prüfe ob Client bereits existiert
+            if (clientSessions.has(clientId)) {
+                const existingSession = clientSessions.get(clientId)!;
+                // console.log(`✓ Reconnect erkannt für Client ${clientId} (Reconnect #${existingSession.reconnectCount + 1})`);
+                
+                // Alte Verbindung schließen (falls noch offen)
+                if (existingSession.ws.readyState === WebSocket.OPEN) {
+                    existingSession.ws.close();
+                }
+
+                // Ersetze alte Verbindung mit neuer
+                existingSession.ws = ws;
+                existingSession.reconnectCount++;
+            } else {
+                console.log(`✓ Neuer WebSocket Client verbunden. ClientId: ${clientId}. Aktuelle Clients: ${clientSessions.size}`);
+                
+                // Neue Session erstellen
+                clientSessions.set(clientId, {
+                    clientId: clientId,
+                    ws: ws,
+                    connectedAt: new Date(),
+                    reconnectCount: 0
+                });
+            }
             
             ws.isAlive = true;
 
@@ -58,12 +111,25 @@ export function initializeGraphWebSocket(server: HttpServer): void {
 
             // Error Handler
             ws.on('error', (error) => {
-                console.error('WebSocket Error:', error);
+                console.error(`WebSocket Error (${clientId}):`, error);
             });
 
             // Close Handler
             ws.on('close', () => {
-                console.log('WebSocket Client disconnect. Noch verbundene Clients:', wss?.clients.size || 0);
+                // console.log(`✗ WebSocket Client disconnect (${clientId}). Noch verbundene Clients: ${clientSessions.size}`);
+                
+                // Entferne Session nur, wenn diese Verbindung tatsächlich die aktuelle ist
+                const session = clientSessions.get(clientId);
+                if (session && session.ws === ws) {
+                    // Verzögere das Löschen, um Reconnects innerhalb kurzer Zeit zu erlauben
+                    setTimeout(() => {
+                        const stillExistingSession = clientSessions.get(clientId);
+                        if (stillExistingSession && stillExistingSession.ws === ws) {
+                            clientSessions.delete(clientId);
+                            console.log(`Session für ${clientId} nach ${CLIENT_TIMEOUT}ms gelöscht (kein Reconnect)`);
+                        }
+                    }, CLIENT_TIMEOUT);
+                }
             });
         });
 
@@ -115,7 +181,7 @@ function startDataGenerator(): void {
  * @param muscleUsage - Muskelrohdaten Wert
  */
 function broadcastMuscleData(muscleUsage: number): void {
-    if (!wss) return;
+    if (clientSessions.size === 0) return;
 
     const data = {
         muscleUsage: muscleUsage,
@@ -125,9 +191,9 @@ function broadcastMuscleData(muscleUsage: number): void {
     const message = JSON.stringify(data);
 
     // Sende an alle verbundenen Clients
-    wss.clients.forEach((client: WebSocket) => {
-        if (client.readyState === WebSocket.OPEN) {
-            client.send(message);
+    clientSessions.forEach((session: ClientSession) => {
+        if (session.ws.readyState === WebSocket.OPEN) {
+            session.ws.send(message);
         }
     });
 }
@@ -136,10 +202,12 @@ function broadcastMuscleData(muscleUsage: number): void {
  * Gibt die aktuellen Daten zurück (für HTTP Polling Fallback)
  */
 export function getCurrentMuscleData(): object {
+    const activeClients = Array.from(clientSessions.values()).filter(s => s.ws.readyState === WebSocket.OPEN).length;
     return {
         muscleUsage: currentMuscleUsage,
         timestamp: new Date().toLocaleTimeString('de-DE'),
-        connectedClients: wss?.clients.size || 0
+        connectedClients: activeClients,
+        totalSessions: clientSessions.size
     };
 }
 
@@ -147,20 +215,16 @@ export function getCurrentMuscleData(): object {
  * Heartbeat um inaktive Clients zu identifizieren
  */
 function startHeartbeat(): void {
-    if (!wss) return;
-
     const heartbeatInterval = setInterval(() => {
-        if (!wss) {
-            clearInterval(heartbeatInterval);
-            return;
-        }
-
-        wss.clients.forEach((ws: MuscleClient) => {
-            if (ws.isAlive === false) {
-                return ws.terminate();
+        clientSessions.forEach((session: ClientSession) => {
+            if (session.ws.isAlive === false) {
+                session.ws.terminate();
+            } else {
+                session.ws.isAlive = false;
+                if (session.ws.readyState === WebSocket.OPEN) {
+                    session.ws.ping();
+                }
             }
-            ws.isAlive = false;
-            ws.ping();
         });
     }, 30000); // Ping alle 30 Sekunden
 }
@@ -174,6 +238,14 @@ export function stopGraphWebSocket(): void {
         dataGeneratorInterval = null;
     }
 
+    // Schließe alle aktiven Sessions
+    clientSessions.forEach((session: ClientSession) => {
+        if (session.ws.readyState === WebSocket.OPEN) {
+            session.ws.close();
+        }
+    });
+    clientSessions.clear();
+
     if (wss) {
         wss.close(() => {
             console.log('WebSocket Server geschlossen');
@@ -186,9 +258,11 @@ export function stopGraphWebSocket(): void {
  * Gibt den Status des WebSocket Servers zurück
  */
 export function getGraphWebSocketStatus(): object {
+    const activeClients = Array.from(clientSessions.values()).filter(s => s.ws.readyState === WebSocket.OPEN).length;
     return {
         isRunning: wss !== null,
-        connectedClients: wss?.clients.size || 0,
+        activeClients: activeClients,
+        totalSessions: clientSessions.size,
         currentMuscleUsage: currentMuscleUsage
     };
 }
