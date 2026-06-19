@@ -7,6 +7,7 @@ let updateTimeout = null;
 let ws = null;
 let reconnectAttempts = 0;
 const maxReconnectAttempts = 5;
+let graphPaused = false;
 let reconnectDelay = 1000; // Startverzögerung für Reconnect in ms
 let set = [{
                 label: 'Raw Muscle Usage',
@@ -137,31 +138,24 @@ function initializeLiveGraph() {
  * @param {string} timestamp - Zeit im Format HH:MM:SS oder custom
  */
 function addDataPoint(muscleUsage, timestamp = null) {
-    if (!liveChart) {
-        console.error('Chart nicht initialisiert');
+    if (!liveChart || graphPaused) {
         return;
     }
 
-    // Generiere Timestamp falls nicht vorhanden
     if (!timestamp) {
         const now = new Date();
         timestamp = now.toLocaleTimeString('de-DE');
     }
 
-    // Begrenzte Anzahl von Datenpunkten
     if (liveChart.data.labels.length >= MAX_DATA_POINTS) {
         liveChart.data.labels.shift();
         liveChart.data.datasets[0].data.shift();
     }
 
-    // Füge neue Daten hinzu
     liveChart.data.labels.push(timestamp);
     liveChart.data.datasets[0].data.push(muscleUsage);
 
-    // Berechne die neue Y-Achsen max (500 größer als höchster Wert)
     updateYAxisMax();
-
-    // Update Chart
     liveChart.update('none'); // 'none' verhindert Animation für flüssigere Updates
 }
 
@@ -212,11 +206,9 @@ function startWebSocketConnection() {
         // Passe die WebSocket URL an deine Server-Konfiguration an
         const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
         const wsUrl = `${wsProtocol}//${window.location.host}/ws/liveData?clientId=${clientId}`;
-        console.log(`WebSocket Connect mit ClientId: ${clientId}`);
         ws = new WebSocket(wsUrl);
 
         ws.onopen = function() {
-            console.log('✓ WebSocket verbunden mit ClientId:', clientId);
             reconnectAttempts = 0;
             reconnectDelay = 1000; // Reset Reconnect Delay
         };
@@ -233,17 +225,16 @@ function startWebSocketConnection() {
         };
 
         ws.onerror = function(error) {
-            console.error('✗ WebSocket Error (ClientId: ' + clientId + '):', error);
+            console.error('WebSocket Error (ClientId: ' + clientId + '):', error);
         };
 
         ws.onclose = function() {
-            console.log('✗ WebSocket geschlossen (ClientId: ' + clientId + ')');
+            console.log('WebSocket geschlossen (ClientId: ' + clientId + ')');
             ws = null;
             
             // Versuche Reconnection mit exponentiellem Backoff
             if (reconnectAttempts < maxReconnectAttempts) {
                 reconnectAttempts++;
-                console.log(`Reconnect Versuch ${reconnectAttempts}/${maxReconnectAttempts} für ClientId ${clientId} in ${reconnectDelay}ms`);
                 setTimeout(startWebSocketConnection, reconnectDelay);
                 reconnectDelay = Math.min(reconnectDelay * 2, 30000); // Max 30 Sekunden
             } else {

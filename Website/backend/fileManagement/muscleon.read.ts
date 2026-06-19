@@ -67,7 +67,7 @@ export async function getValidationCode(userId:number): Promise<string | boolean
 
 export async function addExercise(exercise:model.Exercise) {
     let userExercises: model.Exercise[] = await gatherUserExercises();
-    let unsuppExercises: model.Exercise[] = await gatherSupportedExercises();
+    let unsuppExercises: model.Exercise[] = await gatherUnsupportedExercises();
     if (exercise.public) unsuppExercises.push(exercise);
     userExercises.push(exercise);
 

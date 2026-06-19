@@ -248,6 +248,10 @@ header {
     justify-content: center;
 }
 
+#exerciseForm[hidden] {
+    display: none !important;
+}
+
 #sessionDiv[hidden] {
     display: none !important;
 }

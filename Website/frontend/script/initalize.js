@@ -62,6 +62,7 @@ function initializeSession() {
                     deviceData.currentExercise = exData.nextExercise;
                     localStorage.setItem("deviceData", JSON.stringify(deviceData));
                     document.getElementById("currentExercise").innerText = exData.nextExercise.name;
+                    document.getElementById("currentExerciseDisplay").innerText = exData.nextExercise.name;
                 }
                 setUserProperties(data);
                 sessionButtonCheck();
@@ -78,6 +79,7 @@ function initializeSession() {
                     deviceData.currentExercise = exData.nextExercise;
                     localStorage.setItem("deviceData", JSON.stringify(deviceData));
                     document.getElementById("currentExercise").innerText = exData.nextExercise.name;
+                    document.getElementById("currentExerciseDisplay").innerText = exData.nextExercise.name;
                 }
                 setUserProperties(data);
                 sessionButtonCheck();

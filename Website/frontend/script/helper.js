@@ -346,7 +346,7 @@ function getIndexOfSessionId(id) {
         for (let j = 0; j < table.children.length; j++) {
             if (table.children.item(j).getAttribute("id")) tbodyIndex = j;
         }
-        if (id == Number(table.children.item(tbodyIndex).getAttribute("id").charAt(table.children.item(tbodyIndex).getAttribute("id").length - 1))) return i;
+        if (id == Number(table.children.item(tbodyIndex).getAttribute("id").replace("exercise-table", ""))) return i;
     }
     return -1;
 }
@@ -384,7 +384,7 @@ function getExerciseWithId(id) {
 function validateSessionTimes(data) {
     if (!data) return false;
     for (let i = 0; i < data.length; i++) {
-        let exercises = data[i].exercies ? data[i].exercises : null;
+        let exercises = data[i].exercises ? data[i].exercises : null;
         let time = data[i].times;
         if (!time || data[i].primaryMuscleGroup == "" || data[i].sessionId == -1) {
             console.error("if 1");

@@ -316,8 +316,9 @@ async function getSupportedExercises() {
         },
     }).then((response) => {
         if (response.ok) {
-            localStorage.setItem("supportedExercises", JSON.stringify(response.json));
-            return response.json();
+            let data = response.json();
+            localStorage.setItem("supportedExercises", JSON.stringify(data));
+            return data;
         } else {
             console.error("An error ocured while requesting data from backend:", response.statusText);
         }
@@ -326,7 +327,7 @@ async function getSupportedExercises() {
 
 async function getUserById(id) {
     return fetch("/api/getUser/byId", {
-        method: "GET",
+        method: "POST",
         headers: {
             "Content-Type": "application/json",
         },
@@ -348,8 +349,9 @@ async function getUnsupportedExercises() {
         },
     }).then((response) => {
         if (response.ok) {
-            localStorage.setItem("unsupportedExercises", JSON.stringify(response.json));
-            return response.json();
+            let data = response.json();
+            localStorage.setItem("unsupportedExercises", JSON.stringify(data));
+            return data;
         } else {
             console.error("An error ocured while requesting data from backend:", response.statusText);
         }
@@ -364,8 +366,9 @@ async function getUserDefinedExercises() {
         },
     }).then((response) => {
         if (response.ok) {
-            localStorage.setItem("userdefinedExercises", JSON.stringify(response.json));
-            return response.json();
+            let data = response.json()
+            localStorage.setItem("userdefinedExercises", JSON.stringify(data));
+            return data;
         } else {
             console.error("An error ocured while requesting data from backend:", response.statusText);
         }

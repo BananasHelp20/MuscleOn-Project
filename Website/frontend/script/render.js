@@ -41,6 +41,7 @@ function sessionButtonCheck() {
             sessionDiv.hidden = true;
             startStopSess.innerText = "Start Session";
             document.getElementById("currentExercise").innerText = "not yet started";
+            document.getElementById("currentExerciseDisplay").innerText = "not yet started";
             resumePauseSess.hidden = true;
         }
 
@@ -48,6 +49,7 @@ function sessionButtonCheck() {
             startSkipEx.innerText = "Skip Exercise";
             resumePauseSess.hidden = false;
             document.getElementById("currentExercise").innerText = getDeviceData().currentExercise ? getDeviceData().currentExercise.name : "unknown exercise";
+            document.getElementById("currentExerciseDisplay").innerText = getDeviceData().currentExercise ? getDeviceData().currentExercise.name : "unknown exercise";
         } else {
             startSkipEx.innerText = "Start Exercise";
             resumePauseSess.hidden = true;
@@ -64,7 +66,7 @@ function sessionButtonCheck() {
 function showLoggedIn(deviceData) {
     let loggedInAsDisplay = document.getElementById("currentUser");
     if (deviceData.loggedIn && loggedInAsDisplay) {
-        loggedInAsDisplay.innerHTML = "<span id='inlineUsernameDisplay'>" + deviceData.loggedInAsUser + "</span><button id='logoutButton' class='defaultButton'>Logout</button>";
+        loggedInAsDisplay.innerHTML = "<span id='inlineUsernameDisplay'>" + deviceData.loggedInAsUser.replaceAll("<", "").replaceAll(">", "") + "</span><button id='logoutButton' class='defaultButton'>Logout</button>";
         initializeLogout();
     } else if (loggedInAsDisplay) {
         loggedInAsDisplay.innerHTML = "<button href='./login.html' class='defaultButton' id='inlineLoginButton'>Login</button><button href='./signup.html' id='inlineSignupButton' class='defaultButton'>Signup Now</button>";
@@ -112,11 +114,15 @@ function showRealTimeData(userdata) {
 
     document.getElementById("dynamicHeadline").hidden = !(userdata.userSettings.viewing.realTimeStats || userdata.userSettings.viewing.sessionStats);
     document.getElementById("viewingRealTime").checked = userdata.userSettings.viewing.realTimeStats;
+
+    if (userdata && userdata.userProperties) {
+        graphPaused = userdata.userProperties.pausedSession;
+    }
 }
 
 function showSessionData(userdata) {
-    let avgHeartRateDisplay = document.getElementById("averageHeartFrequence");
-    let avgMuscleUsageDisplay = document.getElementById("averageMuscleUsageInPercent");
+    let avgHeartRateDisplay = document.getElementById("averageHeartFrequenceDyn");
+    let avgMuscleUsageDisplay = document.getElementById("averageMuscleUsageInPercentDyn");
     let trainedMusclesInCurrentOrLatestSessionDisplay = document.getElementById("trainedMuscles");
     let exercisesAheadDisplay = document.getElementById("exercisesAhead");
     let exercisesFinishedDisplay = document.getElementById("exercisesFinished");
@@ -143,8 +149,8 @@ function showLongtermData(userdata) {
     let maxDoneInOneForEachExerciseDisplay = document.getElementById("maxDoneInOneForEachExercise");
     let maxHeartRateDisplay = document.getElementById("maxHeartRate");
     let averageTimeTrainedDisplay = document.getElementById("averageTimeTrained");
-    let averageHeartFrequenceDisplay = document.getElementById("averageHeartFrequence");
-    let averageMuscleUsageInPercentDisplay = document.getElementById("averageMuscleUsageInPercent");
+    let averageHeartFrequenceDisplay = document.getElementById("averageHeartFrequenceStat");
+    let averageMuscleUsageInPercentDisplay = document.getElementById("averageMuscleUsageInPercentStat");
     let monthlyStrengthIncreaseDisplay = document.getElementById("monthlyStrengthIncrease");
     let weeklyTrainingTimeDisplay = document.getElementById("weeklyTrainingTime");
     let mostTrainedMuscleDisplay = document.getElementById("mostTrainedMuscle");
@@ -267,7 +273,7 @@ function renderExercises(settings) {
 
             let weight = document.createElement("span");
             weight.classList.add("exerciseWeight");
-            weight.innerText = "Needs Weight: " + (exercise.needsWeight ? "Yes" : "No");
+            weight.innerText = "Needs Weight: " + (exercise.weight ? "Yes" : "No");
 
             let isPublic = document.createElement("span");
             isPublic.classList.add("exercisePublic");

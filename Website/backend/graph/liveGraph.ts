@@ -91,7 +91,7 @@ export function initializeGraphWebSocket(server: HttpServer): void {
                 existingSession.ws = ws;
                 existingSession.reconnectCount++;
             } else {
-                console.log(`✓ Neuer WebSocket Client verbunden. ClientId: ${clientId}. Aktuelle Clients: ${clientSessions.size}`);
+                console.log(`Aktuelle Clients: ${clientSessions.size}`);
                 
                 // Neue Session erstellen
                 clientSessions.set(clientId, {
@@ -126,7 +126,6 @@ export function initializeGraphWebSocket(server: HttpServer): void {
                         const stillExistingSession = clientSessions.get(clientId);
                         if (stillExistingSession && stillExistingSession.ws === ws) {
                             clientSessions.delete(clientId);
-                            console.log(`Session für ${clientId} nach ${CLIENT_TIMEOUT}ms gelöscht (kein Reconnect)`);
                         }
                     }, CLIENT_TIMEOUT);
                 }

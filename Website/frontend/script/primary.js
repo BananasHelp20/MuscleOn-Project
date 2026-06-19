@@ -8,7 +8,7 @@ function init() {
     let deviceData = getDeviceData();
     initalizeDefault(deviceData); //initializes stuff needed wheather or not the user is logged in
     initializeExerciseUpdateLoop(); //loop2
-    initLiveGraph(); // websocckets
+    if (document.getElementById("liveGraph")) initLiveGraph(); // websocckets
 
     if (deviceData.loggedIn) { //if somebody is logged in
         getUserData().then((data) => { //get Userdata for inialization
@@ -147,7 +147,6 @@ function initLiveGraph() {
             console.log('Seite ist nicht sichtbar - stoppe Graph Updates');
             stopFetchingData();
         } else {
-            console.log('Seite ist sichtbar - starte Graph Updates erneut');
             startFetchingData();
         }
     });
