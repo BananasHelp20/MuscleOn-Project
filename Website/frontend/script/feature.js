@@ -272,8 +272,8 @@ function addExercise() {
     }
 }
 
-function saveExercise(exerciseSaveButton) {
-    let exerciseObject = exerciseSaveButton.parentElement?.parentElement;
+function saveExercise(exerciseSaveButton, mode) {
+    let exerciseObject = mode == "save" ? exerciseSaveButton.parentElement?.parentElement : document.getElementById("exerciseForm");
     if (!exerciseObject) {
         log("Error: exerciseObject not found for saveExercise");
         return;
@@ -283,12 +283,12 @@ function saveExercise(exerciseSaveButton) {
     
     let exerciseObjectChildren = exerciseObject.children;
 
-    let definedName = exerciseObjectChildren.item(0).value;
-    let definedDescription = exerciseObjectChildren.item(2).value;
-    let definedEqipment = exerciseObjectChildren.item(6).value;
-    let definedWeight = exerciseObjectChildren.item(8).children.item(1).checked;
-    let definedVisibility = exerciseObjectChildren.item(10).children.item(1).checked;
-    let definedGroups = exerciseObjectChildren.item(12).children;
+    let definedName = exerciseObjectChildren.item(mode == "save" ? 0 : 1).value;
+    let definedDescription = exerciseObjectChildren.item(mode == "save" ? 2 : 4).value;
+    let definedEqipment = exerciseObjectChildren.item(mode == "save" ? 6 : 9).value;
+    let definedWeight = exerciseObjectChildren.item(mode == "save" ? 8 : 11).children.item(1).checked;
+    let definedVisibility = exerciseObjectChildren.item(mode == "save" ? 10 : 12).children.item(1).checked;
+    let definedGroups = exerciseObjectChildren.item(mode == "save" ? 12 : 7).children;
     let definedGroupStrings = [];
 
     for (let i = 0; i < definedGroups.length; i++) {
@@ -580,7 +580,7 @@ function enableEditExercise(exerciseEditButton) {
     saveButton.innerText = "save changes";
     saveButton.classList.add("defaultButton");
     saveButton.addEventListener("click", (event) => {
-        saveExercise(event.target);
+        saveExercise(event.target, "save");
     });
 
     let actionDiv = document.createElement("div");

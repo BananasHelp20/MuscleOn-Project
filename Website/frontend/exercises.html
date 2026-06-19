@@ -53,27 +53,31 @@
     <div class="siteBody" id="exercise-page">
         <h1>Exercises</h1>
         Currently viewing: <button id="exerciseSwitch" class="defaultButton">All</button><br>
-        <button id="addExercise" class="defaultButton lockedButton">Add New Exercise</button>
-        <button id="cancelExerciseAddition" class="defaultButton" hidden>Cancel</button>
-        <div id="formContainer" hidden>
-            <div id="exerciseForm" class="exerciseObject">
-                <label for="exerciseName">Name of Exercise: </label>
-                <input type="text" id="exerciseName" name="exerciseName"><br>
-                <label for="exerciseDescription">Description of Exercise:</label><br>
-                <textarea name="exerciseDescription" id="exerciseDescription" rows="3"></textarea>
-                <label for="musleGroupSelection">Affected Muscle Groups:</label>
-                <ul id="muscleGroupSelection">
-                    <!-- <li>group</li> -->
-                </ul>
-                <label for="equipment">Uses Equipment (leave blank if not): </label>
-                <input type="text" name="equipment" id="equipment"><br>
-                <div>
-                    <label for="usesWeight">Uses Weight: </label>
-                    <input type="checkbox" name="usesWeight" id="usesWeight"><br>
+        <div id="formContainer">
+            <div class="exerciseObject">
+                <div id="exerciseForm">
+                    <label for="exerciseName">Name of Exercise: </label>
+                    <input type="text" id="exerciseName" name="exerciseName"><br>
+                    <label for="exerciseDescription">Description of Exercise:</label><br>
+                    <textarea name="exerciseDescription" id="exerciseDescription" rows="3"></textarea>
+                    <label for="musleGroupSelection"></label>
+                    <ul id="muscleGroupSelection">
+                        <!-- <li>group</li> -->
+                    </ul>
+                    <label for="equipment">Uses Equipment (leave blank if not): </label>
+                    <input type="text" name="equipment" id="equipment"><br>
+                    <div>
+                        <label for="usesWeight">Uses Weight: </label>
+                        <input type="checkbox" name="usesWeight" id="usesWeight"><br>
+                    </div>
+                    <div>
+                        <label for="public">Visible to others: </label>
+                        <input type="checkbox" id="public" name="public">
+                    </div>
                 </div>
                 <div>
-                    <label for="public">Visible to others: </label>
-                    <input type="checkbox" id="public" name="public">
+                    <button id="addExercise" class="defaultButton lockedButton">Add New Exercise</button>
+                    <button id="cancelExerciseAddition" class="defaultButton" hidden>Cancel</button>
                 </div>
             </div>
         </div>
