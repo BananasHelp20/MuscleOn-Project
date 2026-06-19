@@ -280,12 +280,12 @@ function initializeExercises() {
         if (addExerciseBtn.innerText == "Save Exercise") {
             if (saveExercise() != false) {
                 addExerciseBtn.innerText = "Add New Exercise";
-                document.getElementById("exerciseForm").hidden = true;
+                document.getElementById("formContainer").hidden = true;
                 document.getElementById("cancelExerciseAddition").hidden = true;
             }
         } else {
             addExerciseBtn.innerText = "Save Exercise";
-            document.getElementById("exerciseForm").hidden = false;
+            document.getElementById("formContainer").hidden = false;
             document.getElementById("cancelExerciseAddition").hidden = false;
             addExercise();
         }
@@ -298,11 +298,12 @@ function initializeExercises() {
         let exEquipment = document.getElementById("equipment");
         addExerciseBtn.innerText = "Add New Exercise";
         document.getElementById("cancelExerciseAddition").hidden = true;
-        document.getElementById("exerciseForm").hidden = true;
+        document.getElementById("formContainer").hidden = true;
         for (let i = 0; i < muscleGroupSelection.children; i++) {
             let liElem = muscleGroupSelection.children.item(i);
             if (liElem.nodeName == "dd" && liElem.children.item(1).checked) liElem.children.item(1).checked = false;
         }
+        
         document.getElementById("public").checked = false;
         document.getElementById("usesWeight").checked = false;
         exEquipment.value = "";

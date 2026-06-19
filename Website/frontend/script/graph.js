@@ -2,7 +2,7 @@
 let liveChart = null;
 let chartDataPoints = [];
 const MAX_DATA_POINTS = 50; // Maximale Anzahl von Datenpunkten im Graph
-const UPDATE_INTERVAL = 100; // Update Interval in Millisekunden (100ms für schnellere Updates)
+const UPDATE_INTERVAL = 50; // Update Interval in Millisekunden (100ms für schnellere Updates)
 let updateTimeout = null;
 let ws = null;
 let reconnectAttempts = 0;
