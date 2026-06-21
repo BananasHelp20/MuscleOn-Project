@@ -1,0 +1,207 @@
+[
+  {
+    "name": "Beginner Full Body",
+    "sessions": [
+      {
+        "sessionId": "0",
+        "primaryMuscleGroup": "Chest",
+        "exercises": [
+          {
+            "exerciseType": "supported",
+            "name": "Push-Up",
+            "targetedMuscleGroups": ["Chest", "Shoulders", "Triceps"],
+            "equipment": "None",
+            "reps": "10",
+            "sets": "3",
+            "weight": null
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Squat",
+            "targetedMuscleGroups": ["Quadriceps", "Hamstrings", "Glutes", "Calves"],
+            "equipment": "None",
+            "reps": "15",
+            "sets": "3",
+            "weight": null
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Plank",
+            "targetedMuscleGroups": ["Abdominals", "Lower Back"],
+            "equipment": false,
+            "reps": "1",
+            "sets": "3",
+            "weight": null
+          }
+        ],
+        "times": {
+          "weekday": "Monday",
+          "fromTime": "18:00",
+          "toTime": "19:00"
+        }
+      },
+      {
+        "sessionId": "1",
+        "primaryMuscleGroup": "Glutes",
+        "exercises": [
+          {
+            "exerciseType": "supported",
+            "name": "Lunges",
+            "targetedMuscleGroups": ["Quadriceps", "Hamstrings", "Glutes", "Calves"],
+            "equipment": "None",
+            "reps": "12",
+            "sets": "3",
+            "weight": null
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Glute Bridge",
+            "targetedMuscleGroups": ["Glutes", "Hamstrings"],
+            "equipment": "None",
+            "reps": "15",
+            "sets": "3",
+            "weight": null
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Sit-Ups",
+            "targetedMuscleGroups": ["Abdominals"],
+            "equipment": "None",
+            "reps": "15",
+            "sets": "3",
+            "weight": null
+          }
+        ],
+        "times": {
+          "weekday": "Wednesday",
+          "fromTime": "18:00",
+          "toTime": "19:00"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Upper Lower Split",
+    "sessions": [
+      {
+        "sessionId": "0",
+        "primaryMuscleGroup": "Chest",
+        "exercises": [
+          {
+            "exerciseType": "supported",
+            "name": "Bench Press",
+            "targetedMuscleGroups": ["Chest", "Shoulders", "Triceps"],
+            "equipment": "Barbell or Dumbbells",
+            "reps": "8",
+            "sets": "4",
+            "weight": "20"
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Pull-Up",
+            "targetedMuscleGroups": ["Back", "Shoulders", "Biceps"],
+            "equipment": "Pull-Up Bar",
+            "reps": "6",
+            "sets": "4",
+            "weight": null
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Shoulder Press",
+            "targetedMuscleGroups": ["Shoulders", "Triceps"],
+            "equipment": "Dumbbells or Barbell",
+            "reps": "10",
+            "sets": "3",
+            "weight": "12"
+          }
+        ],
+        "times": {
+          "weekday": "Tuesday",
+          "fromTime": "17:30",
+          "toTime": "18:45"
+        }
+      },
+      {
+        "sessionId": "1",
+        "primaryMuscleGroup": "Quadriceps",
+        "exercises": [
+          {
+            "exerciseType": "supported",
+            "name": "Squat",
+            "targetedMuscleGroups": ["Quadriceps", "Hamstrings", "Glutes", "Calves"],
+            "equipment": "None",
+            "reps": "12",
+            "sets": "4",
+            "weight": null
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Deadlift",
+            "targetedMuscleGroups": ["Lower Back", "Glutes", "Hamstrings", "Core"],
+            "equipment": "Barbell",
+            "reps": "6",
+            "sets": "4",
+            "weight": "30"
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Calf Raises",
+            "targetedMuscleGroups": ["Calves"],
+            "equipment": "None",
+            "reps": "18",
+            "sets": "3",
+            "weight": null
+          }
+        ],
+        "times": {
+          "weekday": "Thursday",
+          "fromTime": "17:30",
+          "toTime": "18:45"
+        }
+      }
+    ]
+  },
+  {
+    "name": "Core And Conditioning",
+    "sessions": [
+      {
+        "sessionId": "0",
+        "primaryMuscleGroup": "Core (Abs & Obliques)",
+        "exercises": [
+          {
+            "exerciseType": "supported",
+            "name": "Plank",
+            "targetedMuscleGroups": ["Abdominals", "Lower Back"],
+            "equipment": false,
+            "reps": "1",
+            "sets": "4",
+            "weight": null
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Russian Twist",
+            "targetedMuscleGroups": ["Obliques"],
+            "equipment": "None",
+            "reps": "20",
+            "sets": "3",
+            "weight": null
+          },
+          {
+            "exerciseType": "supported",
+            "name": "Mountain Climbers",
+            "targetedMuscleGroups": ["Core", "Shoulders", "Legs"],
+            "equipment": "None",
+            "reps": "30",
+            "sets": "3",
+            "weight": null
+          }
+        ],
+        "times": {
+          "weekday": "Friday",
+          "fromTime": "16:30",
+          "toTime": "17:15"
+        }
+      }
+    ]
+  }
+]
