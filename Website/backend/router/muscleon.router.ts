@@ -112,13 +112,14 @@ muscleRouter.post('/clearUserData', async (req, res) => {
 
 muscleRouter.post('/addUser', async (req, res) => {
     //in req.body san de UserDaten gespeichert, de sollten glei in de Datenbank gespeichert werdnen
-    //sie werden anschließend auch in die Json Daten geladen
+    //hier wird dem Nutzer eine freie UserId (Zahl) zugewiesen.
+    //Die daten werden direkt in alle Nutzerbetreffenden JSON files geladen, indem vorhandenes in den JSON files in die Datenbank gesichert (basierend auf userid) und dann überschrieben wird.
     res.statusCode = 200;
-    res.send({ message: "logging out successful!" });
+    res.send({ message: "creating user successful!", created: true }); //created sollte false sein wenn fehler aufgetreten sind.
 });
 
 muscleRouter.post('/deleteUser', async (req, res) => {
-    let answer: model.DatabaseAnswer = { //Daten des gelöschten Users zurückgeben
+    let answer: model.DatabaseAnswer = { //Daten des gelöschten Users zurückgeben, dies sind testdaten
         found: true,
         userId: 0,
         email: "willi@a.at",
@@ -320,11 +321,13 @@ muscleRouter.post('/sendValidationMail', async (req, res) => {
 });
 
 muscleRouter.post('/validateMail', async (req, res) => {
-    let code = getValidationCode(req.body.userId);
+    let code = await getValidationCode(req.body.userId);
+    console.log("Validation code for userId", req.body.userId, "is:", code);
     if (code && req.body.validationCode == code) {
         await delValidationCode(req.body.userId);
         res.send({valid: true});
     } else {
+        console.error("Invalid validation code provided for userId:", req.body.userId);
         res.send({valid: false});
     }
 });

@@ -1,11 +1,6 @@
 [
   "add Documentary",
-  "About Page",
-  "add Preset Plans [OPTIONAL]",
   "Style/layout for tablets/phones",
-  "display data how it should be [waiting on tobi, der mir erklärt wos wir jetzt wirkli an Daten haum]",
-  "verify Email upon signining up [waiting for database]",
-  "live graph [waiting for database + connection to esp]",
   "finsish session handeling [waiting for database]",
   "finish data transfer [waiting for database]",
   "finish login existence check [waiting for database]",
@@ -14,9 +9,5 @@
   "finish logout saving data [waiting for database]",
   "finish deleting account [waiting for database]",
   "finish creating account [waiting for database]",
-  "finish MuscleOn :pray:",
-  "S: feature.js (line 202) Signup geht ned, userName wird mit password befüllt, password fehlt im User-Objekt, usualSessionTime heißt im model anders, createUser() existiert und validateMail wird mit validEmail statt valid geprüft.",
-  "S: router.ts (line 309) mail validierung geht ned, getValidationCode is async, wird aber ohne await verwendet",
-  "S: initialize.js (line 281) + feature.js (line 275) 'Add New Exercise' ruft saveExercise() ohne argumente auf, oba es wird a 'exerciseSaveButton' erwartet",
-  "S: Live Graph geht ned"
+  "finish MuscleOn :pray:"
 ]

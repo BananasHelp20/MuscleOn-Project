@@ -199,23 +199,25 @@ function signUp() {
     if (document.getElementById("plan").checked) {
         data = {
             userId: -1, //temporär ungültige id, weil i jo ned was wos für a id in da Datenbank nu frei is
-            userName: password,
+            userName: userName,
+            password: password,
             email: email,
             weight: weight,
             size: size,
             birthday: birthday,
             currentlyTraining: false,
-            usualSessionTime: getSessionTimes(),
+            usualSessionTimes: getSessionTimes(),
         };
         createdPlan = true;
-        if (!validateSessionTimes(data.usualSessionTime)) {
+        if (!validateSessionTimes(data.usualSessionTimes)) {
             alert("Days must be real weekdays, times must be real times: xx:xx");
             return;
         }
     } else {
         data = {
             userId: -1, //temporär ungültige id, weil i jo ned was wos für a id in da Datenbank nu frei is
-            userName: password,
+            userName: userName,
+            password: password,
             email: email,
             weight: weight,
             size: size,
@@ -240,17 +242,25 @@ function signUp() {
             devMode: false,
         },
     };
-    sendValidationMail(email).then(() => {
-        let validationCode = prompt("A validation mail has been sent to your email address. Please enter the validation code here:");
-        validateMail(validationCode).then((isValid) => {
-            if (isValid.validEmail) {
-                createUser(completeUserData).then(() => {
+    sendValidationMail(email).then(async () => {
+        let validCode = false;
+        while (!validCode) {
+            let validationCode = prompt("A validation mail has been sent to your email address. Please enter the validation code here:");
+
+            if (!validationCode) {
+                return; // User cancelled
+            }
+
+            let isValid = await validateMail(validationCode);
+            if (isValid.valid) {
+                validCode = true;
+                createNewUser(completeUserData).then(() => {
                     login();
                 });
             } else {
                 alert("Code is not valid!");
             }
-        });
+        }
     });
 }
 
