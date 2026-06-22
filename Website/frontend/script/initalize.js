@@ -283,10 +283,12 @@ function initializeExercises() {
             if (saveExercise(event.target, "create") != false) {
                 addExerciseBtn.innerText = "Add New Exercise";
                 document.getElementById("cancelExerciseAddition").hidden = true;
+                document.getElementById("exerciseForm").hidden = true;  // ← HINZUFÜGEN
             }
         } else {
             addExerciseBtn.innerText = "Save Exercise";
             document.getElementById("cancelExerciseAddition").hidden = false;
+            document.getElementById("exerciseForm").hidden = false;  // ← HINZUFÜGEN
             addExercise();
         }
     });
@@ -298,6 +300,7 @@ function initializeExercises() {
         let exEquipment = document.getElementById("equipment");
         addExerciseBtn.innerText = "Add New Exercise";
         document.getElementById("cancelExerciseAddition").hidden = true;
+        document.getElementById("exerciseForm").hidden = true;  // ← HINZUFÜGEN
         for (let i = 0; i < muscleGroupSelection.children; i++) {
             let liElem = muscleGroupSelection.children.item(i);
             if (liElem.nodeName == "dd" && liElem.children.item(1).checked) liElem.children.item(1).checked = false;

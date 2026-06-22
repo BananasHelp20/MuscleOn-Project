@@ -389,7 +389,14 @@ function saveExercise(exerciseSaveButton, mode) {
         weight: definedWeight
     };
 
-    saveExerciseToJSON(exercise, oldExerciseJSON);
+    // NEW: Check ob neues oder bestehendes Exercise
+    if (oldExerciseJSON == null) {
+        // Neues Exercise erstellen
+        appendExercise(exercise);
+    } else {
+        // Bestehendes Exercise speichern
+        saveExerciseToJSON(exercise, oldExerciseJSON);
+    }
 }
 
 let saveListener = () => {

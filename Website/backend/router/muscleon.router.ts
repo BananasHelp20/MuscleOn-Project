@@ -286,7 +286,7 @@ muscleRouter.post('/newExercise', async (req, res) => {
 });
 
 muscleRouter.post('/validateExercise', async (req, res) => {
-    let found = await validateExercise(req.body).catch((err) => {
+    let found = await validateExercise(req.body.name).catch((err) => {
         console.error("Error validating Exercise:", err);
         res.statusCode = 500;
         res.send({ message: "Error validating Exercise" });

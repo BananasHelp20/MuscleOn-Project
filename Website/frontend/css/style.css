@@ -586,7 +586,7 @@ textarea {
 #formContainer {
     display: flex;
     justify-content: center;
-    flex-direction: column;
+    margin: 20px 0;
 }
 
 #exerciseForm {
@@ -696,31 +696,26 @@ textarea {
     justify-content: space-around;
 }
 
-/* Medienabfragen: bei kleineren Viewports Polster/Margins verringern */
-@media (max-width: 768px) {
-  .siteBody {
-    padding-left: 2em;
-    padding-right: 2em;
-    margin-left: var(--bodyMargin);
-    margin-right: var(--bodyMargin);
-  }
-  #exercise-tables th, #exercise-tables td {
-    padding: 0.35em;
-    font-size: 0.95rem;
-  }
-  :root { --bodyMargin: 2em; }
+/* Inputs im exerciseForm sollten linksbündig sein */
+#exerciseForm input[type="text"],
+#exerciseForm textarea {
+    text-align: left;
 }
 
-@media (max-width: 480px) {
-  .siteBody {
-    padding-left: 1em;
-    padding-right: 1em;
-    margin-left: 0.5em;
-    margin-right: 0.5em;
-  }
-  #exercise-tables th, #exercise-tables td {
-    padding: 0.25em;
-    font-size: 0.9rem;
-  }
-  :root { --bodyMargin: 0.5em; }
+/* Checkbox-Container linksbündig ausrichten */
+#exerciseForm > div {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5em;
+    margin: 0.5em 0;
+}
+
+#exerciseForm > div label {
+    margin: 0;
+}
+
+#exerciseForm > div input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
 }

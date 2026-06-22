@@ -90,12 +90,22 @@ export async function saveTasks(tasks:string[][]) {
 }
 
 export async function saveExercise(exercise: model.Exercise, newExercise: model.Exercise) {
+    // NEW: Validation
+    if (!exercise || !exercise.name) {
+        throw new Error("Invalid exercise: exercise name is required");
+    }
+    
     let exercises: model.Exercise[] = await gatherUserExercises();
     let unsupEx: model.Exercise[] = await gatherUnsupportedExercises();
     newExercise.exerciseType = "defined";
-    let temp = -1;
-    for (let i in exercises) {
-        if (exercises[i].name == exercise.name) exercises[i] = newExercise;
+    
+    // FIXED: Proper loop
+    let temp: number = -1;
+    for (let i: number = 0; i < exercises.length; i++) {
+        if (exercises[i]?.name == exercise.name) {
+            exercises[i] = newExercise;
+            temp = i;
+        }
     }
     if (temp != -1) {
         exercises[temp] = newExercise;

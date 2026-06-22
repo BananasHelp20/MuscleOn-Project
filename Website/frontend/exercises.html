@@ -55,17 +55,17 @@
         Currently viewing: <button id="exerciseSwitch" class="defaultButton">All</button><br>
         <div id="formContainer">
             <div class="exerciseObject">
-                <div id="exerciseForm">
+                <div id="exerciseForm" hidden>
                     <label for="exerciseName">Name of Exercise: </label>
-                    <input type="text" id="exerciseName" name="exerciseName"><br>
+                    <input type="text" id="exerciseName" name="exerciseName" class="exerciseTitle styledInput"><br>
                     <label for="exerciseDescription">Description of Exercise:</label><br>
-                    <textarea name="exerciseDescription" id="exerciseDescription" rows="3"></textarea>
+                    <textarea name="exerciseDescription" id="exerciseDescription" rows="3" class="styledArea"></textarea>
                     <label for="musleGroupSelection"></label>
                     <ul id="muscleGroupSelection">
                         <!-- <li>group</li> -->
                     </ul>
                     <label for="equipment">Uses Equipment (leave blank if not): </label>
-                    <input type="text" name="equipment" id="equipment"><br>
+                    <input type="text" name="equipment" id="equipment" class="styledInput exerciseEquipment"><br>
                     <div>
                         <label for="usesWeight">Uses Weight: </label>
                         <input type="checkbox" name="usesWeight" id="usesWeight"><br>
