@@ -304,7 +304,7 @@ function renderExercises(settings) {
             editButton.innerText = "Edit Exercise";
             editButton.classList.add("defaultButton");
             editButton.addEventListener("click", (event) => {
-                enableEditExercise(event.target);
+                enableEditExercise(event.target, "edit");
             });
 
             let actionDiv = document.createElement("div");

@@ -32,5 +32,16 @@
     "equipment": "Basketball, Korb",
     "public": true,
     "weight": false
+  },
+  {
+    "userIdCreated": 0,
+    "name": "Hello",
+    "equipment": "",
+    "description": "This is an exercise",
+    "targetedMuscleGroups": [
+      "Chest"
+    ],
+    "public": true,
+    "weight": false
   }
 ]

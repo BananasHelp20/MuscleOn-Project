@@ -99,7 +99,7 @@ export async function saveExercise(exercise: model.Exercise, newExercise: model.
     let unsupEx: model.Exercise[] = await gatherUnsupportedExercises();
     newExercise.exerciseType = "defined";
     
-    // FIXED: Proper loop
+    // FIXED: Proper loop for user-defined exercises
     let temp: number = -1;
     for (let i: number = 0; i < exercises.length; i++) {
         if (exercises[i]?.name == exercise.name) {
@@ -107,20 +107,16 @@ export async function saveExercise(exercise: model.Exercise, newExercise: model.
             temp = i;
         }
     }
-    if (temp != -1) {
-        exercises[temp] = newExercise;
-    }
 
-    temp = -1;
-
+    // FIXED: Separate counter for unsupported exercises
+    let tempUnsup: number = -1;
     if (exercise.public) {
-        for (let i in unsupEx) {
-            if (unsupEx[i].name == exercise.name) unsupEx[i] = newExercise;
+        for (let i: number = 0; i < unsupEx.length; i++) {
+            if (unsupEx[i]?.name == exercise.name) {
+                unsupEx[i] = newExercise;
+                tempUnsup = i;
+            }
         }
-    }
-
-    if (temp != -1) {
-        unsupEx[temp] = newExercise;
     }
 
     await writeFile(join(__dirname, "..", "..", "data", "userStatic", "userdefinedExercises.json"), JSON.stringify(exercises, null, 2));
