@@ -321,12 +321,15 @@ function initializeExercises() {
             if (saveExercise(event.target, "create") != false) {
                 addExerciseBtn.innerText = "Add New Exercise";
                 document.getElementById("cancelExerciseAddition").hidden = true;
-                document.getElementById("exerciseForm").hidden = true;  // ← HINZUFÜGEN
+                document.getElementById("exerciseForm").hidden = true;
+                document.getElementById("exerciseForm").innerHTML = localStorage.getItem("form");
+                window.location.reload();
             }
         } else {
             addExerciseBtn.innerText = "Save Exercise";
             document.getElementById("cancelExerciseAddition").hidden = false;
-            document.getElementById("exerciseForm").hidden = false;  // ← HINZUFÜGEN
+            document.getElementById("exerciseForm").hidden = false;
+            localStorage.setItem("form", document.getElementById("exerciseForm").innerHTML);
             addExercise();
         }
     });

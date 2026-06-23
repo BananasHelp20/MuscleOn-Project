@@ -246,11 +246,9 @@ function signUp() {
         let validCode = false;
         while (!validCode) {
             let validationCode = prompt("A validation mail has been sent to your email address. Please enter the validation code here:");
-
             if (!validationCode) {
                 return; // User cancelled
             }
-
             let isValid = await validateMail(validationCode);
             if (isValid.valid) {
                 validCode = true;

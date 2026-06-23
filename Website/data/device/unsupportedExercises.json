@@ -36,12 +36,46 @@
   {
     "userIdCreated": 0,
     "name": "Hello",
+    "equipment": "Yes",
+    "targetedMuscleGroups": [
+      "Chest",
+      "Upper Back (Traps & Rhomboids)"
+    ],
+    "public": true,
+    "weight": false
+  },
+  {
+    "userIdCreated": 0,
+    "name": "asdfa",
     "equipment": "",
-    "description": "This is an exercise",
+    "targetedMuscleGroups": [],
+    "public": true,
+    "weight": true
+  },
+  {
+    "userIdCreated": 0,
+    "name": "asdfa",
+    "equipment": "",
+    "targetedMuscleGroups": [],
+    "public": true,
+    "weight": true
+  },
+  {
+    "userIdCreated": 0,
+    "name": "asdfad",
+    "equipment": "",
     "targetedMuscleGroups": [
       "Chest"
     ],
     "public": true,
-    "weight": false
+    "weight": true
+  },
+  {
+    "userIdCreated": 0,
+    "name": "asdfad",
+    "equipment": "",
+    "targetedMuscleGroups": [],
+    "public": true,
+    "weight": true
   }
 ]

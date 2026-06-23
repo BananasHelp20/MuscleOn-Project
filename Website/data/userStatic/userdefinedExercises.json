@@ -48,23 +48,36 @@
   },
   {
     "userIdCreated": 0,
-    "name": "Hello",
+    "name": "asdfa",
     "equipment": "",
-    "description": "This is an exercise",
-    "targetedMuscleGroups": [
-      "Chest"
-    ],
+    "targetedMuscleGroups": [],
     "public": true,
-    "weight": false
+    "weight": true
   },
   {
     "userIdCreated": 0,
     "name": "asdfa",
     "equipment": "",
+    "targetedMuscleGroups": [],
+    "public": true,
+    "weight": true
+  },
+  {
+    "userIdCreated": 0,
+    "name": "asdfad",
+    "equipment": "",
     "targetedMuscleGroups": [
       "Chest"
     ],
-    "public": false,
-    "weight": false
+    "public": true,
+    "weight": true
+  },
+  {
+    "userIdCreated": 0,
+    "name": "asdfad",
+    "equipment": "",
+    "targetedMuscleGroups": [],
+    "public": true,
+    "weight": true
   }
 ]
