@@ -184,6 +184,13 @@ function startFetchingData() {
     // Initialisiere Client-ID für WebSocket Session Tracking
     clientId = getOrCreateClientId();
     
+    // Resize Chart wenn verfügbar (falls Element jetzt sichtbar ist)
+    if (liveChart) {
+        setTimeout(() => {
+            liveChart.resize();
+        }, 100);
+    }
+    
     // Versuche zuerst WebSocket, falls nicht verfügbar, nutze Polling
     if (window.WebSocket) {
         startWebSocketConnection();

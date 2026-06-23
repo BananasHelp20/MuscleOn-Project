@@ -365,17 +365,11 @@ function saveExercise(exerciseSaveButton, mode) {
     exerciseObject.innerHTML = "";
 
     exerciseObject.appendChild(title);
-    exerciseObject.appendChild(document.createElement("br"));
     exerciseObject.appendChild(description);
-    exerciseObject.appendChild(document.createElement("br"));
     exerciseObject.appendChild(createdByUser);
-    exerciseObject.appendChild(document.createElement("br"));
     exerciseObject.appendChild(equipment);
-    exerciseObject.appendChild(document.createElement("br"));
     exerciseObject.appendChild(weight);
-    exerciseObject.appendChild(document.createElement("br"));
     exerciseObject.appendChild(isPublic);
-    exerciseObject.appendChild(document.createElement("br"));
     exerciseObject.appendChild(muscleGroupList);
     exerciseObject.appendChild(actionDiv);
 
@@ -541,6 +535,9 @@ function enableEditExercise(exerciseEditButton) {
 
     let createdBy = exerciseObjectChildren.item(4);
 
+    let equipmentLabel = document.createElement("label");
+    equipmentLabel.innerText = "Equipment: ";
+
     let equipment = document.createElement("input");
     equipment.classList.add("styledInput");
     equipment.setAttribute("type", "text");
@@ -556,6 +553,7 @@ function enableEditExercise(exerciseEditButton) {
     weightSpan.innerText = "Uses Weight: ";
 
     let weightDiv = document.createElement("div");
+    weightDiv.classList.add("checkboxContainer");
     weightDiv.appendChild(weightSpan);
     weightDiv.appendChild(weight);
 
@@ -566,6 +564,7 @@ function enableEditExercise(exerciseEditButton) {
     let visibSpan = document.createElement("span");
     visibSpan.innerText = "Visible for other users: ";
     let visibilityDiv = document.createElement("div");
+    visibilityDiv.classList.add("checkboxContainer");
     visibilityDiv.appendChild(visibSpan);
     visibilityDiv.appendChild(visibility);
 
@@ -601,6 +600,7 @@ function enableEditExercise(exerciseEditButton) {
     });
 
     let actionDiv = document.createElement("div");
+    actionDiv.classList.add("actionDiv");
     actionDiv.appendChild(saveButton);
     actionDiv.appendChild(cancelButton);
 
@@ -639,18 +639,12 @@ function enableEditExercise(exerciseEditButton) {
 
     object.innerHTML = "";
     object.appendChild(title);
-    object.appendChild(document.createElement("br"));
     object.appendChild(description);
-    object.appendChild(document.createElement("br"));
     object.appendChild(createdBy);
-    object.appendChild(document.createElement("br"));
+    object.appendChild(equipmentLabel);
     object.appendChild(equipment);
-    object.appendChild(document.createElement("br"));
     object.appendChild(weightDiv);
-    object.appendChild(document.createElement("br"));
     object.appendChild(visibilityDiv);
-    object.appendChild(document.createElement("br"));
     object.appendChild(muscleGroupSelection);
-    object.appendChild(document.createElement("br"));
     object.appendChild(actionDiv);
 }

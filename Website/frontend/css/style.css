@@ -597,6 +597,7 @@ textarea {
 
 #liveGraph {
     width: 100%;
+    height: 400px;
     display: flex;
     justify-content: center;
 }
@@ -696,13 +697,12 @@ textarea {
     justify-content: space-around;
 }
 
-/* Inputs im exerciseForm sollten linksbündig sein */
-#exerciseForm input[type="text"],
-#exerciseForm textarea {
-    text-align: left;
+/* Checkbox-Container linksbündig ausrichten - nur im Edit-Modus */
+.exerciseObject .checkboxContainer {
+    justify-content: flex-start;
 }
 
-/* Checkbox-Container linksbündig ausrichten */
+/* Checkbox-Container im Formular linksbündig ausrichten */
 #exerciseForm > div {
     display: flex;
     align-items: center;
@@ -718,4 +718,13 @@ textarea {
 #exerciseForm > div input[type="checkbox"] {
     margin: 0;
     cursor: pointer;
+}
+
+/* Checkbox-Container für Edit-Funktion */
+.checkboxContainer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0.5em;
+    margin: 0.5em 0;
 }
