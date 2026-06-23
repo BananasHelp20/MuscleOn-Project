@@ -10,4 +10,5 @@ Das Backend fragt alle Nutzerbetreffenden Daten ab, und erstellt ein User Objekt
 (So, wie sie von read.ts wieder ausgelesen werden)
 Die Website fragt die Daten aus den JSON dateien ab, und initialisiert alles passend dazu.
 
-In dem Router (ts und js) ist oft beschrieben, was ungefähr bei manchem passieren soll, bzw noch nicht im Backend umgesetzt ist.
+In dem Router (ts und js) ist oft in Kommentaren beschrieben, was ungefähr bei gewissen dingen passieren soll, bzw noch nicht im Backend umgesetzt ist.
+
