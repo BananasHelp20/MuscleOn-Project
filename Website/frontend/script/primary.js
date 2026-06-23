@@ -35,6 +35,8 @@ function initalizeDefault(deviceData) {
     initializeLightSwitch();
     initializeExercises();
     initializeDevMode();
+    initializeViewingPage();
+    
 
     //editing zurücksetzen
     deviceData.editingPlanSection = false;

@@ -245,6 +245,44 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
     }
 }
 
+function initializeViewingPage() {
+    let pages = document.getElementsByClassName("menuObject");
+    let currentUrl = window.location.pathname;
+    
+    // Bestimme die aktuelle Seite beim Laden
+    for (let i = 0; i < pages.length; i++) {
+        let pageLink = pages[i].getAttribute("href");
+        
+        // Überprüfe ob dieser Link der aktuellen Seite entspricht
+        if (pageLink && currentUrl.endsWith(pageLink.split('/').pop())) {
+            let span = pages[i].children.item(0);
+            if (span && span.tagName.toUpperCase() == "SPAN") {
+                span.classList.add("activeMenuText");
+            }
+        }
+        
+        // Event Listener für Klicks hinzufügen
+        pages[i].addEventListener("click", (event) => {
+            // Entferne activeMenuText von allen anderen Links
+            for (let j = 0; j < pages.length; j++) {
+                let span = pages[j].children.item(0);
+                if (span && span.tagName.toUpperCase() == "SPAN") {
+                    span.classList.remove("activeMenuText");
+                }
+            }
+            
+            // Füge activeMenuText zu dem geklickten Link hinzu
+            let obj = event.target.closest(".menuObject");
+            if (obj) {
+                let span = obj.children.item(0);
+                if (span && span.tagName.toUpperCase() == "SPAN") {
+                    span.classList.add("activeMenuText");
+                }
+            }
+        });
+    }
+}
+
 function initializeExercises() {
     let exerciseDiv = document.getElementById("exerciseDisplay");
     let exerciseSwitch = document.getElementById("exerciseSwitch");

@@ -24,6 +24,8 @@
 
    --button-input-color: rgb(0, 169, 166);
    --button-background-color: rgba(255, 255, 255, 0.726);
+   --button-background-color-hover: rgba(255, 255, 255, 0.8);
+   --button-background-color-active: rgba(255, 255, 255, 0.9);
    --title-color: rgb(255, 255, 255);
    --text-color: antiquewhite;
    --site-body-background: rgba(147, 147, 147, 0.701);
@@ -34,6 +36,7 @@
    --menu-bar-background: linear-gradient(to top, rgba(48, 113, 133, 0.66) 0%, rgb(23, 140, 176) 91%);
    --menu-deviders-color: rgba(193, 193, 193, 0.42);
    --menu-text-color: rgb(220, 220, 220);
+   --activeMenu: rgb(255, 230, 0);
 }
 
 body {
@@ -153,6 +156,10 @@ body {
     border-color: var(--main-border-color);
 }
 
+.activeMenuText {
+    color: var(--activeMenu);
+}
+
 .background {
     /*Level 1*/
     background-image: url(../images/background2.jpg);
@@ -175,15 +182,20 @@ body {
 
 .defaultButton {
     background-color: var(--button-background-color);
+    transition: all 0.2s ease;
     color: var(--button-input-color);
+    -webkit-transition: all 0.2s ease;
+    -moz-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    -o-transition: all 0.2s ease;
 }
 
 .defaultButton:hover {
-    background-color: var(--button-background-color);
+    background-color: var(--button-background-color-hover);
 }
 
 .defaultButton:active {
-    background-color: var(--button-background-color);
+    background-color: var(--button-background-color-active);
 }
 
 .tableButton {

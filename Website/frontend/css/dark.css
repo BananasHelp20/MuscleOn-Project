@@ -33,6 +33,7 @@
    --menu-bar-background: linear-gradient(to top, rgba(48, 113, 133, 0.66) 0%, rgb(9, 30, 140) 91%);
    --menu-deviders-color: rgba(193, 193, 193, 0.42);
    --menu-text-color: rgb(220, 220, 220);
+   --activeMenu: rgb(255, 230, 0);
 }
 
 body {
@@ -140,6 +141,10 @@ header {
 
 .section div h3 {
     border-color: var(--border-color);
+}
+
+.activeMenuText {
+    color: var(--activeMenu);
 }
 
 .background {
