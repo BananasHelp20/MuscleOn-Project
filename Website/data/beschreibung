@@ -1,0 +1,13 @@
+Die Website funktioniert folgendermaßen:
+Das Fronend ist fix und fertig, keine Änderungen werden benötigt.
+Alles, was auf der Website angezeigt wird, bzw das mit dem alles auf der Website funktioniert, sind die JSON dateien in /data
+Diese werden laufend von der Website gelesen und beschrieben. Das heißt, die Datenbank sendet nichts direkt and die Website, sondern speichert alles
+in die JSON dateien, welche dann von der Website ausgelesen werden. Das einzige, das eine Direkte Verbindung zur Datenbank hat, ist der Livegraph.
+Wenn also z.B. ein Nutzerlogin passiert, passiert folgendes:
+
+Die Datenbank wird abgefragt ob dieser Nutzer existiert,
+Das Backend fragt alle Nutzerbetreffenden Daten ab, und erstellt ein User Objekt. Dieses Userobjekt wird mit anderen Nutzerdaten in die JSON dateien gespeichert.
+(So, wie sie von read.ts wieder ausgelesen werden)
+Die Website fragt die Daten aus den JSON dateien ab, und initialisiert alles passend dazu.
+
+In dem Router (ts und js) ist oft beschrieben, was ungefähr bei manchem passieren soll, bzw noch nicht im Backend umgesetzt ist.
