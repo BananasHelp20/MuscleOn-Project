@@ -56,6 +56,7 @@ function render(deviceData, data) {
     showButtons(deviceData.loggedIn);
     if (deviceData.loggedIn) {
         showProfileSettings(data.userProperties);
+        updateProfileName(getUserPropertiesFromLocalStorage().userName);
         renderExercises(data.userSettings);
         renderSessionAndExercise(data);
         if (document.getElementById("lockedFromLogin")) document.getElementById("lockedFromLogin").hidden = false;

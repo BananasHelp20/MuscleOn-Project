@@ -404,6 +404,10 @@ let editListener = () => {
     enableProfileEditing();
 };
 
+let liveNameListener = (event) => {
+        updateProfileName(event.target.value);
+    }
+
 function validatePasswordChange(userProperties) {
     let currentPassword = document.getElementById("currentPassword").value;
     let newPassword = document.getElementById("newPassword").value;
@@ -438,6 +442,12 @@ function disableProfileEditing() {
     document.getElementById("editProfileButton").removeEventListener("click", saveListener);
     document.getElementById("editProfileButton").addEventListener("click", editListener);
     showProfileSettings(getUserPropertiesFromLocalStorage());
+    updateProfileName(getUserPropertiesFromLocalStorage().userName);
+}
+
+function updateProfileName(newName) {
+    let nameDisplay = document.getElementById("inlineUsernameDisplay");
+    if (nameDisplay) nameDisplay.innerText = newName;
 }
 
 function enableProfileEditing() {
@@ -451,26 +461,32 @@ function enableProfileEditing() {
     email.type = "email";
     email.id = "emailInput";
     email.classList.add("styledInput");
+
     let userName = document.createElement("input");
     userName.value = profileSettingsList.children.item(0).innerText.split(": ")[1];
     userName.type = "text";
     userName.id = "userNameInput";
     userName.classList.add("styledInput");
+    userName.addEventListener("input", liveNameListener);
+
     let weight = document.createElement("input");
     weight.value = profileSettingsList.children.item(2).innerText.split(": ")[1].split(" ")[0];
     weight.type = "number";
     weight.id = "weightInput";
     weight.classList.add("styledInput");
+
     let size = document.createElement("input");
     size.value = profileSettingsList.children.item(3).innerText.split(": ")[1].split(" ")[0];
     size.type = "number";
     size.id = "sizeInput";
     size.classList.add("styledInput");
+
     let birthday = document.createElement("input");
     birthday.value = profileSettingsList.children.item(4).innerText.split(": ")[1];
     birthday.type = "date";
     birthday.id = "birthdayInput";
     birthday.classList.add("styledInput");
+
     profileSettingsList.children.item(0).innerHTML = "<span>Username: </span>";
     profileSettingsList.children.item(0).appendChild(userName);
     profileSettingsList.children.item(1).innerHTML = "<span>Email: </span>";
@@ -487,6 +503,9 @@ function saveProfileSettings() {
     let profileSettingsList = document.getElementById("profileSettingsList");
     let newUserData = getUserPropertiesFromLocalStorage();
     newUserData.userName = document.getElementById("userNameInput").value;
+    document.getElementById("userNameInput").removeEventListener("input", liveNameListener);
+    updateProfileName(newUserData.userName);
+
     newUserData.email = document.getElementById("emailInput").value;
     newUserData.weight = parseInt(document.getElementById("weightInput").value);
     newUserData.size = parseInt(document.getElementById("sizeInput").value);
