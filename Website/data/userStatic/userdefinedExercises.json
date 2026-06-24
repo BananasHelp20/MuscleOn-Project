@@ -1,130 +1,94 @@
 [
-  {
-    "userIdCreated": 0,
-    "name": "Volleyball",
-    "equipment": "None",
-    "description": "Volleyball hoid",
-    "targetedMuscleGroups": [
-      "Biceps"
-    ],
-    "public": true,
-    "weight": false,
-    "exerciseType": "defined"
-  },
-  {
-    "userIdCreated": 0,
-    "name": "Askö",
-    "equipment": "None",
-    "description": "Askö Turnverein",
-    "targetedMuscleGroups": [
-      "Chest",
-      "Upper Back (Traps & Rhomboids)",
-      "Mid-Back (Lats)",
-      "Lower Back (Erector Spinae)",
-      "Shoulders (Deltoids)",
-      "Biceps",
-      "Core (Abs & Obliques)",
-      "Glutes",
-      "Quadriceps",
-      "Hamstrings",
-      "Calves, (Gastrocnemius & Soleus)"
-    ],
-    "public": true,
-    "weight": false,
-    "exerciseType": "defined"
-  },
-  {
-    "userIdCreated": 0,
-    "name": "Neiche Exercise",
-    "equipment": "None",
-    "description": "Irgend a Description",
-    "targetedMuscleGroups": [
-      "Biceps",
-      "Triceps"
-    ],
-    "public": true,
-    "weight": false,
-    "exerciseType": "defined"
-  },
-  {
-    "userIdCreated": 0,
-    "name": "asdfa",
-    "equipment": "",
-    "targetedMuscleGroups": [],
-    "public": true,
-    "weight": true
-  },
-  {
-    "userIdCreated": 0,
-    "name": "asdfa",
-    "equipment": "",
-    "targetedMuscleGroups": [],
-    "public": true,
-    "weight": true
-  },
-  {
-    "userIdCreated": 0,
-    "name": "asdfad",
-    "equipment": "",
-    "targetedMuscleGroups": [
-      "Chest"
-    ],
-    "public": true,
-    "weight": true
-  },
-  {
-    "userIdCreated": 0,
-    "name": "asdfad",
-    "equipment": "",
-    "targetedMuscleGroups": [],
-    "public": true,
-    "weight": true
-  },
-  {
-    "userIdCreated": 0,
-    "name": "Volleyball",
-    "equipment": "None",
-    "description": "Volleyball hoid",
-    "targetedMuscleGroups": [
-      "Biceps"
-    ],
-    "public": true,
-    "weight": false,
-    "exerciseType": "unsupported"
-  },
-  {
-    "userIdCreated": 0,
-    "name": "Askö",
-    "equipment": "None",
-    "description": "Askö Turnverein",
-    "targetedMuscleGroups": [
-      "Chest",
-      "Upper Back (Traps & Rhomboids)",
-      "Mid-Back (Lats)",
-      "Lower Back (Erector Spinae)",
-      "Shoulders (Deltoids)",
-      "Biceps",
-      "Core (Abs & Obliques)",
-      "Glutes",
-      "Quadriceps",
-      "Hamstrings",
-      "Calves, (Gastrocnemius & Soleus)"
-    ],
-    "public": true,
-    "weight": false,
-    "exerciseType": "unsupported"
-  },
-  {
-    "userIdCreated": 0,
-    "name": "Neiche Exercise",
-    "equipment": "None",
-    "description": "Irgend a Description",
-    "targetedMuscleGroups": [
-      "Biceps",
-      "Triceps"
-    ],
-    "public": true,
-    "weight": false,
-    "exerciseType": "unsupported"
-  }
+    {
+        "userIdCreated": 0,
+        "name": "Volleyball",
+        "equipment": "None",
+        "description": "Volleyball hoid",
+        "targetedMuscleGroups": ["Biceps"],
+        "public": true,
+        "weight": false,
+        "exerciseType": "defined"
+    },
+    {
+        "userIdCreated": 0,
+        "name": "Askö",
+        "equipment": "None",
+        "description": "Askö Turnverein",
+        "targetedMuscleGroups": ["Chest", "Upper Back (Traps & Rhomboids)", "Mid-Back (Lats)", "Lower Back (Erector Spinae)", "Shoulders (Deltoids)", "Biceps", "Core (Abs & Obliques)", "Glutes", "Quadriceps", "Hamstrings", "Calves, (Gastrocnemius & Soleus)"],
+        "public": true,
+        "weight": false,
+        "exerciseType": "defined"
+    },
+    {
+        "userIdCreated": 0,
+        "name": "Neiche Exercise",
+        "equipment": "None",
+        "description": "Irgend a Description",
+        "targetedMuscleGroups": ["Biceps", "Triceps"],
+        "public": true,
+        "weight": false,
+        "exerciseType": "defined"
+    },
+    {
+        "userIdCreated": 0,
+        "name": "asdfa",
+        "equipment": "",
+        "targetedMuscleGroups": [],
+        "public": true,
+        "weight": true
+    },
+    {
+        "userIdCreated": 0,
+        "name": "asdfa",
+        "equipment": "",
+        "targetedMuscleGroups": [],
+        "public": true,
+        "weight": true
+    },
+    {
+        "userIdCreated": 0,
+        "name": "asdfad",
+        "equipment": "",
+        "targetedMuscleGroups": ["Chest"],
+        "public": true,
+        "weight": true
+    },
+    {
+        "userIdCreated": 0,
+        "name": "asdfad",
+        "equipment": "",
+        "targetedMuscleGroups": [],
+        "public": true,
+        "weight": true
+    },
+    {
+        "userIdCreated": 0,
+        "name": "Volleyball",
+        "equipment": "None",
+        "description": "Volleyball hoid",
+        "targetedMuscleGroups": ["Biceps"],
+        "public": true,
+        "weight": false,
+        "exerciseType": "unsupported"
+    },
+    {
+        "userIdCreated": 0,
+        "name": "Askö",
+        "equipment": "None",
+        "description": "Askö Turnverein",
+        "targetedMuscleGroups": ["Chest", "Upper Back (Traps & Rhomboids)", "Mid-Back (Lats)", "Lower Back (Erector Spinae)", "Shoulders (Deltoids)", "Biceps", "Core (Abs & Obliques)", "Glutes", "Quadriceps", "Hamstrings", "Calves, (Gastrocnemius & Soleus)"],
+        "public": true,
+        "weight": false,
+        "exerciseType": "unsupported"
+    },
+    {
+        "userIdCreated": 0,
+        "name": "Neiche Exercise",
+        "equipment": "None",
+        "description": "Irgend a Description",
+        "targetedMuscleGroups": ["Biceps", "Triceps"],
+        "public": true,
+        "weight": false,
+        "exerciseType": "unsupported"
+    }
 ]
