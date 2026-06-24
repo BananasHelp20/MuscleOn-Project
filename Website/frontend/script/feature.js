@@ -87,7 +87,7 @@ function addWeekday(data) {
     let delButton = document.createElement("button");
     delButton.setAttribute("class", "tableButton");
     delButton.setAttribute("id", "delete-day");
-    delButton.innerText = "remove day";
+    delButton.innerText = "Remove Session";
     delButton.addEventListener("click", (event) => {
         if (document.getElementById("plan-table").children.length > 1) event.target.parentElement.parentElement.remove();
         if (document.getElementById("plan-table").children.length <= 1) event.target.parentElement.parentElement.parentElement.parentElement.remove();
@@ -98,17 +98,17 @@ function addWeekday(data) {
     removeExercisesForDayButton.setAttribute("class", "tableButton");
     removeExercisesForDayButton.setAttribute("id", "exercise-controlButton");
     if (data && data.exercises.length != 0) {
-        removeExercisesForDayButton.innerText = "remove exercises";
+        removeExercisesForDayButton.innerText = "Remove Exercises";
     } else {
-        removeExercisesForDayButton.innerText = "add exercises";
+        removeExercisesForDayButton.innerText = "Add Exercises";
     }
     removeExercisesForDayButton.addEventListener("click", (event) => {
         if (document.getElementById("exercise-table" + event.target.parentElement.parentElement.getAttribute("id"))) {
             removeExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
-            event.target.innerText = "add exercises";
+            event.target.innerText = "Add Exercises";
         } else {
             addExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
-            event.target.innerText = "remove exercises";
+            event.target.innerText = "Remove Exercises";
         }
     });
 
