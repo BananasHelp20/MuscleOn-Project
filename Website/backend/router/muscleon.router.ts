@@ -1,5 +1,5 @@
 import express from 'express';
-import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise, saveExercise, getTasks, saveTasks } from '../fileManagement/muscleon.read';
+import { setUserData, gatherSupportedExercises, gatherUnsupportedExercises, gatherUserExercises, gatherUserData, gatherDeviceData, setDeviceData, setUserSettings, clearUserData, setUserProperties, saveTrainingsPlan, appendValidationCode, getValidationCode, delValidationCode, addExercise, validateExercise, deleteExercise, saveExercise, getTasks, saveTasks, downloadExercises, uploadExercises } from '../fileManagement/muscleon.read';
 import * as model from '../model/muscleon.model';
 // import { resumeExercise, startOrResumeSession, stopExercise, stopSession } from '../databaseManagement/muscleon.calc';
 import { sendMail, validateMail } from '../mail/muscleon.mail';
@@ -208,6 +208,40 @@ muscleRouter.get('/getExercises/unsupported', async (req, res) => { //unsupporte
 muscleRouter.get('/getExercises/user', async (req, res) => { // userdefined exercises holen
     res.statusCode = 200;
     res.send(await gatherUserExercises());
+});
+
+muscleRouter.get('/downloadExercises', async (req, res) => { // download user exercises as JSON file
+    try {
+        const exercises = await downloadExercises();
+        res.setHeader("Content-Disposition", "attachment; filename=userdefinedExercises.json");
+        res.setHeader("Content-Type", "application/json");
+        res.statusCode = 200;
+        res.send(JSON.stringify(exercises, null, 2));
+    } catch (error) {
+        console.error("Error downloading exercises:", error);
+        res.statusCode = 500;
+        res.send({ message: "Failed to download exercises" });
+    }
+});
+
+muscleRouter.post('/uploadExercises', async (req, res) => { // upload user exercises from JSON file
+    try {
+        const { exercises } = req.body;
+        
+        if (!exercises || !Array.isArray(exercises)) {
+            res.statusCode = 400;
+            res.send({ message: "Invalid request: exercises array required" });
+            return;
+        }
+
+        const importedCount = await uploadExercises(exercises);
+        res.statusCode = 200;
+        res.send({ message: "Exercises uploaded successfully", importedCount: importedCount });
+    } catch (error) {
+        console.error("Error uploading exercises:", error);
+        res.statusCode = 500;
+        res.send({ message: "Failed to upload exercises: " + (error instanceof Error ? error.message : "Unknown error") });
+    }
 });
 
 muscleRouter.get('/session/start', async (req, res) => { //session starten (auskommentierter code ist noch nicht implementiert momentan)

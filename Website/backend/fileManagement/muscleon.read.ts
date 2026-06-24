@@ -249,3 +249,51 @@ export async function clearUserData(userSettings: model.UserSettings) {
     writeFile(join(__dirname, "..", "..", "data", "userStatic", "average.json"), "");
     */
 }
+
+export async function downloadExercises(): Promise<model.Exercise[]> {
+    let userExercises: model.Exercise[] = await gatherUserExercises();
+    return userExercises;
+}
+
+export async function uploadExercises(exercises: model.Exercise[]): Promise<number> {
+    if (!Array.isArray(exercises) || exercises.length === 0) {
+        throw new Error("Invalid exercises data");
+    }
+
+    let userExercises: model.Exercise[] = await gatherUserExercises();
+    let unsuppExercises: model.Exercise[] = await gatherUnsupportedExercises();
+    let importedCount = 0;
+
+    for (let exercise of exercises) {
+        // Validate exercise has required fields
+        if (!exercise.name || !exercise.description) {
+            console.warn("Skipping invalid exercise:", exercise);
+            continue;
+        }
+
+        // Set default values
+        exercise.exerciseType = "defined";
+        exercise.weight = exercise.weight || false;
+        exercise.public = exercise.public || false;
+        exercise.equipment = exercise.equipment || "None";
+
+        // Simply add the exercise without checking for duplicates
+        userExercises.push(exercise);
+
+        // Add to unsupported exercises if public
+        if (exercise.public) {
+            exercise.exerciseType = "unsupported";
+            unsuppExercises.push(exercise);
+        }
+
+        importedCount++;
+    }
+
+    // Save updated exercises
+    await writeFile(join(__dirname, "..", "..", "data", "userStatic", "userdefinedExercises.json"), JSON.stringify(userExercises, null, 2));
+    if (unsuppExercises.length > 0) {
+        await writeFile(join(__dirname, "..", "..", "data", "device", "unsupportedExercises.json"), JSON.stringify(unsuppExercises, null, 2));
+    }
+
+    return importedCount;
+}
