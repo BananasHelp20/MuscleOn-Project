@@ -12,6 +12,8 @@
   --brand-deep: #075a79;
   --accent: #f3ca2b;
   --shadow: 0 20px 55px rgba(8, 57, 77, .11);
+  --backdrop-image: url("../images/background2.jpg");
+  --backdrop-tint: rgba(234, 246, 246, .28);
 }
 
 html:has(#modeStylesheet[href$="dark.css"]) {
@@ -25,6 +27,8 @@ html:has(#modeStylesheet[href$="dark.css"]) {
   --brand-deep: #75dadd;
   --accent: #f3ca2b;
   --shadow: 0 24px 60px rgba(0, 0, 0, .24);
+  --backdrop-image: url("../images/background.jpg");
+  --backdrop-tint: rgba(5, 16, 29, .42);
 }
 html:has(#modeStylesheet[href$="dark.css"]) .defaultButton,
 html:has(#modeStylesheet[href$="dark.css"]) .sessionCtrlButton,
@@ -39,9 +43,9 @@ html:has(#modeStylesheet[href$="dark.css"]) #inlineSignupButton { color: #183649
 html:has(#modeStylesheet[href$="dark.css"]) .button-secondary { color: var(--brand-deep) !important; }
 
 html { min-height: 100%; background: var(--page-bg) !important; }
-body { min-height: 100vh; font-family: "Segoe UI", Arial, sans-serif; line-height: 1.55; color: var(--ink); background: var(--page-bg) !important; overflow-x: hidden; }
-body::before { content: ""; position: fixed; inset: 0; z-index: -2; background: radial-gradient(circle at 2% 42%, rgba(34, 198, 201, .15), transparent 31%), radial-gradient(circle at 99% 4%, rgba(32, 136, 184, .13), transparent 36%); pointer-events: none; }
-.background { display: none; }
+body { position: relative; isolation: isolate; min-height: 100vh; font-family: "Segoe UI", Arial, sans-serif; line-height: 1.55; color: var(--ink); background: transparent !important; overflow-x: hidden; }
+body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: var(--backdrop-tint); pointer-events: none; }
+.background { display: block; position: fixed; inset: -40px; width: auto; height: auto; z-index: -2; background-image: var(--backdrop-image) !important; background-position: center; background-repeat: no-repeat; background-size: cover; filter: blur(28px) saturate(140%); -webkit-filter: blur(28px) saturate(140%); transform: none; pointer-events: none; }
 
 header { background: linear-gradient(110deg, #0d7896, #10a9aa 55%, #10567f) !important; border-bottom: 4px solid var(--accent); box-shadow: 0 9px 28px rgba(0, 47, 69, .14); }
 #actualHeaderHolder { width: min(1360px, calc(100% - 64px)); margin: auto; display: flex; flex-direction: row; align-items: center; gap: 16px; min-height: 94px; }
