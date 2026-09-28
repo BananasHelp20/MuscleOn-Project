@@ -74,7 +74,7 @@ header { background: linear-gradient(110deg, #0d7896, #10a9aa 55%, #10567f) !imp
 :focus-visible { outline: 3px solid var(--accent) !important; outline-offset: 3px; }
 [hidden] { display: none !important; }
 
-#main-page { padding: 0; overflow: hidden; }
+main#main-page { padding: 0; overflow: hidden; }
 .home-hero { display: grid; grid-template-columns: 1.15fr .85fr; align-items: stretch; min-height: 430px; }
 .home-copy { padding: clamp(32px, 6vw, 76px); align-self: center; }
 .home-copy h1 { max-width: 10ch; margin-bottom: 22px; }
@@ -109,11 +109,40 @@ label { display: inline-block; margin: 6px 0; font-weight: 600; }
 #login-page > input, #passwd-change-page > input, #signup-page > input:not([type="checkbox"]) { display: block; width: min(100%, 460px); }
 #login-page > br, #passwd-change-page > br, #signup-page > br { display: none; }
 #login-page > button, #passwd-change-page > button, #signup-page > button { margin: 24px 0 12px; }
+#login-page > button, #signup-page > button { display: flex; }
 #signup-page > label[for="plan"] { margin-top: 24px; font-weight: 600; }
+#signup-page > input#plan { margin-left: 10px; }
 #loginLink, #signupLink, #returnLink { color: var(--brand-deep) !important; }
 #loginLink:hover, #signupLink:hover, #returnLink:hover { color: var(--brand) !important; }
 
-#settings-page #lockedFromLogin { line-height: 2.5; }
+.about-team { max-width: 940px; }
+.about-team > h3 { margin: 0 0 22px; }
+.team-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.team-card { min-width: 0; padding: 24px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface-soft); }
+.team-card h4 { margin: 0 0 7px; font-size: 1.1rem; font-weight: 600; }
+.team-card .role { margin: 0; color: var(--brand-deep); font-weight: 600; }
+.team-card p + p { margin-top: 12px; }
+.team-card-wide { grid-column: 1 / -1; }
+.about-quote { margin: 30px 0 0; padding: 20px 24px; border-left: 4px solid var(--accent); color: var(--muted); font-size: 1.1rem; font-style: italic; }
+
+#404-page > h4 { max-width: 60ch; margin: 0 0 32px !important; color: var(--muted); font-weight: 400; line-height: 1.6; text-align: left !important; }
+#gameDiv { max-width: 900px; }
+
+#settings-page #lockedFromLogin { line-height: 1.55; }
+.settings-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.settings-panel { min-width: 0; padding: 26px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface-soft); }
+.settings-panel h2 { margin: 0 0 16px; font-size: 1.45rem; font-weight: 600; }
+.settings-panel-wide, .settings-danger { grid-column: 1 / -1; }
+.settings-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; min-height: 58px; padding: 10px 0; border-top: 1px solid var(--line); }
+.settings-row > span { font-weight: 600; }
+.settings-row > div { display: flex; flex-wrap: wrap; gap: 8px; }
+.settings-row .defaultButton { margin: 0; }
+.settings-panel #viewSection { margin-top: 18px; background: var(--surface) !important; }
+.settings-danger { display: flex; justify-content: flex-end; padding: 7px 0; }
+.settings-danger .defaultButton { background: #aa4545 !important; color: #fff !important; }
+.settings-danger .defaultButton:hover { background: #8e3232 !important; }
+html:has(#modeStylesheet[href$="dark.css"]) .settings-danger .defaultButton { color: #fff !important; }
+html:has(#modeStylesheet[href$="dark.css"]) .settings-danger .defaultButton:hover { background: #8e3232 !important; }
 #profileSettingsList { display: grid; gap: 8px; padding: 0; margin: 15px 0 25px; list-style: none; }
 #profileSettingsList li { padding: 12px 16px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-soft); }
 #viewSection { gap: 4px; padding: 18px 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); }
@@ -129,8 +158,10 @@ label { display: inline-block; margin: 6px 0; font-weight: 600; }
 #liveGraph { max-width: 100%; overflow: hidden; }
 
 #formContainer { margin: 22px 0; justify-content: stretch; }
+#formContainer:has(.lockedButton[hidden]) { display: none; }
 #formContainer > .exerciseObject { width: 100%; margin: 0; }
 #exercises { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 18px; }
+#exercises:has(> .exerciseObject:only-child) { grid-template-columns: minmax(0, 520px); justify-content: center; }
 .exerciseObject { width: 100%; margin: 0; padding: 25px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface-soft) !important; color: var(--ink); }
 .exerciseTitle { color: var(--brand-deep) !important; text-align: left; font-size: 1.2rem; font-weight: 600; }
 .exerciseObject div { flex-wrap: wrap; gap: 8px; justify-content: flex-start; }
@@ -157,6 +188,8 @@ canvas { max-width: 100%; background: var(--surface-soft) !important; border-col
   .hero-art { min-height: 250px; }
   .feature-grid { grid-template-columns: 1fr; }
   #sections { grid-template-columns: 1fr; }
+  .settings-grid { grid-template-columns: 1fr; }
+  .settings-panel-wide, .settings-danger { grid-column: auto; }
 }
 @media (max-width: 600px) {
   #actualHeaderHolder { width: calc(100% - 24px); }
@@ -166,9 +199,11 @@ canvas { max-width: 100%; background: var(--surface-soft) !important; border-col
   #currentUser { width: 100%; justify-content: flex-start; }
   #inlineSignupButton, #inlineLoginButton, #logoutButton { padding: 8px 12px; }
   .siteBody { width: calc(100% - 24px); margin: 20px auto 45px; padding: 26px 20px; border-radius: 18px; }
-  #main-page { padding: 0; }
+  main#main-page { padding: 0; }
   .home-copy, .home-section { padding: 30px 23px; }
   .home-copy h1 { font-size: 2.7rem; }
   #exercises { grid-template-columns: 1fr; }
   .exerciseObject { padding: 18px; }
+  .team-grid { grid-template-columns: 1fr; }
+  .team-card-wide { grid-column: auto; }
 }

@@ -43,39 +43,49 @@
     <div class="siteBody" id="settings-page">
         <h1>Settings</h1>
         <div id="lockedFromLogin" hidden>
-            Mode: <button id="dev" class="setting defaultButton">devmode</button><br>
-            Environment: <button id="lightSwitch" class="setting defaultButton">lightmode</button><br>
-            Profile Settings: <button id="editProfileButton" class="setting defaultButton">Edit Profile</button>
-            <button id="cancelEditProfileButton" class="setting defaultButton" hidden>Cancel</button>
-            <ul id="profileSettingsList"></ul>
-            Change Password: <button id="changePasswordLink" class="setting defaultButton">Change Password</button><br>
-            Trainingsplan: <button id="createTrainingsPlan" class="setting defaultButton">Create Trainings Plan</button>
-            <button id="cancelTrainingsPlan" class="defaultButton" hidden>Cancel</button><br>
-            View Exercises: <button id="exerciseSwitch" class="setting defaultButton">All</button>
-            <div id="viewSection">
-                <span>Show Session data: <input type="checkbox" id="viewingSession"></span>
-                <span>Show Live data: <input type="checkbox" id="viewingRealTime"></span>
-                <span>Show Long-term data: <input type="checkbox" id="viewingLongterm"></span>
+            <div class="settings-grid">
+                <section class="settings-panel">
+                    <h2>Appearance</h2>
+                    <div class="settings-row"><span>Mode</span><button id="dev" class="setting defaultButton">devmode</button></div>
+                    <div class="settings-row"><span>Environment</span><button id="lightSwitch" class="setting defaultButton">lightmode</button></div>
+                </section>
+                <section class="settings-panel">
+                    <h2>Profile</h2>
+                    <div class="settings-row"><span>Profile Settings</span><div><button id="editProfileButton" class="setting defaultButton">Edit Profile</button> <button id="cancelEditProfileButton" class="setting defaultButton" hidden>Cancel</button></div></div>
+                    <ul id="profileSettingsList"></ul>
+                    <div class="settings-row"><span>Change Password</span><button id="changePasswordLink" class="setting defaultButton">Change Password</button></div>
+                </section>
+                <section class="settings-panel settings-panel-wide">
+                    <h2>Training</h2>
+                    <div class="settings-row"><span>Trainingsplan</span><div><button id="createTrainingsPlan" class="setting defaultButton">Create Trainings Plan</button> <button id="cancelTrainingsPlan" class="defaultButton" hidden>Cancel</button></div></div>
+                    <div class="settings-row"><span>View Exercises</span><button id="exerciseSwitch" class="setting defaultButton">All</button></div>
+                    <div id="viewSection">
+                        <span>Show Session data: <input type="checkbox" id="viewingSession"></span>
+                        <span>Show Live data: <input type="checkbox" id="viewingRealTime"></span>
+                        <span>Show Long-term data: <input type="checkbox" id="viewingLongterm"></span>
+                    </div>
+                    <div id="plan-section" class="table-wrapper" hidden>
+                        <table id="plan-table-table">
+                            <thead>
+                                <tr>
+                                    <th>Day of Week</th>
+                                    <th>From</th>
+                                    <th>To</th>
+                                    <th>Muscle Group</th>
+                                    <th colspan="2" class="tableButtonContainer"><button id="add-weekday" class="tableButton">Add Session</button></th>
+                                </tr>
+                            </thead>
+                            <tbody id="plan-table"></tbody>
+                        </table>
+                        <div id="exercise-tables" class="table-wrapper" hidden>
+                            <h3>Exercises</h3>
+                        </div>
+                    </div>
+                </section>
+                <div class="settings-danger"><button id='deleteUserButton' class="setting defaultButton">Delete Account</button></div>
             </div>
-            <div id="plan-section" class="table-wrapper" hidden>
-                <table id="plan-table-table">
-                    <thead>
-                        <tr>
-                            <th>Day of Week</th>
-                            <th>From</th>
-                            <th>To</th>
-                            <th>Muscle Group</th>
-                            <th colspan="2" class="tableButtonContainer"><button id="add-weekday" class="tableButton">Add Session</button></th>
-                        </tr>
-                    </thead>
-                    <tbody id="plan-table"></tbody>
-                </table>
-                <div id="exercise-tables" class="table-wrapper" hidden>
-                    <h3>Exercises</h3>
-                </div>
-            </div>
-            <button id='deleteUserButton' class="setting defaultButton">Delete Account</button>
         </div>
     </div>
     <div class="background"></div>
 </body>
+</html>
