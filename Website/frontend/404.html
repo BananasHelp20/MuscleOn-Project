@@ -7,6 +7,7 @@
   <title>404 - Page Not Found</title>
   <link rel="stylesheet" type="text/css" href="./css/style.css">
   <link rel="stylesheet" type="text/css" href="./css/light.css" id="modeStylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/redesign.css">
   <script src="./script/initalize.js" defer></script>
   <script src="./script/localStorage.js" defer></script>
   <script src="./script/router.js" defer></script>
@@ -21,36 +22,25 @@
 
 <body style="background-color: transparent">
   <header>
-    <div id="logoHolder">
-    </div>
-    <div id="actualHeaderHolder">
-      <div id="title">
-        Muscle-ON!
-      </div>
-      <div id="menuBar">
-        <div id="menuContainer">
-          <a id="menuLogo" class="menuObject" href="./index.html">
-            <img src="./images/logo.png" alt="">
-          </a>
-          <div id="menuOptionBar">
-            <a class="menuObject menuOption" href="./about.html">
-              <span>About</span>
+        <div id="logoHolder"></div>
+        <div id="actualHeaderHolder">
+            <a id="menuLogo" class="menuObject" href="./index.html" aria-label="Muscle-ON! home">
+                <img src="./images/logo.png" alt="Muscle-ON! logo">
             </a>
-            <a class="menuObject menuOption locked" href="./settings.html">
-              <span>Settings</span>
-            </a>
-            <a class="menuObject menuOption locked" href="./session.html">
-              <span>Session</span>
-            </a>
-            <a class="menuObject menuOption" href="./exercises.html">
-              <span>Exercises</span>
-            </a>
-          </div>
-          <div id="currentUser"></div>
+            <div id="title">Muscle-ON!</div>
+            <div id="menuBar">
+                <div id="menuContainer">
+                    <nav id="menuOptionBar" aria-label="Main navigation">
+                        <a class="menuObject menuOption" href="./about.html"><span>About</span></a>
+                        <a class="menuObject menuOption locked" href="./settings.html"><span>Settings</span></a>
+                        <a class="menuObject menuOption locked" href="./session.html"><span>Session</span></a>
+                        <a class="menuObject menuOption" href="./exercises.html"><span>Exercises</span></a>
+                    </nav>
+                    <div id="currentUser"></div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </header>
+    </header>
   <div class="siteBody" id="404-page">
     <h1>Oh Well, 404</h1>
     <h4 style="margin-bottom: 3em; text-align: center;">The page you requested does not exist. But you can play a little

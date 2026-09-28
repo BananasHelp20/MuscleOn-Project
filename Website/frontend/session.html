@@ -6,6 +6,7 @@
     <title>Muscle ON!</title>
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/light.css" id="modeStylesheet">
+    <link rel="stylesheet" type="text/css" href="./css/redesign.css">
     <script src="./script/initalize.js" defer></script>
     <script src="./script/localStorage.js" defer></script>
     <script src="./script/router.js" defer></script>
@@ -21,31 +22,20 @@
 </head>
 <body style="background-color: transparent">
     <header>
-        <div id="logoHolder">
-        </div>
+        <div id="logoHolder"></div>
         <div id="actualHeaderHolder">
-            <div id="title">
-                Muscle-ON!
-            </div>
+            <a id="menuLogo" class="menuObject" href="./index.html" aria-label="Muscle-ON! home">
+                <img src="./images/logo.png" alt="Muscle-ON! logo">
+            </a>
+            <div id="title">Muscle-ON!</div>
             <div id="menuBar">
                 <div id="menuContainer">
-                    <a id="menuLogo" class="menuObject" href="./index.html">
-                        <img src="./images/logo.png" alt="">
-                    </a>
-                    <div id="menuOptionBar">
-                        <a class="menuObject menuOption" href="./about.html">
-                            <span>About</span>
-                        </a>
-                        <a class="menuObject menuOption locked" href="./settings.html">
-                            <span>Settings</span>
-                        </a>
-                        <a class="menuObject menuOption locked" href="./session.html">
-                            <span>Session</span>
-                        </a>
-                        <a class="menuObject menuOption" href="./exercises.html">
-                            <span>Exercises</span>
-                        </a>
-                    </div>
+                    <nav id="menuOptionBar" aria-label="Main navigation">
+                        <a class="menuObject menuOption" href="./about.html"><span>About</span></a>
+                        <a class="menuObject menuOption locked" href="./settings.html"><span>Settings</span></a>
+                        <a class="menuObject menuOption locked" href="./session.html"><span>Session</span></a>
+                        <a class="menuObject menuOption" href="./exercises.html"><span>Exercises</span></a>
+                    </nav>
                     <div id="currentUser"></div>
                 </div>
             </div>
