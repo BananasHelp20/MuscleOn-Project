@@ -10,6 +10,12 @@
   --line: #c9dfe0;
   --brand: #087f91;
   --brand-deep: #075a79;
+  --button-bg: #087f91;
+  --button-hover: #075a79;
+  --button-ink: #fff;
+  --table-head-bg: #075a79;
+  --field-hover: #e8f5f4;
+  --link-hover: #075a79;
   --accent: #f3ca2b;
   --shadow: 0 20px 55px rgba(8, 57, 77, .11);
   --backdrop-image: url("../images/background2.jpg");
@@ -25,23 +31,17 @@ html:has(#modeStylesheet[href$="dark.css"]) {
   --line: #32515f;
   --brand: #1dabb2;
   --brand-deep: #75dadd;
+  --button-bg: #44c6c7;
+  --button-hover: #77d7d8;
+  --button-ink: #092531;
+  --table-head-bg: #0b5364;
+  --field-hover: #264250;
+  --link-hover: #a7e9e9;
   --accent: #f3ca2b;
   --shadow: 0 24px 60px rgba(0, 0, 0, .24);
   --backdrop-image: url("../images/background.jpg");
   --backdrop-tint: rgba(5, 16, 29, .42);
 }
-html:has(#modeStylesheet[href$="dark.css"]) .defaultButton,
-html:has(#modeStylesheet[href$="dark.css"]) .sessionCtrlButton,
-html:has(#modeStylesheet[href$="dark.css"]) .linkButton,
-html:has(#modeStylesheet[href$="dark.css"]) .tableButton { color: #092531 !important; }
-html:has(#modeStylesheet[href$="dark.css"]) .defaultButton:hover,
-html:has(#modeStylesheet[href$="dark.css"]) .sessionCtrlButton:hover,
-html:has(#modeStylesheet[href$="dark.css"]) .linkButton:hover,
-html:has(#modeStylesheet[href$="dark.css"]) .tableButton:hover { background: #77d7d8 !important; }
-html:has(#modeStylesheet[href$="dark.css"]) #inlineLoginButton { color: #fff !important; }
-html:has(#modeStylesheet[href$="dark.css"]) #inlineSignupButton { color: #183649 !important; }
-html:has(#modeStylesheet[href$="dark.css"]) .button-secondary { color: var(--brand-deep) !important; }
-
 html { min-height: 100%; background: var(--page-bg) !important; }
 body { position: relative; isolation: isolate; min-height: 100vh; font-family: "Segoe UI", Arial, sans-serif; line-height: 1.55; color: var(--ink); background: transparent !important; overflow-x: hidden; }
 body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: var(--backdrop-tint); pointer-events: none; }
@@ -59,12 +59,15 @@ header { background: linear-gradient(110deg, #0d7896, #10a9aa 55%, #10567f) !imp
 .menuOption { min-height: 40px; padding: 9px 16px; justify-content: center; white-space: nowrap; font-size: .92rem; font-weight: 600; border-radius: 999px; transition: background .2s, color .2s, box-shadow .2s; }
 .menuOption:hover, .menuOption:focus-visible { background: rgba(255,255,255,.16); color: #fff; }
 .menuOption:has(.activeMenuText) { background: rgba(4, 48, 69, .34); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); }
+.menuOption:has(.activeMenuText):hover, .menuOption:has(.activeMenuText):focus-visible { background: rgba(4, 48, 69, .48); }
 .activeMenuText { color: var(--accent) !important; }
 #currentUser { grid-area: account; min-width: 0; padding: 0 0 0 20px; gap: 9px; border-left: 1px solid rgba(255,255,255,.24); }
 #inlineUsernameDisplay { width: auto; max-width: 150px; height: auto; margin: 0; padding: 0 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #fff; font-size: .9rem; font-weight: 600; }
 #inlineSignupButton, #inlineLoginButton, #logoutButton { width: auto; height: auto; margin: 0; padding: 10px 16px; font-size: .88rem; white-space: nowrap; }
 #inlineLoginButton { background: rgba(255,255,255,.14) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.38) !important; }
+#inlineLoginButton:hover, #inlineLoginButton:focus-visible { background: rgba(255,255,255,.26) !important; }
 #inlineSignupButton { background: var(--accent) !important; color: #183649 !important; }
+#inlineSignupButton:hover, #inlineSignupButton:focus-visible { background: #ffe175 !important; }
 
 .siteBody { width: min(1160px, calc(100% - 48px)); margin: 42px auto 76px; padding: clamp(28px, 5vw, 70px); border: 1px solid var(--line); border-radius: 28px; background: var(--surface) !important; color: var(--ink) !important; box-shadow: var(--shadow); }
 .siteBody h1, .siteBody h2, .siteBody h3, .siteBody h4 { color: var(--ink); text-align: left; line-height: 1.15; letter-spacing: -.035em; }
@@ -74,7 +77,7 @@ header { background: linear-gradient(110deg, #0d7896, #10a9aa 55%, #10567f) !imp
 .siteBody p { line-height: 1.75; }
 .siteBody .text { max-width: 76ch; }
 .siteBody a:not(.defaultButton) { color: var(--brand-deep); text-decoration: underline; text-underline-offset: 3px; }
-.siteBody a:hover { color: var(--brand); }
+.siteBody a:not(.defaultButton):hover { color: var(--link-hover); }
 :focus-visible { outline: 3px solid var(--accent) !important; outline-offset: 3px; }
 [hidden] { display: none !important; }
 
@@ -97,14 +100,16 @@ main#main-page { padding: 0; overflow: hidden; }
 .home-contact { margin-top: 30px; padding-top: 22px; border-top: 1px solid var(--line); font-size: .93rem; }
 #devLists { margin-top: 30px; padding: 24px; border: 1px solid var(--line); border-radius: 16px; }
 
-.defaultButton, .sessionCtrlButton, .linkButton, .tableButton { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 11px 18px; margin: 5px 0; border: 1px solid transparent; border-radius: 11px; background: var(--brand) !important; color: #fff !important; font: inherit; font-size: .91rem; font-weight: 600; line-height: 1.2; text-align: center; cursor: pointer; transition: transform .18s, background .18s, box-shadow .18s; }
-.defaultButton:hover, .sessionCtrlButton:hover, .linkButton:hover, .tableButton:hover { background: var(--brand-deep) !important; box-shadow: 0 8px 18px rgba(4, 75, 100, .17); transform: translateY(-1px); }
+.defaultButton, .sessionCtrlButton, .linkButton, .tableButton { display: inline-flex; justify-content: center; align-items: center; gap: 8px; padding: 11px 18px; margin: 5px 0; border: 1px solid transparent; border-radius: 11px; background: var(--button-bg) !important; color: var(--button-ink) !important; font: inherit; font-size: .91rem; font-weight: 600; line-height: 1.2; text-align: center; cursor: pointer; transition: transform .18s, background .18s, box-shadow .18s; }
+.defaultButton:hover, .defaultButton:focus-visible, .sessionCtrlButton:hover, .sessionCtrlButton:focus-visible, .linkButton:hover, .linkButton:focus-visible, .tableButton:hover, .tableButton:focus-visible { background: var(--button-hover) !important; color: var(--button-ink) !important; box-shadow: 0 8px 18px rgba(4, 75, 100, .17); transform: translateY(-1px); }
 .button-secondary { background: transparent !important; border-color: var(--line); color: var(--brand-deep) !important; }
-.button-secondary:hover { background: var(--surface-soft) !important; color: var(--brand-deep) !important; }
+.button-secondary:hover, .button-secondary:focus-visible { background: var(--surface-soft) !important; color: var(--link-hover) !important; box-shadow: inset 0 0 0 1px var(--line); }
 .tableButton { width: 100%; height: auto; min-height: 48px; border-radius: 8px; }
 #startStopSession, #startSkipExercise, #resumePauseSession { width: 100%; height: auto; min-height: 60px; }
 
-input:not([type="checkbox"]), select, textarea { max-width: 100%; padding: 11px 13px !important; border: 1px solid var(--line) !important; border-radius: 9px !important; background: var(--surface-soft) !important; color: var(--ink) !important; font: inherit; text-align: left !important; }
+input:not([type="checkbox"]), select, textarea { max-width: 100%; padding: 11px 13px !important; border: 1px solid var(--line) !important; border-radius: 9px !important; background: var(--surface-soft) !important; color: var(--ink) !important; font: inherit; text-align: left !important; transition: background .18s, border-color .18s, box-shadow .18s; }
+input:not([type="checkbox"]):hover, select:hover, textarea:hover { background: var(--field-hover) !important; border-color: var(--brand) !important; }
+input:not([type="checkbox"]):focus, select:focus, textarea:focus { background: var(--surface) !important; border-color: var(--brand) !important; box-shadow: 0 0 0 3px rgba(29, 171, 178, .16); }
 input[type="checkbox"] { accent-color: var(--brand); width: 18px; height: 18px; vertical-align: middle; }
 label { display: inline-block; margin: 6px 0; font-weight: 600; }
 #login-page, #passwd-change-page { max-width: 620px; }
@@ -117,7 +122,7 @@ label { display: inline-block; margin: 6px 0; font-weight: 600; }
 #signup-page > label[for="plan"] { margin-top: 24px; font-weight: 600; }
 #signup-page > input#plan { margin-left: 10px; }
 #loginLink, #signupLink, #returnLink { color: var(--brand-deep) !important; }
-#loginLink:hover, #signupLink:hover, #returnLink:hover { color: var(--brand) !important; }
+#loginLink:hover, #signupLink:hover, #returnLink:hover { color: var(--link-hover) !important; }
 
 .about-team { max-width: 940px; }
 .about-team > h3 { margin: 0 0 22px; }
@@ -176,7 +181,7 @@ html:has(#modeStylesheet[href$="dark.css"]) .settings-danger .defaultButton:hove
 .table-wrapper { max-width: 100%; padding: 0; overflow-x: auto; }
 table, #exercise-tables table { width: 100%; min-width: 650px; margin: 16px 0; border: 0; border-collapse: separate; border-spacing: 0; }
 th, td { border: 0 !important; border-bottom: 1px solid var(--line) !important; padding: 12px !important; background: var(--surface-soft) !important; color: var(--ink); }
-th { background: var(--brand-deep) !important; color: #fff; font-size: .84rem; }
+th { background: var(--table-head-bg) !important; color: #fff; font-size: .84rem; }
 #exercise-tables { max-width: 100%; margin: 25px 0; border: 0; }
 canvas { max-width: 100%; background: var(--surface-soft) !important; border-color: var(--line) !important; }
 
