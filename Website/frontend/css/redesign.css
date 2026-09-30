@@ -47,21 +47,21 @@ body { position: relative; isolation: isolate; min-height: 100vh; font-family: "
 body::before { content: ""; position: fixed; inset: 0; z-index: -1; background: var(--backdrop-tint); pointer-events: none; }
 .background { display: block; position: fixed; inset: -40px; width: auto; height: auto; z-index: -2; background-image: var(--backdrop-image) !important; background-position: center; background-repeat: no-repeat; background-size: cover; filter: blur(28px) saturate(140%); -webkit-filter: blur(28px) saturate(140%); transform: none; pointer-events: none; }
 
-header { background: linear-gradient(110deg, #0d7896, #10a9aa 55%, #10567f) !important; border-bottom: 4px solid var(--accent); box-shadow: 0 9px 28px rgba(0, 47, 69, .14); }
-#actualHeaderHolder { width: min(1360px, calc(100% - 64px)); margin: auto; display: flex; flex-direction: row; align-items: center; gap: 16px; min-height: 94px; }
+header { background: linear-gradient(110deg, #0d7896, #10a9aa 55%, #10567f) !important; border-bottom: 3px solid var(--accent); box-shadow: 0 9px 28px rgba(0, 47, 69, .14); }
+#actualHeaderHolder { width: min(1360px, calc(100% - 64px)); min-height: 82px; margin: auto; display: grid; grid-template-columns: 52px max-content minmax(0, 1fr) max-content; grid-template-areas: "logo title navigation account"; align-items: center; column-gap: 14px; }
 #logoHolder { display: none; }
-#menuLogo { order: 0; flex: 0 0 58px; width: 58px; margin: 0; padding: 0; border: 0; }
-#menuLogo img { display: block; width: 58px; height: 58px; object-fit: contain; }
-#title { order: 1; width: auto; margin: 0; white-space: nowrap; text-align: left; color: #fff; font-size: 1.55rem; font-weight: 700; letter-spacing: -.04em; }
-#menuBar { order: 2; width: auto; flex: 1; background: transparent !important; }
-#menuContainer { padding: 0; align-items: center; gap: 14px; }
-#menuOptionBar { justify-content: center; align-items: center; gap: 4px; }
+#menuLogo { grid-area: logo; width: 52px; margin: 0; padding: 0; border: 0; }
+#menuLogo img { display: block; width: 52px; height: 52px; object-fit: contain; }
+#title { grid-area: title; width: auto; margin: 0; white-space: nowrap; text-align: left; color: #fff; font-size: 1.45rem; font-weight: 700; letter-spacing: -.04em; }
+#menuBar, #menuContainer { display: contents; }
+#menuOptionBar { grid-area: navigation; width: auto; min-width: 0; justify-content: flex-start; align-items: center; gap: 6px; padding-left: clamp(18px, 4vw, 60px); }
 .menuObject { border: 0 !important; color: #e9fcfc; }
-.menuOption { padding: 10px 15px; font-size: .94rem; font-weight: 600; border-radius: 12px; transition: background .2s, color .2s; }
-.menuOption:hover, .menuOption:focus-visible { background: rgba(255,255,255,.15); color: #fff; }
+.menuOption { min-height: 40px; padding: 9px 16px; justify-content: center; white-space: nowrap; font-size: .92rem; font-weight: 600; border-radius: 999px; transition: background .2s, color .2s, box-shadow .2s; }
+.menuOption:hover, .menuOption:focus-visible { background: rgba(255,255,255,.16); color: #fff; }
+.menuOption:has(.activeMenuText) { background: rgba(4, 48, 69, .34); box-shadow: inset 0 0 0 1px rgba(255,255,255,.18); }
 .activeMenuText { color: var(--accent) !important; }
-#currentUser { padding: 0; gap: 9px; flex: 0 0 auto; }
-#inlineUsernameDisplay { width: auto; height: auto; margin: 0; padding: 0 8px; color: #fff; font-size: .9rem; font-weight: 600; }
+#currentUser { grid-area: account; min-width: 0; padding: 0 0 0 20px; gap: 9px; border-left: 1px solid rgba(255,255,255,.24); }
+#inlineUsernameDisplay { width: auto; max-width: 150px; height: auto; margin: 0; padding: 0 8px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #fff; font-size: .9rem; font-weight: 600; }
 #inlineSignupButton, #inlineLoginButton, #logoutButton { width: auto; height: auto; margin: 0; padding: 10px 16px; font-size: .88rem; white-space: nowrap; }
 #inlineLoginButton { background: rgba(255,255,255,.14) !important; color: #fff !important; border: 1px solid rgba(255,255,255,.38) !important; }
 #inlineSignupButton { background: var(--accent) !important; color: #183649 !important; }
@@ -181,13 +181,13 @@ th { background: var(--brand-deep) !important; color: #fff; font-size: .84rem; }
 canvas { max-width: 100%; background: var(--surface-soft) !important; border-color: var(--line) !important; }
 
 @media (max-width: 900px) {
-  #actualHeaderHolder { width: min(100% - 32px, 720px); flex-wrap: wrap; padding: 14px 0; gap: 10px; }
-  #menuLogo, #menuLogo img { width: 46px; height: 46px; flex-basis: 46px; }
+  #actualHeaderHolder { width: min(100% - 32px, 720px); min-height: 0; padding: 12px 0 9px; grid-template-columns: 46px minmax(0, 1fr) max-content; grid-template-areas: "logo title account" "navigation navigation navigation"; gap: 10px; }
+  #menuLogo, #menuLogo img { width: 46px; height: 46px; }
   #title { font-size: 1.35rem; }
-  #menuBar { order: 3; flex-basis: 100%; }
-  #menuContainer { justify-content: space-between; }
-  #menuOptionBar { justify-content: flex-start; width: auto; flex-wrap: wrap; }
-  #currentUser { margin-left: auto; }
+  #menuOptionBar { width: 100%; padding: 8px 0 0; border-top: 1px solid rgba(255,255,255,.22); overflow-x: auto; scrollbar-width: none; }
+  #menuOptionBar::-webkit-scrollbar { display: none; }
+  .menuOption { flex: 1 0 auto; }
+  #currentUser { justify-self: end; padding: 0; border: 0; }
   .home-hero { grid-template-columns: 1fr; }
   .hero-art { min-height: 250px; }
   .feature-grid { grid-template-columns: 1fr; }
@@ -197,11 +197,9 @@ canvas { max-width: 100%; background: var(--surface-soft) !important; border-col
 }
 @media (max-width: 600px) {
   #actualHeaderHolder { width: calc(100% - 24px); }
-  #menuContainer { flex-wrap: wrap; }
-  #menuOptionBar { width: 100%; justify-content: space-between; }
-  .menuOption { padding: 8px 9px; font-size: .82rem; }
-  #currentUser { width: 100%; justify-content: flex-start; }
-  #inlineSignupButton, #inlineLoginButton, #logoutButton { padding: 8px 12px; }
+  #title { font-size: 1.22rem; }
+  .menuOption { padding: 8px 11px; font-size: .84rem; }
+  #inlineSignupButton, #inlineLoginButton, #logoutButton { padding: 8px 10px; font-size: .8rem; }
   .siteBody { width: calc(100% - 24px); margin: 20px auto 45px; padding: 26px 20px; border-radius: 18px; }
   main#main-page { padding: 0; }
   .home-copy, .home-section { padding: 30px 23px; }
@@ -210,4 +208,8 @@ canvas { max-width: 100%; background: var(--surface-soft) !important; border-col
   .exerciseObject { padding: 18px; }
   .team-grid { grid-template-columns: 1fr; }
   .team-card-wide { grid-column: auto; }
+}
+@media (max-width: 380px) {
+  #actualHeaderHolder { grid-template-columns: 44px minmax(0, 1fr); grid-template-areas: "logo title" "account account" "navigation navigation"; }
+  #currentUser { justify-self: end; }
 }
