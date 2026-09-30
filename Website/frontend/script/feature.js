@@ -18,7 +18,6 @@ function addExercises(sessionId) {
     let newTable = getEmptyExerciseTable(times);
     document.getElementById("exercise-tables").appendChild(newTable);
     newTable.querySelector(".add-exercise-button").click();
-    newTable.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function removeExercises(sessionId) {
@@ -29,6 +28,9 @@ function removeExercises(sessionId) {
     }
 
     document.getElementById("exercise-tables").children.item(foundIndex).remove();
+    const control = document.getElementById(sessionId)?.querySelector("#exercise-controlButton");
+    if (control) control.innerText = "Add exercises";
+    if (!document.querySelector("#exercise-tables table")) document.getElementById("exercise-tables").hidden = true;
 }
 
 function addWeekday(data) {
@@ -44,13 +46,7 @@ function addWeekday(data) {
     const germanWeekdays = { Montag: "Monday", Dienstag: "Tuesday", Mittwoch: "Wednesday", Donnerstag: "Thursday", Freitag: "Friday", Samstag: "Saturday", Sonntag: "Sunday" };
     if (weekdayData) weekday.value = germanWeekdays[weekdayData.weekday] || weekdayData.weekday;
     weekday.addEventListener("input", (event) => {
-        let id = event.target.parentElement.parentElement.getAttribute("id");
-        let foundIndex = findExerciseTableById(id);
-        if (foundIndex != -1) {
-            let exTableBody = document.getElementById("exercise-table" + id);
-            let exTableHead = exTableBody.parentElement.children.item(0);
-            exTableHead.children.item(0).children.item(0).children.item(0).innerText = "Session: " + event.target.value;
-        }
+        updateExerciseTableHeading(event.target.closest("tr").id);
     });
 
     let from = document.createElement("input");
@@ -59,13 +55,7 @@ function addWeekday(data) {
     from.setAttribute("aria-label", "Start time");
     if (weekdayData) from.value = weekdayData.fromTime?.padStart(5, "0") || "";
     from.addEventListener("input", (event) => {
-        let id = event.target.parentElement.parentElement.getAttribute("id");
-        let foundIndex = findExerciseTableById(id);
-        if (foundIndex != -1) {
-            let exTableBody = document.getElementById("exercise-table" + id);
-            let exTableHead = exTableBody.parentElement.children.item(0);
-            exTableHead.children.item(0).children.item(0).children.item(1).innerText = " from " + event.target.value;
-        }
+        updateExerciseTableHeading(event.target.closest("tr").id);
     });
 
     let to = document.createElement("input");
@@ -74,13 +64,7 @@ function addWeekday(data) {
     to.setAttribute("aria-label", "End time");
     if (weekdayData) to.value = weekdayData.toTime?.padStart(5, "0") || "";
     to.addEventListener("input", (event) => {
-        let id = event.target.parentElement.parentElement.getAttribute("id");
-        let foundIndex = findExerciseTableById(id);
-        if (foundIndex != -1) {
-            let exTableBody = document.getElementById("exercise-table" + id);
-            let exTableHead = exTableBody.parentElement.children.item(0);
-            exTableHead.children.item(0).children.item(0).children.item(2).innerText = " to " + event.target.value;
-        }
+        updateExerciseTableHeading(event.target.closest("tr").id);
     });
 
     let primaryMuscleGroup = document.createElement("select");
@@ -106,17 +90,15 @@ function addWeekday(data) {
     removeExercisesForDayButton.setAttribute("class", "tableButton");
     removeExercisesForDayButton.setAttribute("id", "exercise-controlButton");
     const hasExercises = Boolean(data?.exercises?.length);
-    removeExercisesForDayButton.innerText = hasExercises ? "Clear exercises" : "Add exercises";
-    removeExercisesForDayButton.classList.toggle("is-destructive", hasExercises);
+    removeExercisesForDayButton.innerText = hasExercises ? "Edit exercises" : "Add exercises";
     removeExercisesForDayButton.addEventListener("click", (event) => {
-        if (document.getElementById("exercise-table" + event.target.parentElement.parentElement.getAttribute("id"))) {
-            removeExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
-            event.target.innerText = "Add exercises";
-            event.target.classList.remove("is-destructive");
+        const sessionId = Number(event.target.closest("tr").id);
+        const existing = document.getElementById("exercise-table" + sessionId);
+        if (existing) {
+            existing.closest("table").scrollIntoView({ behavior: "smooth", block: "start" });
         } else {
-            addExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
-            event.target.innerText = "Clear exercises";
-            event.target.classList.add("is-destructive");
+            addExercises(sessionId);
+            event.target.innerText = "Edit exercises";
         }
     });
 

@@ -224,7 +224,13 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
         });
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
         let inputs = [document.createElement("input"), document.createElement("input"), document.createElement("input")];
-        select.value = exerciseData[i].exerciseType.charAt(0) + exerciseData[i].name; //problems here (select value is empty string after assignment)
+        const savedExerciseId = exerciseData[i].exerciseType.charAt(0) + exerciseData[i].name;
+        if (![...select.options].some(option => option.value === savedExerciseId)) {
+            const savedOption = new Option(exerciseData[i].name, savedExerciseId);
+            savedOption.dataset.exercise = JSON.stringify(exerciseData[i]);
+            select.add(savedOption);
+        }
+        select.value = savedExerciseId;
         tds[0].appendChild(makeExercisePicker(select));
         tds[1].innerText = exerciseData[i].equipment;
         inputs[0].setAttribute("id", "reps" + sessionId + "-" + i);
