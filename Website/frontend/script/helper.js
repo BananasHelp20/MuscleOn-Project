@@ -127,6 +127,7 @@ function makeExercisePicker(select) {
                 const item = document.createElement("button");
                 item.type = "button";
                 item.className = "exercise-picker-option";
+                item.classList.toggle("is-selected", option.value === select.value);
                 const name = document.createElement("span");
                 name.textContent = option.textContent;
                 const meta = document.createElement("small");

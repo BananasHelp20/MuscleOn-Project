@@ -262,7 +262,7 @@ function renderExercises(settings) {
             title.innerText = exercise.name;
 
             let description = document.createElement("p");
-            description.innerText = exercise.description;
+            description.innerText = typeof exercise.description == "string" ? exercise.description.trim() : "";
 
             let createdByUser = document.createElement("span");
             createdByUser.classList.add("exerciseCreatedBy");
@@ -270,7 +270,7 @@ function renderExercises(settings) {
 
             let equipment = document.createElement("span");
             equipment.classList.add("exerciseEquipment");
-            equipment.innerText = "Equipment: " + exercise.equipment;
+            equipment.innerText = "Equipment: " + (exercise.equipment || "None");
 
             let weight = document.createElement("span");
             weight.classList.add("exerciseWeight");
@@ -287,7 +287,7 @@ function renderExercises(settings) {
             muscleGroupTitle.classList.add("muscleGroupListObject");
             muscleGroupTitle.innerText = "Muscle groups";
             muscleGroupList.appendChild(muscleGroupTitle);
-            exercise.targetedMuscleGroups.forEach((muscleGroup) => {
+            (exercise.targetedMuscleGroups || []).forEach((muscleGroup) => {
                 let muscleGroupListObject = document.createElement("dd");
                 muscleGroupListObject.classList.add("muscleGroupListObject");
                 muscleGroupListObject.innerText = muscleGroup;
@@ -314,8 +314,10 @@ function renderExercises(settings) {
 
             exerciseObject.appendChild(title);
             exerciseObject.appendChild(document.createElement("br"));
-            exerciseObject.appendChild(description);
-            exerciseObject.appendChild(document.createElement("br"));
+            if (description.innerText) {
+                exerciseObject.appendChild(description);
+                exerciseObject.appendChild(document.createElement("br"));
+            }
             if (isDefined) exerciseObject.appendChild(createdByUser);
             if (isDefined) exerciseObject.appendChild(document.createElement("br"));
             exerciseObject.appendChild(equipment);
