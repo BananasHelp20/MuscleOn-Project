@@ -198,7 +198,7 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
         let delButton = document.createElement("button");
         delButton.setAttribute("class", "tableButton");
         delButton.setAttribute("id", "delete-exercise");
-        delButton.innerText = "remove exercise";
+        delButton.innerText = "Remove";
         delButton.addEventListener("click", (event) => {
             const row = event.target.closest("tr");
             const body = row.parentElement;
@@ -212,6 +212,8 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
                     control.classList.remove("is-destructive");
                 }
                 if (!document.querySelector("#exercise-tables table")) document.getElementById("exercise-tables").hidden = true;
+            } else {
+                updateExerciseRowNumbers(body);
             }
         });
 
@@ -261,7 +263,8 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
 
         tbody.appendChild(tr);
     }
-    exerciseTable.appendChild(tbody);
+    exerciseTable.insertBefore(tbody, exerciseTable.tFoot);
+    updateExerciseRowNumbers(tbody);
     if (exerciseData.length != 0) exerciseDiv.appendChild(exerciseTable);
     if (exerciseData.length == 0 && !exerciseDiv.querySelector("table")) exerciseDiv.hidden = true;
 }

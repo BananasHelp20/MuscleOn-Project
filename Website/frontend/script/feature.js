@@ -17,7 +17,7 @@ function addExercises(sessionId) {
 
     let newTable = getEmptyExerciseTable(times);
     document.getElementById("exercise-tables").appendChild(newTable);
-    newTable.querySelector("thead button").click();
+    newTable.querySelector(".add-exercise-button").click();
     newTable.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 

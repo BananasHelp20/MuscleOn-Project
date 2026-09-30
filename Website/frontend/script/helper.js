@@ -148,8 +148,18 @@ function makeExercisePicker(select) {
         panel.hidden = !opening;
         trigger.setAttribute("aria-expanded", String(opening));
         if (opening) {
+            if (!select.querySelector("optgroup")) {
+                select.replaceChildren();
+                setExerciseOptions(select);
+                updateTrigger();
+            }
             panel.classList.toggle("open-up", window.innerHeight - trigger.getBoundingClientRect().bottom < 320 && trigger.getBoundingClientRect().top > 360);
             renderResults();
+            const pickerRect = picker.getBoundingClientRect();
+            const panelWidth = panel.getBoundingClientRect().width;
+            const viewportWidth = Math.min(window.innerWidth, window.visualViewport?.width || window.innerWidth, window.screen.width || window.innerWidth);
+            const panelLeft = Math.max(12, Math.min(pickerRect.left, viewportWidth - panelWidth - 12));
+            panel.style.left = `${panelLeft - pickerRect.left}px`;
             search.focus();
         }
     });
@@ -212,10 +222,10 @@ function findTimeTableById(sessionId) {
 function setSelectedExercise(elem) {
     const row = elem.closest("tr");
     const exercise = getExerciseWithId(elem.value);
-    row.cells[1].textContent = exercise ? (exercise.equipment || "None") : "No Exercise Selected";
+    row.cells[1].textContent = exercise ? (exercise.equipment || "None") : "—";
     row.cells[4].replaceChildren();
     if (!exercise) {
-        row.cells[4].textContent = "No Exercise Selected";
+        row.cells[4].textContent = "—";
     } else if (exercise.weight) {
         const input = document.createElement("input");
         input.type = "number";
@@ -237,6 +247,10 @@ function getIndexOfName(array, name) {
     return -1;
 }
 
+function updateExerciseRowNumbers(tbody) {
+    [...tbody.rows].forEach((row, index) => { row.dataset.order = String(index + 1); });
+}
+
 function getEmptyExerciseTable(time) {
     let table = document.createElement("table");
     let ths = [document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th"), document.createElement("th")];
@@ -250,11 +264,12 @@ function getEmptyExerciseTable(time) {
 
     let mainTh = document.createElement("th");
     mainTh.innerHTML = "<span>Session: " + time.times.weekday + "</span><span> from " + time.times.fromTime + "</span><span> to " + time.times.toTime + "</span>";
-    mainTh.setAttribute("colspan", ths.length - 1);
+    mainTh.setAttribute("colspan", ths.length);
 
     let addButton = document.createElement("button");
-    addButton.setAttribute("class", "tableButton");
-    addButton.innerText = "Add exercise";
+    addButton.setAttribute("class", "tableButton add-exercise-button");
+    addButton.type = "button";
+    addButton.innerText = "+ Add exercise";
 
     addButton.addEventListener("click", (event) => {
         const tbody = event.target.closest("table").tBodies[0];
@@ -272,14 +287,14 @@ function getEmptyExerciseTable(time) {
         });
         tds[0].appendChild(makeExercisePicker(select));
 
-        tds[1].innerText = "No Exercise Selected";
+        tds[1].innerText = "—";
 
         inputs[0].setAttribute("id", "reps" + tr.getAttribute("id"));
         inputs[0].type = "number";
         inputs[0].min = "1";
         inputs[0].step = "1";
         inputs[0].setAttribute("aria-label", "Reps");
-        inputs[0].placeholder = 5;
+        inputs[0].value = "5";
         tds[2].appendChild(inputs[0]);
 
         inputs[1].setAttribute("id", "sets" + tr.getAttribute("id"));
@@ -287,15 +302,15 @@ function getEmptyExerciseTable(time) {
         inputs[1].min = "1";
         inputs[1].step = "1";
         inputs[1].setAttribute("aria-label", "Sets");
-        inputs[1].placeholder = 3;
+        inputs[1].value = "3";
         tds[3].appendChild(inputs[1]);
 
-        tds[4].innerText = "No Exercise Selected"
+        tds[4].innerText = "—";
 
         let delButton = document.createElement("button");
         delButton.setAttribute("class", "tableButton");
         delButton.setAttribute("id", "delete-exercise");
-        delButton.innerText = "Remove exercise";
+        delButton.innerText = "Remove";
         delButton.addEventListener("click", (event) => {
             const row = event.target.closest("tr");
             const body = row.parentElement;
@@ -310,6 +325,8 @@ function getEmptyExerciseTable(time) {
                     control.classList.remove("is-destructive");
                 }
                 if (!document.querySelector("#exercise-tables table")) document.getElementById("exercise-tables").hidden = true;
+            } else {
+                updateExerciseRowNumbers(body);
             }
         });
         tds[5].setAttribute("class", "tableButtonContainer");
@@ -319,15 +336,13 @@ function getEmptyExerciseTable(time) {
             tr.appendChild(td);
         });
         tbody.appendChild(tr);
+        updateExerciseRowNumbers(tbody);
+        tr.scrollIntoView({ behavior: "smooth", block: "nearest" });
+        requestAnimationFrame(() => tr.querySelector(".exercise-picker-trigger").click());
     });
-
-    let addButtonTh = document.createElement("th");
-    addButtonTh.setAttribute("class", "tableButtonContainer");
-    addButtonTh.appendChild(addButton);
 
     let headerRow = document.createElement("tr");
     headerRow.appendChild(mainTh);
-    headerRow.appendChild(addButtonTh);
 
     let headersRow = document.createElement("tr");
     ths.forEach((th) => {
@@ -344,6 +359,15 @@ function getEmptyExerciseTable(time) {
         tbody.setAttribute("id", "exercise-table" + time.sessionId);
         table.appendChild(tbody);
     }
+
+    const footer = document.createElement("tfoot");
+    const footerRow = document.createElement("tr");
+    const footerCell = document.createElement("td");
+    footerCell.colSpan = ths.length;
+    footerCell.appendChild(addButton);
+    footerRow.appendChild(footerCell);
+    footer.appendChild(footerRow);
+    table.appendChild(footer);
 
     return table;
 }
