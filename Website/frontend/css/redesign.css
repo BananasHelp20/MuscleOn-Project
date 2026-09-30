@@ -116,6 +116,7 @@ input[type="checkbox"] { accent-color: var(--brand); width: 18px; height: 18px; 
 label { display: inline-block; margin: 6px 0; font-weight: 600; }
 #login-page, #passwd-change-page { max-width: 620px; }
 #signup-page { max-width: 1080px; }
+#login-page > h1, #signup-page > h1 { margin-bottom: 20px; font-size: clamp(2rem, 3.2vw, 2.6rem); }
 #login-page > label, #passwd-change-page > label, #signup-page > label:not([for="plan"]) { display: block; margin: 17px 0 7px; font-weight: 600; }
 #login-page > input, #passwd-change-page > input, #signup-page > input:not([type="checkbox"]) { display: block; width: min(100%, 460px); }
 #login-page > br, #passwd-change-page > br, #signup-page > br { display: none; }
