@@ -17,6 +17,8 @@ function addExercises(sessionId) {
 
     let newTable = getEmptyExerciseTable(times);
     document.getElementById("exercise-tables").appendChild(newTable);
+    newTable.querySelector("thead button").click();
+    newTable.scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 function removeExercises(sessionId) {
@@ -91,7 +93,7 @@ function addWeekday(data) {
     let delButton = document.createElement("button");
     delButton.setAttribute("class", "tableButton");
     delButton.setAttribute("id", "delete-day");
-    delButton.innerText = "Remove Session";
+    delButton.innerText = "Remove day";
     delButton.addEventListener("click", (event) => {
         const row = event.target.closest("tr");
         const removedSessionId = Number(row.id);
@@ -103,18 +105,18 @@ function addWeekday(data) {
     let removeExercisesForDayButton = document.createElement("button");
     removeExercisesForDayButton.setAttribute("class", "tableButton");
     removeExercisesForDayButton.setAttribute("id", "exercise-controlButton");
-    if (data && data.exercises.length != 0) {
-        removeExercisesForDayButton.innerText = "Remove Exercises";
-    } else {
-        removeExercisesForDayButton.innerText = "Add Exercises";
-    }
+    const hasExercises = Boolean(data?.exercises?.length);
+    removeExercisesForDayButton.innerText = hasExercises ? "Clear exercises" : "Add exercises";
+    removeExercisesForDayButton.classList.toggle("is-destructive", hasExercises);
     removeExercisesForDayButton.addEventListener("click", (event) => {
         if (document.getElementById("exercise-table" + event.target.parentElement.parentElement.getAttribute("id"))) {
             removeExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
-            event.target.innerText = "Add Exercises";
+            event.target.innerText = "Add exercises";
+            event.target.classList.remove("is-destructive");
         } else {
             addExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
-            event.target.innerText = "Remove Exercises";
+            event.target.innerText = "Clear exercises";
+            event.target.classList.add("is-destructive");
         }
     });
 
@@ -141,7 +143,7 @@ function login() {
     let email = document.getElementById("email").value;
     let password = document.getElementById("password").value;
     if (!email) {
-        alert("Please fill out E-Mail field!");
+        alert("Please enter your username or email.");
         return;
     }
     loadDataFromSpecificUser(email, password).then((answer) => {
@@ -163,7 +165,7 @@ function login() {
             location.href = "./index.html";
             initializeLogoutAndDelete();
         } else {
-            alert("Email oder Passwort falsch!");
+            alert("Username or password is incorrect.");
             return;
         }
     });

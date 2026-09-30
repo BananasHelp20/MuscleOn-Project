@@ -5,6 +5,6 @@
     "realTimeStats": true,
     "longtermStats": true
   },
-  "devMode": false,
+  "devMode": true,
   "viewingExercises": "Community-made Exercises"
 }

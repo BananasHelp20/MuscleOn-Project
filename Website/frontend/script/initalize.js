@@ -207,7 +207,10 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
             if (!body.rows.length) {
                 table.remove();
                 const control = document.getElementById(sessionId)?.querySelector("#exercise-controlButton");
-                if (control) control.innerText = "Add Exercises";
+                if (control) {
+                    control.innerText = "Add exercises";
+                    control.classList.remove("is-destructive");
+                }
                 if (!document.querySelector("#exercise-tables table")) document.getElementById("exercise-tables").hidden = true;
             }
         });
@@ -220,7 +223,7 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
         let inputs = [document.createElement("input"), document.createElement("input"), document.createElement("input")];
         select.value = exerciseData[i].exerciseType.charAt(0) + exerciseData[i].name; //problems here (select value is empty string after assignment)
-        tds[0].appendChild(select);
+        tds[0].appendChild(makeExercisePicker(select));
         tds[1].innerText = exerciseData[i].equipment;
         inputs[0].setAttribute("id", "reps" + sessionId + "-" + i);
         inputs[0].type = "number";
@@ -260,9 +263,7 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
     }
     exerciseTable.appendChild(tbody);
     if (exerciseData.length != 0) exerciseDiv.appendChild(exerciseTable);
-    if (exerciseData.length == 0) {
-        exerciseDiv.hidden = true;
-    }
+    if (exerciseData.length == 0 && !exerciseDiv.querySelector("table")) exerciseDiv.hidden = true;
 }
 
 function initializeViewingPage() {

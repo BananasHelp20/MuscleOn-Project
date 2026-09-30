@@ -77,6 +77,14 @@ muscleRouter.post('/loadUserData', async (req, res) => { //Dies ist wohl eine eh
      */
     // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und userName="", found=false}
     let data = await gatherUserData(); //kann erst gemacht werden, wenn alle Files fertig beschrieben wurden.
+    const login = String(req.body?.email || "").trim();
+    const password = String(req.body?.password || "");
+    if (!login || !password ||
+        (login.toLowerCase() !== data.userProperties.userName.toLowerCase() && login.toLowerCase() !== data.userProperties.email.toLowerCase()) ||
+        password !== data.userProperties.password) {
+        res.status(200).send({ found: false });
+        return;
+    }
     let answer: model.DatabaseAnswer = {
         found: true,
         userId: data.userProperties.userId,
@@ -97,6 +105,10 @@ muscleRouter.post('/loadUserDataById', async (req, res) => { //gleiches wie load
      */
     // daten von da Datenbank holen und in de JSON dateien schreiben, wenn user ned gefunden wurde, ein dem entsprechendes objekt answer zurücksenden { userid=-1, und userName="", found=false}
     let data = await gatherUserData(); //kann erst gemacht werden, wenn alle Files fertig beschrieben wurden.
+    if (Number(req.body?.userId) !== data.userProperties.userId) {
+        res.status(200).send({ found: false });
+        return;
+    }
     let answer: model.DatabaseAnswer = {
         found: true,
         userId: data.userProperties.userId,

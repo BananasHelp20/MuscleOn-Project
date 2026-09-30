@@ -49,44 +49,122 @@ function setMuscleGroupOptions(elem) {
 }
 
 function setExerciseOptions(elem) {
-    let exerciseTypes = [document.createElement("optgroup"), document.createElement("optgroup"), document.createElement("optgroup")];
-    exerciseTypes[0].label = "Supported Exercises";
-    exerciseTypes[1].label = "Unsupported Exercises";
-    exerciseTypes[2].label = "Own Exercises";
-    let muscleGroups = getMuscleGroups();
+    elem.add(new Option("Choose an exercise", ""));
+    const sources = [
+        ["Supported exercises", "s", getSupportedExercisesFromLS()],
+        ["Unsupported exercises", "u", getUnsupportedExercisesFromLS()],
+        ["Own exercises", "d", getUserdefinedExercisesFromLS()]
+    ];
+    for (const [label, prefix, exercises] of sources) {
+        if (!exercises.length) continue;
+        const group = document.createElement("optgroup");
+        group.label = label;
+        for (const exercise of [...exercises].sort((a, b) => a.name.localeCompare(b.name))) {
+            group.appendChild(new Option(exercise.name, prefix + exercise.name));
+        }
+        elem.add(group);
+    }
+}
 
-    let NULL = document.createElement("option");
-    NULL.value = "Select Exercises";
-    NULL.label = "Select Exercises";
-    elem.add(NULL);
+function makeExercisePicker(select) {
+    const picker = document.createElement("div");
+    picker.className = "exercise-picker";
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "exercise-picker-trigger";
+    trigger.setAttribute("aria-label", "Choose an exercise");
+    trigger.setAttribute("aria-expanded", "false");
+    const panel = document.createElement("div");
+    panel.className = "exercise-picker-panel";
+    panel.hidden = true;
+    const search = document.createElement("input");
+    search.type = "search";
+    search.placeholder = "Search exercises or muscle groups";
+    search.setAttribute("aria-label", "Search exercises");
+    const results = document.createElement("div");
+    results.className = "exercise-picker-results";
+    panel.append(search, results);
+    select.classList.add("exercise-picker-value");
+    select.tabIndex = -1;
+    select.setAttribute("aria-hidden", "true");
+    picker.append(select, trigger, panel);
 
-    let exercises = [getSupportedExercisesFromLS(), getUnsupportedExercisesFromLS(), getUserdefinedExercisesFromLS()]
-    let prefixes = ["s", "u", "d"];
-
-    for (let k = 0; k < exercises.length; k++) { //des wor fü denkoabeit
-        if (exercises[k].length > 0) {
-            elem.add(exerciseTypes[k]);
-            for (let i = 0; i < muscleGroups.length; i++) {
-                let options = [];
-                for (let j = 0; j < exercises[k].length; j++) {
-                    if (exercises[k][j].targetedMuscleGroups.includes(muscleGroups[i])) {
-                        let opt = document.createElement("option");
-                        opt.label = exercises[k][j].name;
-                        opt.value = prefixes[k] + exercises[k][j].name;
-                        options.push(opt);
-                    }
-                }
-                if (options.length > 0) {
-                    let optGr = document.createElement("optgroup");
-                    optGr.label = muscleGroups[i];
-                    elem.add(optGr);
-                    options.forEach((opt) => {
-                        elem.add(opt);
-                    })
-                }
+    function updateTrigger() {
+        trigger.textContent = select.value ? select.selectedOptions[0].textContent : "Choose an exercise";
+        trigger.classList.toggle("is-placeholder", !select.value);
+    }
+    function close() {
+        panel.hidden = true;
+        trigger.setAttribute("aria-expanded", "false");
+        search.value = "";
+    }
+    function renderResults() {
+        results.replaceChildren();
+        const query = search.value.trim().toLocaleLowerCase();
+        let count = 0;
+        for (const group of select.querySelectorAll("optgroup")) {
+            const matches = [...group.querySelectorAll("option")].filter(option => {
+                const exercise = getExerciseWithId(option.value);
+                return `${option.textContent} ${exercise?.targetedMuscleGroups?.join(" ") || ""} ${group.label}`.toLocaleLowerCase().includes(query);
+            });
+            if (!matches.length) continue;
+            const heading = document.createElement("div");
+            heading.className = "exercise-picker-group";
+            heading.textContent = group.label;
+            results.appendChild(heading);
+            for (const option of matches) {
+                const exercise = getExerciseWithId(option.value);
+                const item = document.createElement("button");
+                item.type = "button";
+                item.className = "exercise-picker-option";
+                const name = document.createElement("span");
+                name.textContent = option.textContent;
+                const meta = document.createElement("small");
+                meta.textContent = exercise?.targetedMuscleGroups?.join(", ") || "";
+                item.append(name, meta);
+                item.addEventListener("click", () => {
+                    select.value = option.value;
+                    select.dispatchEvent(new Event("change", { bubbles: true }));
+                    close();
+                    trigger.focus();
+                });
+                results.appendChild(item);
+                count++;
             }
         }
+        if (!count) {
+            const empty = document.createElement("p");
+            empty.className = "exercise-picker-empty";
+            empty.textContent = "No matching exercises";
+            results.appendChild(empty);
+        }
     }
+    trigger.addEventListener("click", () => {
+        const opening = panel.hidden;
+        document.querySelectorAll(".exercise-picker-panel:not([hidden])").forEach(other => {
+            other.hidden = true;
+            other.parentElement.querySelector(".exercise-picker-trigger").setAttribute("aria-expanded", "false");
+        });
+        panel.hidden = !opening;
+        trigger.setAttribute("aria-expanded", String(opening));
+        if (opening) {
+            panel.classList.toggle("open-up", window.innerHeight - trigger.getBoundingClientRect().bottom < 320 && trigger.getBoundingClientRect().top > 360);
+            renderResults();
+            search.focus();
+        }
+    });
+    search.addEventListener("input", renderResults);
+    picker.addEventListener("keydown", event => {
+        if (event.key === "Escape") { close(); trigger.focus(); }
+        if (event.key === "Enter" && document.activeElement === search) {
+            event.preventDefault();
+            results.querySelector(".exercise-picker-option")?.click();
+        }
+    });
+    document.addEventListener("click", event => { if (!picker.contains(event.target)) close(); });
+    select.addEventListener("change", updateTrigger);
+    updateTrigger();
+    return picker;
 }
 
 function getFreeSessionId() {
@@ -176,7 +254,7 @@ function getEmptyExerciseTable(time) {
 
     let addButton = document.createElement("button");
     addButton.setAttribute("class", "tableButton");
-    addButton.innerText = "Add new Exercise";
+    addButton.innerText = "Add exercise";
 
     addButton.addEventListener("click", (event) => {
         const tbody = event.target.closest("table").tBodies[0];
@@ -192,8 +270,7 @@ function getEmptyExerciseTable(time) {
         select.addEventListener("change", (event) => {
             setSelectedExercise(event.target);
         });
-        select.value = "Select Exercise";
-        tds[0].appendChild(select);
+        tds[0].appendChild(makeExercisePicker(select));
 
         tds[1].innerText = "No Exercise Selected";
 
@@ -218,7 +295,7 @@ function getEmptyExerciseTable(time) {
         let delButton = document.createElement("button");
         delButton.setAttribute("class", "tableButton");
         delButton.setAttribute("id", "delete-exercise");
-        delButton.innerText = "remove exercise";
+        delButton.innerText = "Remove exercise";
         delButton.addEventListener("click", (event) => {
             const row = event.target.closest("tr");
             const body = row.parentElement;
@@ -228,7 +305,10 @@ function getEmptyExerciseTable(time) {
                 const sessionId = body.id.replace("exercise-table", "");
                 table.remove();
                 const control = document.getElementById(sessionId)?.querySelector("#exercise-controlButton");
-                if (control) control.innerText = "Add Exercises";
+                if (control) {
+                    control.innerText = "Add exercises";
+                    control.classList.remove("is-destructive");
+                }
                 if (!document.querySelector("#exercise-tables table")) document.getElementById("exercise-tables").hidden = true;
             }
         });
