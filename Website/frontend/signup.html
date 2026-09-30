@@ -53,9 +53,15 @@
         <input type="number" id="size" name="size" class="styledInput" placeholder="177"><br><br>
         <label for="birthday">Geburtstag:</label>
         <input type="date" id="birthday" name="birthday" class="styledInput"><br><br>
-        <label for="plan">Wollen Sie einen Trainingsplan?</label>
-        <input type="checkbox" id="plan" name="plan"><br><br>
+        <div class="plan-toggle">
+            <label for="plan">Create a training plan</label>
+            <input type="checkbox" id="plan" name="plan">
+        </div>
         <div id="plan-section" class="table-wrapper" hidden>
+            <div class="plan-section-heading">
+                <h2>Training plan</h2>
+                <button id="add-weekday" class="defaultButton">Add Weekday</button>
+            </div>
             <table id="plan-table-table">
                 <thead>
                     <tr>
@@ -63,8 +69,7 @@
                         <th>From</th>
                         <th>To</th>
                         <th>Muscle Group</th>
-                        <th colspan="2" class="tableButtonContainer"><button id="add-weekday" class="tableButton">Add
-                                Weekday</button></th>
+                        <th colspan="2">Actions</th>
                     </tr>
                 </thead>
                 <tbody id="plan-table"></tbody>

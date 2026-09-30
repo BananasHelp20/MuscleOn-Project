@@ -211,7 +211,8 @@ function showButtons(loggedIn) {
             lockedElements.item(i).children.item(0).hidden = false;
         }
         for (let i = 0; i < lockedButtons.length; i++) {
-            lockedButtons.item(i).hidden = false;
+            const button = lockedButtons.item(i);
+            button.hidden = button.id == "cancelExerciseAddition" ? document.getElementById("exerciseForm")?.hidden !== false : false;
         }
     } else {
         for (let i = 0; i < lockedElements.length; i++) {
@@ -265,7 +266,7 @@ function renderExercises(settings) {
 
             let createdByUser = document.createElement("span");
             createdByUser.classList.add("exerciseCreatedBy");
-            createdByUser.innerText = "Created By " + (exercise.userIdCreated == getUserPropertiesFromLocalStorage().userId ? "You" : "User: " + getUserById(exercise.userIdCreated).userName);
+            createdByUser.innerText = "Created by " + (isDefinedByUser ? "You" : exercise.userIdCreated != null ? "User #" + exercise.userIdCreated : "Community");
 
             let equipment = document.createElement("span");
             equipment.classList.add("exerciseEquipment");
@@ -284,12 +285,12 @@ function renderExercises(settings) {
 
             let muscleGroupTitle = document.createElement("dt");
             muscleGroupTitle.classList.add("muscleGroupListObject");
-            muscleGroupTitle.innerText = "MuscleGroups: ";
+            muscleGroupTitle.innerText = "Muscle groups";
             muscleGroupList.appendChild(muscleGroupTitle);
             exercise.targetedMuscleGroups.forEach((muscleGroup) => {
                 let muscleGroupListObject = document.createElement("dd");
                 muscleGroupListObject.classList.add("muscleGroupListObject");
-                muscleGroupListObject.innerText = "- " + muscleGroup;
+                muscleGroupListObject.innerText = muscleGroup;
                 muscleGroupList.appendChild(muscleGroupListObject);
             });
 

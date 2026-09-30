@@ -33,11 +33,14 @@ function addWeekday(data) {
     let weekdayData = data ? data.times : null;
     let sessionId = data ? data.sessionId : getFreeSessionId();
 
-    let weekday = document.createElement("input");
-    weekday.setAttribute("type", "text");
-    weekday.setAttribute("id", "weekday" + sessionId);
-    weekday.setAttribute("placeholder", "Monday");
-    if (weekdayData) weekday.value = weekdayData.weekday;
+    let weekday = document.createElement("select");
+    weekday.id = "weekday" + sessionId;
+    weekday.setAttribute("aria-label", "Day of week");
+    weekday.add(new Option("Choose a day", ""));
+    const weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+    weekdays.forEach((day) => weekday.add(new Option(day, day)));
+    const germanWeekdays = { Montag: "Monday", Dienstag: "Tuesday", Mittwoch: "Wednesday", Donnerstag: "Thursday", Freitag: "Friday", Samstag: "Saturday", Sonntag: "Sunday" };
+    if (weekdayData) weekday.value = germanWeekdays[weekdayData.weekday] || weekdayData.weekday;
     weekday.addEventListener("input", (event) => {
         let id = event.target.parentElement.parentElement.getAttribute("id");
         let foundIndex = findExerciseTableById(id);
@@ -49,10 +52,10 @@ function addWeekday(data) {
     });
 
     let from = document.createElement("input");
-    from.setAttribute("type", "text");
+    from.setAttribute("type", "time");
     from.setAttribute("id", "from" + sessionId);
-    from.setAttribute("placeholder", "08:00");
-    if (weekdayData) from.value = weekdayData.fromTime;
+    from.setAttribute("aria-label", "Start time");
+    if (weekdayData) from.value = weekdayData.fromTime?.padStart(5, "0") || "";
     from.addEventListener("input", (event) => {
         let id = event.target.parentElement.parentElement.getAttribute("id");
         let foundIndex = findExerciseTableById(id);
@@ -64,10 +67,10 @@ function addWeekday(data) {
     });
 
     let to = document.createElement("input");
-    to.setAttribute("type", "text");
+    to.setAttribute("type", "time");
     to.setAttribute("id", "to" + sessionId);
-    to.setAttribute("placeholder", "09:30");
-    if (weekdayData) to.value = weekdayData.toTime;
+    to.setAttribute("aria-label", "End time");
+    if (weekdayData) to.value = weekdayData.toTime?.padStart(5, "0") || "";
     to.addEventListener("input", (event) => {
         let id = event.target.parentElement.parentElement.getAttribute("id");
         let foundIndex = findExerciseTableById(id);
@@ -80,7 +83,8 @@ function addWeekday(data) {
 
     let primaryMuscleGroup = document.createElement("select");
     primaryMuscleGroup.setAttribute("name", "selectMuscleGroup");
-    primaryMuscleGroup.setAttribute("id", "selectMuscleGroup");
+    primaryMuscleGroup.setAttribute("id", "selectMuscleGroup" + sessionId);
+    primaryMuscleGroup.setAttribute("aria-label", "Primary muscle group");
     setMuscleGroupOptions(primaryMuscleGroup);
     if (data) primaryMuscleGroup.value = data.primaryMuscleGroup;
 
@@ -89,9 +93,11 @@ function addWeekday(data) {
     delButton.setAttribute("id", "delete-day");
     delButton.innerText = "Remove Session";
     delButton.addEventListener("click", (event) => {
-        if (document.getElementById("plan-table").children.length > 1) event.target.parentElement.parentElement.remove();
-        if (document.getElementById("plan-table").children.length <= 1) event.target.parentElement.parentElement.parentElement.parentElement.remove();
-        if (findExerciseTableById(Number(event.target.parentElement.parentElement.getAttribute("id"))) != -1) removeExercises(Number(event.target.parentElement.parentElement.getAttribute("id")));
+        const row = event.target.closest("tr");
+        const removedSessionId = Number(row.id);
+        if (document.getElementById("exercise-table" + removedSessionId)) removeExercises(removedSessionId);
+        row.remove();
+        if (!document.querySelector("#exercise-tables table")) document.getElementById("exercise-tables").hidden = true;
     });
 
     let removeExercisesForDayButton = document.createElement("button");
@@ -190,8 +196,8 @@ function signUp() {
     let weight = document.getElementById("weight").value;
     let size = document.getElementById("size").value;
     let birthday = document.getElementById("birthday").value;
-    if (!(userName && email && email.includes("@") && email.includes(".") && weight && size && birthday)) {
-        alert("fill in the fields rightously");
+    if (!(userName && password && email && email.includes("@") && email.includes(".") && weight && size && birthday)) {
+        alert("Please complete all required fields with a valid email address.");
         return;
     }
     let data;
@@ -210,7 +216,7 @@ function signUp() {
         };
         createdPlan = true;
         if (!validateSessionTimes(data.usualSessionTimes)) {
-            alert("Days must be real weekdays, times must be real times: xx:xx");
+            alert("Add a training day with a muscle group and a start time before the end time. Complete any exercise rows you added.");
             return;
         }
     } else {
@@ -225,6 +231,7 @@ function signUp() {
             currentlyTraining: false,
         };
     }
+    data.createdPlan = createdPlan;
     let completeUserData = {
         userProperties: data,
         userSessionData: null,
@@ -273,7 +280,7 @@ function addExercise() {
         let uses = document.createElement("input");
         uses.setAttribute("type", "checkbox");
         let text = document.createElement("span");
-        text.innerText = "- " + muscleGroups[i];
+        text.innerText = muscleGroups[i];
         listelem.appendChild(text);
         listelem.appendChild(uses);
         muscleGroupSelection.appendChild(listelem);
@@ -301,7 +308,7 @@ function saveExercise(exerciseSaveButton, mode) {
 
     for (let i = 0; i < definedGroups.length; i++) {
         if (definedGroups.item(i).nodeName != "DT" && definedGroups.item(i).children.item(1).checked) {
-            definedGroupStrings.push(definedGroups.item(i).innerText.substring(2));
+            definedGroupStrings.push(definedGroups.item(i).innerText.replace(/^-\s*/, ""));
         }
     }
 
@@ -331,12 +338,12 @@ function saveExercise(exerciseSaveButton, mode) {
 
     let muscleGroupTitle = document.createElement("dt");
     muscleGroupTitle.classList.add("muscleGroupListObject");
-    muscleGroupTitle.innerText = "MuscleGroups: ";
+    muscleGroupTitle.innerText = "Muscle groups";
     muscleGroupList.appendChild(muscleGroupTitle);
     definedGroupStrings.forEach((muscleGroup) => {
         let muscleGroupListObject = document.createElement("dd");
         muscleGroupListObject.classList.add("muscleGroupListObject");
-        muscleGroupListObject.innerText = "- " + muscleGroup;
+        muscleGroupListObject.innerText = muscleGroup;
         muscleGroupList.appendChild(muscleGroupListObject);
     });
 
@@ -540,7 +547,7 @@ function enableEditExercise(exerciseEditButton, mode) {
 
     for (let i = 0; i < definedGroups.length; i++) {
         if (definedGroups.item(i).nodeName != "DT") {
-            definedGroupStrings.push(definedGroups.item(i).innerText.substring(2));
+            definedGroupStrings.push(definedGroups.item(i).innerText.replace(/^-\s*/, ""));
         }
     }
 
@@ -633,7 +640,7 @@ function enableEditExercise(exerciseEditButton, mode) {
         uses.setAttribute("type", "checkbox");
         uses.checked = definedGroupStrings.includes(muscleGroups[i]);
         let text = document.createElement("span");
-        text.innerText = "- " + muscleGroups[i];
+        text.innerText = muscleGroups[i];
         listelem.appendChild(text);
         listelem.appendChild(uses);
         muscleGroupSelection.appendChild(listelem);

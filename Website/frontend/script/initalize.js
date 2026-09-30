@@ -200,8 +200,16 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
         delButton.setAttribute("id", "delete-exercise");
         delButton.innerText = "remove exercise";
         delButton.addEventListener("click", (event) => {
-            if (event.target.parentElement.parentElement.parentElement.children.length > 1) event.target.parentElement.parentElement.remove();
-            if (event.target.parentElement.parentElement.parentElement.children.length <= 1) event.target.parentElement.parentElement.parentElement.parentElement.remove();
+            const row = event.target.closest("tr");
+            const body = row.parentElement;
+            const table = body.parentElement;
+            row.remove();
+            if (!body.rows.length) {
+                table.remove();
+                const control = document.getElementById(sessionId)?.querySelector("#exercise-controlButton");
+                if (control) control.innerText = "Add Exercises";
+                if (!document.querySelector("#exercise-tables table")) document.getElementById("exercise-tables").hidden = true;
+            }
         });
 
         let select = document.createElement("select");
@@ -214,14 +222,26 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
         select.value = exerciseData[i].exerciseType.charAt(0) + exerciseData[i].name; //problems here (select value is empty string after assignment)
         tds[0].appendChild(select);
         tds[1].innerText = exerciseData[i].equipment;
-        inputs[0].setAttribute("id", "reps" + i);
+        inputs[0].setAttribute("id", "reps" + sessionId + "-" + i);
+        inputs[0].type = "number";
+        inputs[0].min = "1";
+        inputs[0].step = "1";
+        inputs[0].setAttribute("aria-label", "Reps");
         inputs[0].value = exerciseData[i].reps;
         tds[2].appendChild(inputs[0]);
-        inputs[1].setAttribute("id", "sets" + i);
+        inputs[1].setAttribute("id", "sets" + sessionId + "-" + i);
+        inputs[1].type = "number";
+        inputs[1].min = "1";
+        inputs[1].step = "1";
+        inputs[1].setAttribute("aria-label", "Sets");
         inputs[1].value = exerciseData[i].sets;
         tds[3].appendChild(inputs[1]);
         if (exerciseData[i].weight) {
-            inputs[2].setAttribute("id", "weight" + i);
+            inputs[2].setAttribute("id", "weight" + sessionId + "-" + i);
+            inputs[2].type = "number";
+            inputs[2].min = "0";
+            inputs[2].step = "any";
+            inputs[2].setAttribute("aria-label", "Weight");
             inputs[2].value = exerciseData[i].weight;
             tds[4].appendChild(inputs[2]);
         } else {
@@ -231,7 +251,7 @@ function loadExerciseSelection(data) { //FAAAAACK i glaub du muast jetzt a table
         tds[5].appendChild(delButton);
 
         let tr = document.createElement("tr");
-        tr.setAttribute("id", i);
+        tr.id = "exercise-" + sessionId + "-" + i;
         tds.forEach((td) => {
             tr.appendChild(td);
         });
@@ -356,18 +376,15 @@ function initializeExercises() {
 }
 
 function initializePlanTable() {
-    if (document.getElementById("plan")) document.getElementById("plan").addEventListener("click", (event) => {
+    if (document.getElementById("plan")) document.getElementById("plan").addEventListener("change", (event) => {
         document.getElementById("plan-section").hidden = !event.target.checked;
         if (document.getElementById("plan-section").hidden) {
             document.getElementById("plan-table").innerHTML = '';
+            document.getElementById("exercise-tables").innerHTML = "<h3>Exercises</h3>";
+            document.getElementById("exercise-tables").hidden = true;
         } else {
             addWeekday(null);
         }
-        document.getElementById("plan-table").childNodes.forEach((node) => node.childNodes.forEach((node) => node.value = ""));
-    });
-
-    if (document.getElementById("delete-day")) document.getElementById("delete-day").addEventListener("click", (event) => {
-        if (document.getElementById("plan-table").children.length > 1) event.target.parentElement.parentElement.remove();
     });
 
     if (document.getElementById("add-weekday")) document.getElementById("add-weekday").addEventListener("click", () => {

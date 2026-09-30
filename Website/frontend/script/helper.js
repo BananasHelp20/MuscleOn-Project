@@ -131,36 +131,24 @@ function findTimeTableById(sessionId) {
     return -1;
 }
 
-function initSelectExercise(elem, id, data) {
-    elem.parentElement.parentElement.children.item(1).innerText = data[id].equipment;
-    elem.parentElement.parentElement.children.item(4).innerHTML = "";
-    if (data[id].weight == true) {
-        let input = document.createElement("input");
-        input.placeholder = "15";
-        input.id = "weight" + elem.parentElement.parentElement.getAttribute("id");
-        elem.parentElement.parentElement.children.item(4).appendChild(input);
-    } else {
-        elem.parentElement.parentElement.children.item(4).innerHTML = " - ";
-    }
-}
-
 function setSelectedExercise(elem) {
-    let id = elem.value;
-    if (id.startsWith("s")) {
-        id = id.substring(1);
-        getSupportedExercises().then(data => {
-            initSelectExercise(elem, getIndexOfName(data, id), data);
-        });
-    } else if (id.startsWith("u")) {
-        id = id.substring(1);
-        getUnsupportedExercises().then(data => {
-            initSelectExercise(elem, getIndexOfName(data, id), data);
-        });
-    } else { //starts with d
-        id = id.substring(1);
-        getUserDefinedExercises().then(data => {
-            initSelectExercise(elem, getIndexOfName(data, id), data);
-        });
+    const row = elem.closest("tr");
+    const exercise = getExerciseWithId(elem.value);
+    row.cells[1].textContent = exercise ? (exercise.equipment || "None") : "No Exercise Selected";
+    row.cells[4].replaceChildren();
+    if (!exercise) {
+        row.cells[4].textContent = "No Exercise Selected";
+    } else if (exercise.weight) {
+        const input = document.createElement("input");
+        input.type = "number";
+        input.min = "0";
+        input.step = "any";
+        input.placeholder = "15";
+        input.id = "weight" + row.id;
+        input.setAttribute("aria-label", "Weight");
+        row.cells[4].appendChild(input);
+    } else {
+        row.cells[4].textContent = "–";
     }
 }
 
@@ -191,8 +179,11 @@ function getEmptyExerciseTable(time) {
     addButton.innerText = "Add new Exercise";
 
     addButton.addEventListener("click", (event) => {
+        const tbody = event.target.closest("table").tBodies[0];
         let tr = document.createElement("tr");
-        tr.setAttribute("id", event.target.parentElement.parentElement.parentElement.children.length);
+        let rowNumber = tbody.rows.length;
+        while (document.getElementById("exercise-" + time.sessionId + "-" + rowNumber)) rowNumber++;
+        tr.id = "exercise-" + time.sessionId + "-" + rowNumber;
         let tds = [document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td"), document.createElement("td")];
         let inputs = [document.createElement("input"), document.createElement("input"), document.createElement("input")];
 
@@ -207,10 +198,18 @@ function getEmptyExerciseTable(time) {
         tds[1].innerText = "No Exercise Selected";
 
         inputs[0].setAttribute("id", "reps" + tr.getAttribute("id"));
+        inputs[0].type = "number";
+        inputs[0].min = "1";
+        inputs[0].step = "1";
+        inputs[0].setAttribute("aria-label", "Reps");
         inputs[0].placeholder = 5;
         tds[2].appendChild(inputs[0]);
 
         inputs[1].setAttribute("id", "sets" + tr.getAttribute("id"));
+        inputs[1].type = "number";
+        inputs[1].min = "1";
+        inputs[1].step = "1";
+        inputs[1].setAttribute("aria-label", "Sets");
         inputs[1].placeholder = 3;
         tds[3].appendChild(inputs[1]);
 
@@ -221,8 +220,17 @@ function getEmptyExerciseTable(time) {
         delButton.setAttribute("id", "delete-exercise");
         delButton.innerText = "remove exercise";
         delButton.addEventListener("click", (event) => {
-            if (event.target.parentElement.parentElement.parentElement.children.length > 1) event.target.parentElement.parentElement.remove();
-            if (event.target.parentElement.parentElement.parentElement.children.length <= 1) event.target.parentElement.parentElement.parentElement.parentElement.remove();
+            const row = event.target.closest("tr");
+            const body = row.parentElement;
+            const table = body.parentElement;
+            row.remove();
+            if (!body.rows.length) {
+                const sessionId = body.id.replace("exercise-table", "");
+                table.remove();
+                const control = document.getElementById(sessionId)?.querySelector("#exercise-controlButton");
+                if (control) control.innerText = "Add Exercises";
+                if (!document.querySelector("#exercise-tables table")) document.getElementById("exercise-tables").hidden = true;
+            }
         });
         tds[5].setAttribute("class", "tableButtonContainer");
         tds[5].appendChild(delButton);
@@ -230,7 +238,7 @@ function getEmptyExerciseTable(time) {
         tds.forEach((td) => {
             tr.appendChild(td);
         });
-        event.target.parentElement.parentElement.parentElement.parentElement.children.item(1).appendChild(tr);
+        tbody.appendChild(tr);
     });
 
     let addButtonTh = document.createElement("th");
@@ -262,80 +270,39 @@ function getEmptyExerciseTable(time) {
 
 function getSessionTimes() {
     if (!document.getElementById("plan-table") || !document.getElementById("exercise-tables")) return;
+    const sessions = [];
+    for (const row of document.getElementById("plan-table").rows) {
+        const sessionId = row.id;
+        const exerciseRows = document.getElementById("exercise-table" + sessionId)?.rows || [];
+        const exercises = [];
 
-    let table = document.getElementById("plan-table");
-    let exerciseTables = document.getElementById("exercise-tables");
-    let plan = []
-    let plantime = [];
-    let primaryMuscleGroups = [];
-    let exercises = [[]];
-    let ids = [];
-
-    for (let i = 0; i < table.children.length; i++) {
-        ids.push(table.children.item(i).getAttribute("id"));
-        for (let j = 0; j < table.children.item(i).children.length; j++) {
-            let row = table.children.item(i).children.item(j).children.item(0);
-            if (row.getAttribute("id") != null && row.getAttribute("type") != null && row.nodeName != "SELECT") {
-                plantime.push(row.value);
-            }
-            if (row.getAttribute("id") != null && row.nodeName == "SELECT") {
-                primaryMuscleGroups.push(row.value);
-            }
+        for (const exerciseRow of exerciseRows) {
+            const selected = exerciseRow.cells[0].querySelector("select").value;
+            const exercise = getExerciseWithId(selected);
+            if (!exercise) return null;
+            exercises.push({
+                exerciseType: selected[0] == "s" ? "supported" : selected[0] == "u" ? "unsupported" : "defined-by-user",
+                name: exercise.name,
+                targetedMuscleGroups: exercise.targetedMuscleGroups,
+                equipment: exercise.equipment || "None",
+                reps: exerciseRow.cells[2].querySelector("input").value,
+                sets: exerciseRow.cells[3].querySelector("input").value,
+                weight: exerciseRow.cells[4].querySelector("input")?.value || null
+            });
         }
-        plan.push(plantime);
-        plantime = [];
-    }
 
-    for (let i = 0; i < exerciseTables.children.length; i++) {
-        let tbodyIndex = 1;
-        if (exerciseTables.children.item(i).nodeName == "TABLE") {
-            for (let j = 0; j < exerciseTables.children.item(i).children.length; j++) { //tables durchgeh
-                if (exerciseTables.children.item(i).children.item(j).getAttribute("id")) tbodyIndex = j;
-            }
-            for (let j = 0; j < exerciseTables.children.item(i).children.item(tbodyIndex).children.length; j++) { //rows durchgehen
-                let row = exerciseTables.children.item(i).children.item(tbodyIndex).children.item(j);
-                let allExercises = [];
-                let thisExercise;
-                if (row.children.item(0).children.item(0).value.charAt(0) == "s") {
-                    allExercises = getSupportedExercisesFromLS();
-                    thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
-                } else if (row.children.item(0).children.item(0).value.charAt(0) == "u") {
-                    allExercises = getUnsupportedExercisesFromLS();
-                    thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
-                } else {
-                    allExercises = getUserdefinedExercisesFromLS();
-                    thisExercise = allExercises[getIndexOfName(allExercises, row.children.item(0).children.item(0).value.substring(1))];
-                }
-                if (!exercises[i]) exercises.push([]);
-                if (!thisExercise) return null;
-                exercises[i].push({
-                    exerciseType: row.children.item(0).children.item(0).value.charAt(0) == "s" ? "supported" : row.children.item(0).children.item(0).value.charAt(0) == "u" ? "unsupported" : "defined-by-user",
-                    name: thisExercise.name,
-                    targetedMuscleGroups: thisExercise.targetedMuscleGroups,
-                    equipment: thisExercise.equipment,
-                    reps: row.children.item(2).children.item(0).value,
-                    sets: row.children.item(3).children.item(0).value,
-                    weight: (row.children.item(4).children.item(0)) ? row.children.item(4).children.item(0).value : null
-                });
-            }
-        }
-    }
-    let plantimeObjects = [];
-    for (let index = 0; index < plan.length; index++) {
-        let time = plan[index];
-        let object = {
-            sessionId: ids[index],
-            primaryMuscleGroup: primaryMuscleGroups[index],
-            exercises: exercises[getIndexOfSessionId(ids[index])] != null ? exercises[getIndexOfSessionId(ids[index])] : [], //des mit da id is so a gschicht, finde de exercisetabelle mit da passenden id, und füg de daten davon ein
+        sessions.push({
+            sessionId,
+            primaryMuscleGroup: row.cells[3].querySelector("select").value,
+            exercises,
             times: {
-                weekday: time[0],
-                fromTime: time[1],
-                toTime: time[2]
+                weekday: row.cells[0].querySelector("select, input").value,
+                fromTime: row.cells[1].querySelector("input").value,
+                toTime: row.cells[2].querySelector("input").value
             }
-        };
-        plantimeObjects.push(object);
+        });
     }
-    return plantimeObjects; //geht
+    return sessions;
 }
 
 function getIndexOfSessionId(id) {
@@ -382,11 +349,11 @@ function getExerciseWithId(id) {
 }
 
 function validateSessionTimes(data) {
-    if (!data) return false;
+    if (!data || data.length === 0) return false;
     for (let i = 0; i < data.length; i++) {
         let exercises = data[i].exercises ? data[i].exercises : null;
         let time = data[i].times;
-        if (!time || data[i].primaryMuscleGroup == "" || data[i].sessionId == -1) {
+        if (!time || !data[i].primaryMuscleGroup || data[i].primaryMuscleGroup == "-1" || data[i].sessionId == -1) {
             console.error("if 1");
             return false;
         }
@@ -401,14 +368,14 @@ function validateSessionTimes(data) {
                 time.weekday == "Samstag" || time.weekday == "Saturday" ||
                 time.weekday == "Sonntag" || time.weekday == "Sunday"
             ) &&
-            time.fromTime &&
-            (
-                time.fromTime.length == 5 || time.fromTime.length == 4
-            ) &&
-            time.toTime &&
-            (
-                time.toTime.length == 5 || time.toTime.length == 4
-            )
+            /^\d{1,2}:\d{2}$/.test(time.fromTime) &&
+            /^\d{1,2}:\d{2}$/.test(time.toTime) &&
+            Number(time.fromTime.split(":")[0]) < 24 &&
+            Number(time.toTime.split(":")[0]) < 24 &&
+            Number(time.fromTime.split(":")[1]) < 60 &&
+            Number(time.toTime.split(":")[1]) < 60 &&
+            (Number(time.fromTime.split(":")[0]) * 60 + Number(time.fromTime.split(":")[1])) <
+            (Number(time.toTime.split(":")[0]) * 60 + Number(time.toTime.split(":")[1]))
         )) {
             console.error("if 2");
             return false;
@@ -420,13 +387,11 @@ function validateSessionTimes(data) {
                     exercise.name &&
                     exercise.targetedMuscleGroups &&
                     exercise.targetedMuscleGroups.length != 0 &&
-                    exercise.equipment &&
-                    exercise.reps &&
-                    exercise.sets &&
-                    !isNaN(Number(exercise.reps)) &&
-                    !isNaN(Number(exercise.sets)) &&
-                    exercise.reps != "" &&
-                    exercise.sets != ""
+                    typeof exercise.equipment == "string" &&
+                    Number(exercise.reps) > 0 &&
+                    Number(exercise.sets) > 0 &&
+                    Number.isFinite(Number(exercise.reps)) &&
+                    Number.isFinite(Number(exercise.sets))
                 )) {
                     console.error("if 3 (" + exercise + ")");
                     return false;

@@ -110,17 +110,40 @@ main#main-page { padding: 0; overflow: hidden; }
 input:not([type="checkbox"]), select, textarea { max-width: 100%; padding: 11px 13px !important; border: 1px solid var(--line) !important; border-radius: 9px !important; background: var(--surface-soft) !important; color: var(--ink) !important; font: inherit; text-align: left !important; transition: background .18s, border-color .18s, box-shadow .18s; }
 input:not([type="checkbox"]):hover, select:hover, textarea:hover { background: var(--field-hover) !important; border-color: var(--brand) !important; }
 input:not([type="checkbox"]):focus, select:focus, textarea:focus { background: var(--surface) !important; border-color: var(--brand) !important; box-shadow: 0 0 0 3px rgba(29, 171, 178, .16); }
+html:has(#modeStylesheet[href$="dark.css"]) input[type="date"],
+html:has(#modeStylesheet[href$="dark.css"]) input[type="time"] { color-scheme: dark; }
 input[type="checkbox"] { accent-color: var(--brand); width: 18px; height: 18px; vertical-align: middle; }
 label { display: inline-block; margin: 6px 0; font-weight: 600; }
 #login-page, #passwd-change-page { max-width: 620px; }
-#signup-page { max-width: 900px; }
+#signup-page { max-width: 1080px; }
 #login-page > label, #passwd-change-page > label, #signup-page > label:not([for="plan"]) { display: block; margin: 17px 0 7px; font-weight: 600; }
 #login-page > input, #passwd-change-page > input, #signup-page > input:not([type="checkbox"]) { display: block; width: min(100%, 460px); }
 #login-page > br, #passwd-change-page > br, #signup-page > br { display: none; }
 #login-page > button, #passwd-change-page > button, #signup-page > button { margin: 24px 0 12px; }
 #login-page > button, #signup-page > button { display: flex; }
-#signup-page > label[for="plan"] { margin-top: 24px; font-weight: 600; }
-#signup-page > input#plan { margin-left: 10px; }
+.plan-toggle { display: flex; align-items: center; justify-content: space-between; gap: 20px; margin-top: 30px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); }
+.plan-toggle label { margin: 0; cursor: pointer; }
+.plan-toggle input { flex: none; margin: 0; cursor: pointer; }
+#signup-page #plan-section { max-width: 100%; margin: 14px 0 0; padding: 22px; overflow: visible; border: 1px solid var(--line); border-radius: 18px; background: var(--surface-soft); }
+.plan-section-heading { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.plan-section-heading h2 { margin: 0; font-size: 1.55rem; font-weight: 700; }
+.plan-section-heading .defaultButton { margin: 0; }
+#signup-page #plan-table-table { min-width: 690px; width: 100%; margin: 0; table-layout: fixed; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+#signup-page #plan-table-table th { text-align: left; }
+#signup-page #plan-table-table th:first-child { width: 15%; }
+#signup-page #plan-table-table th:nth-child(2), #signup-page #plan-table-table th:nth-child(3) { width: 12%; }
+#signup-page #plan-table-table th:nth-child(4) { width: 23%; }
+#signup-page #plan-table-table td { background: var(--surface) !important; vertical-align: middle; }
+#signup-page #plan-table-table tbody tr:nth-child(even) td { background: var(--surface-soft) !important; }
+#signup-page #plan-table-table input, #signup-page #plan-table-table select { width: 100%; min-width: 0; }
+#signup-page #plan-table-table .tableButton { min-height: 42px; padding: 8px 10px; font-size: .8rem; }
+#signup-page #delete-day, #signup-page #delete-exercise { background: #aa4545 !important; color: #fff !important; }
+#signup-page #delete-day:hover, #signup-page #delete-day:focus-visible,
+#signup-page #delete-exercise:hover, #signup-page #delete-exercise:focus-visible { background: #8e3232 !important; color: #fff !important; }
+#signup-page #exercise-tables { width: 100%; max-width: 100%; margin: 26px 0 0; padding: 22px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); overflow-x: auto; }
+#signup-page #exercise-tables h3 { margin: 0 0 14px; }
+#signup-page #exercise-tables table { min-width: 700px; margin: 16px 0 0; }
+#signup-page #exercise-tables table + table { margin-top: 28px; }
 #loginLink, #signupLink, #returnLink { color: var(--brand-deep) !important; }
 #loginLink:hover, #signupLink:hover, #returnLink:hover { color: var(--link-hover) !important; }
 
@@ -166,18 +189,54 @@ html:has(#modeStylesheet[href$="dark.css"]) .settings-danger .defaultButton:hove
 .section div h2 { margin: 0 0 14px; }
 #liveGraph { max-width: 100%; overflow: hidden; }
 
-#formContainer { margin: 22px 0; justify-content: stretch; }
-#formContainer:has(.lockedButton[hidden]) { display: none; }
-#formContainer > .exerciseObject { width: 100%; margin: 0; }
-#exercises { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 18px; }
-#exercises:has(> .exerciseObject:only-child) { grid-template-columns: minmax(0, 520px); justify-content: center; }
+#exercise-page > h1 { margin-bottom: 20px; }
+#exercise-page > span { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; width: 100%; margin: 0 0 24px; padding: 13px 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface-soft); color: var(--muted); font-weight: 600; }
+#exerciseSwitch { margin: 0; }
+#formContainer { margin: 0 0 24px; justify-content: stretch; }
+#formContainer:has(#addExercise[hidden]) { display: none; }
+#formContainer > .exerciseObject { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 8px 20px; width: 100%; margin: 0; padding: 18px 22px; }
+#formContainer > .exerciseObject > div:not(#exerciseForm) { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+#formContainer > .exerciseObject > div:not(#exerciseForm) .defaultButton { margin: 0; }
+#formContainer > .exerciseObject > div:last-child { justify-content: flex-end; }
+#exercises { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: stretch; gap: 20px; }
+#exercises:has(> .exerciseObject:only-child) { grid-template-columns: minmax(0, 700px); justify-content: center; }
+#exercises:empty { display: block; }
+#exercises:empty::before { content: "No exercises to show in this view."; display: block; padding: 52px 24px; border: 1px dashed var(--line); border-radius: 18px; background: var(--surface-soft); color: var(--muted); text-align: center; }
 .exerciseObject { width: 100%; margin: 0; padding: 25px; border: 1px solid var(--line); border-radius: 17px; background: var(--surface-soft) !important; color: var(--ink); }
 .exerciseTitle { color: var(--brand-deep) !important; text-align: left; font-size: 1.2rem; font-weight: 600; }
 .exerciseObject div { flex-wrap: wrap; gap: 8px; justify-content: flex-start; }
+#exercises > .exerciseObject { min-width: 0; overflow: hidden; background: var(--surface) !important; box-shadow: 0 12px 28px rgba(8, 57, 77, .07); }
+#exercises > .exerciseObject:has(> span.exerciseTitle) { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); align-content: start; gap: 12px; padding: 0; }
+#exercises > .exerciseObject:has(> span.exerciseTitle) > br { display: none; }
+#exercises > .exerciseObject > span.exerciseTitle { grid-column: 1 / -1; margin: 0; padding: 23px 24px 0; font-size: 1.4rem; line-height: 1.25; overflow-wrap: anywhere; }
+#exercises > .exerciseObject > p { grid-column: 1 / -1; margin: 0; padding: 0 24px 6px; color: var(--muted); line-height: 1.6; overflow-wrap: anywhere; }
+#exercises > .exerciseObject > .exerciseCreatedBy { grid-column: 1 / -1; margin: -4px 24px 0; color: var(--muted); font-size: .85rem; }
+#exercises > .exerciseObject > .exerciseEquipment,
+#exercises > .exerciseObject > .exerciseWeight,
+#exercises > .exerciseObject > .exercisePublic { min-width: 0; margin: 0 0 0 24px; padding: 11px 13px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface-soft); font-size: .88rem; line-height: 1.4; overflow-wrap: anywhere; }
+#exercises > .exerciseObject > .exerciseWeight { margin: 0 24px 0 0; }
+#exercises > .exerciseObject > .exercisePublic { grid-column: 1 / -1; width: fit-content; margin-right: 24px; }
+#exercises > .exerciseObject > .muscleGroupList { grid-column: 1 / -1; display: flex; align-content: start; flex-wrap: wrap; gap: 7px; min-height: 62px; margin: 1px 0 0; padding: 16px 24px 20px; border-top: 1px solid var(--line); }
+#exercises > .exerciseObject > .muscleGroupList dt { flex-basis: 100%; margin: 0 0 3px; color: var(--muted); font-size: .85rem; font-weight: 600; }
+#exercises > .exerciseObject > .muscleGroupList dd { margin: 0; padding: 5px 11px; border-radius: 999px; background: var(--surface-soft); color: var(--brand-deep); font-size: .83rem; font-weight: 600; }
+#exercises > .exerciseObject > div:last-child { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; margin: -12px 0 0; padding: 15px 24px; border-top: 1px solid var(--line); background: var(--surface-soft); }
+#exercises > .exerciseObject > div:last-child .defaultButton { margin: 0; }
+#exercises > .exerciseObject:has(> span.exerciseTitle) > div:last-child .defaultButton:last-child { background: #aa4545 !important; color: #fff !important; }
+#exercises > .exerciseObject:has(> span.exerciseTitle) > div:last-child .defaultButton:last-child:hover,
+#exercises > .exerciseObject:has(> span.exerciseTitle) > div:last-child .defaultButton:last-child:focus-visible { background: #8e3232 !important; color: #fff !important; }
 #exerciseForm { width: 100%; }
-#exerciseForm > div { margin-bottom: 12px; }
+#formContainer #exerciseForm { grid-column: 1 / -1; margin-bottom: 10px; padding: 8px 4px 18px; border-bottom: 1px solid var(--line); }
+#exerciseForm > br { display: none; }
+#exerciseForm > label { margin: 13px 0 6px; }
+#exerciseForm > label:empty { display: none; }
+#exerciseForm > div { margin: 10px 0; }
 #exerciseForm .styledInput, #exerciseForm .styledArea { width: 100%; }
-#exerciseForm ul { padding-left: 20px; }
+#exerciseForm #exerciseDescription { width: 100%; max-width: none; min-height: 110px; }
+#exerciseForm ul { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin: 14px 0; padding: 0; list-style: none; }
+#exerciseForm ul dt { grid-column: 1 / -1; margin: 0 0 4px; font-weight: 600; }
+#exerciseForm ul dd { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 0; padding: 9px 12px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface); }
+#exerciseForm ul dd span { margin: 0; }
+#exerciseForm ul dd input { flex: none; margin: 0; }
 .table-wrapper { max-width: 100%; padding: 0; overflow-x: auto; }
 table, #exercise-tables table { width: 100%; min-width: 650px; margin: 16px 0; border: 0; border-collapse: separate; border-spacing: 0; }
 th, td { border: 0 !important; border-bottom: 1px solid var(--line) !important; padding: 12px !important; background: var(--surface-soft) !important; color: var(--ink); }
@@ -199,6 +258,9 @@ canvas { max-width: 100%; background: var(--surface-soft) !important; border-col
   #sections { grid-template-columns: 1fr; }
   .settings-grid { grid-template-columns: 1fr; }
   .settings-panel-wide, .settings-danger { grid-column: auto; }
+  #formContainer > .exerciseObject { grid-template-columns: 1fr; }
+  #formContainer > .exerciseObject > div:last-child { justify-content: flex-start; }
+  #signup-page #plan-section { overflow-x: auto; }
 }
 @media (max-width: 600px) {
   #actualHeaderHolder { width: calc(100% - 24px); }
@@ -211,8 +273,53 @@ canvas { max-width: 100%; background: var(--surface-soft) !important; border-col
   .home-copy h1 { font-size: 2.7rem; }
   #exercises { grid-template-columns: 1fr; }
   .exerciseObject { padding: 18px; }
+  #exercise-page > span { padding: 12px 14px; }
+  #exercises > .exerciseObject:has(> span.exerciseTitle) { gap: 10px; }
+  #exercises > .exerciseObject > span.exerciseTitle { padding: 20px 18px 0; }
+  #exercises > .exerciseObject > p { padding: 0 18px 6px; }
+  #exercises > .exerciseObject > .exerciseCreatedBy { margin-right: 18px; margin-left: 18px; }
+  #exercises > .exerciseObject > .exerciseEquipment,
+  #exercises > .exerciseObject > .exerciseWeight,
+  #exercises > .exerciseObject > .exercisePublic { margin-left: 18px; }
+  #exercises > .exerciseObject > .exerciseWeight { margin-right: 18px; }
+  #exercises > .exerciseObject > .muscleGroupList { padding: 16px 18px 20px; }
+  #exercises > .exerciseObject > div:last-child { padding: 14px 18px; }
+  #exerciseForm ul { grid-template-columns: 1fr; }
   .team-grid { grid-template-columns: 1fr; }
   .team-card-wide { grid-column: auto; }
+  .plan-toggle { padding: 14px 16px; }
+  #signup-page #plan-section { padding: 16px; overflow: visible; }
+  #signup-page #plan-table-table { display: block; min-width: 0; border: 0; background: transparent; }
+  #signup-page #plan-table-table thead { display: none; }
+  #signup-page #plan-table-table tbody { display: grid; gap: 14px; }
+  #signup-page #plan-table-table tbody tr { display: block; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--surface); }
+  #signup-page #plan-table-table tbody td { display: grid; grid-template-columns: 1fr; align-items: center; gap: 6px; padding: 10px 12px !important; border-bottom: 1px solid var(--line) !important; background: var(--surface) !important; }
+  #signup-page #plan-table-table tbody td::before { color: var(--muted); font-size: .83rem; font-weight: 600; }
+  #signup-page #plan-table-table tbody td:nth-child(1)::before { content: "Day"; }
+  #signup-page #plan-table-table tbody td:nth-child(2)::before { content: "From"; }
+  #signup-page #plan-table-table tbody td:nth-child(3)::before { content: "To"; }
+  #signup-page #plan-table-table tbody td:nth-child(4)::before { content: "Muscle group"; }
+  #signup-page #plan-table-table tbody td:nth-child(n+5) { display: block; }
+  #signup-page #plan-table-table tbody td:last-child { border-bottom: 0 !important; }
+  #signup-page #exercise-tables { padding: 15px; overflow: visible; }
+  #signup-page #exercise-tables table { display: block; min-width: 0; width: 100%; margin-top: 16px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+  #signup-page #exercise-tables table thead, #signup-page #exercise-tables table tbody { display: block; }
+  #signup-page #exercise-tables table thead tr:first-child { display: flex; flex-direction: column; align-items: stretch; }
+  #signup-page #exercise-tables table thead tr:first-child th { display: block; width: 100%; min-width: 0; }
+  #signup-page #exercise-tables table thead tr:first-child th:first-child { text-align: left; overflow-wrap: anywhere; }
+  #signup-page #exercise-tables table thead tr:first-child .tableButton { width: 100%; min-height: 40px; padding: 8px; font-size: .78rem; }
+  #signup-page #exercise-tables table thead tr:nth-child(2) { display: none; }
+  #signup-page #exercise-tables table tbody tr { display: block; border-top: 1px solid var(--line); }
+  #signup-page #exercise-tables table tbody td { display: grid; grid-template-columns: 1fr; gap: 6px; padding: 10px 12px !important; background: var(--surface) !important; text-align: left; }
+  #signup-page #exercise-tables table tbody td::before { color: var(--muted); font-size: .83rem; font-weight: 600; }
+  #signup-page #exercise-tables table tbody td:nth-child(1)::before { content: "Exercise"; }
+  #signup-page #exercise-tables table tbody td:nth-child(2)::before { content: "Equipment"; }
+  #signup-page #exercise-tables table tbody td:nth-child(3)::before { content: "Reps"; }
+  #signup-page #exercise-tables table tbody td:nth-child(4)::before { content: "Sets"; }
+  #signup-page #exercise-tables table tbody td:nth-child(5)::before { content: "Weight"; }
+  #signup-page #exercise-tables table tbody td:last-child { display: block; border-bottom: 0 !important; }
+  #signup-page #exercise-tables table tbody input, #signup-page #exercise-tables table tbody select { width: 100%; }
+  #signup-page #exercise-tables table tbody .tableButton { width: 100%; min-height: 42px; }
 }
 @media (max-width: 380px) {
   #actualHeaderHolder { grid-template-columns: 44px minmax(0, 1fr); grid-template-areas: "logo title" "account account" "navigation navigation"; }
