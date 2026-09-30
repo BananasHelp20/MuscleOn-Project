@@ -84,6 +84,21 @@ function makeExercisePicker(select) {
     trigger.className = "exercise-picker-trigger";
     trigger.setAttribute("aria-label", "Choose an exercise");
     trigger.setAttribute("aria-expanded", "false");
+    const triggerLabel = document.createElement("span");
+    triggerLabel.className = "exercise-picker-trigger-label";
+    const chevron = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+    chevron.classList.add("exercise-picker-chevron");
+    chevron.setAttribute("viewBox", "0 0 20 20");
+    chevron.setAttribute("fill", "none");
+    chevron.setAttribute("aria-hidden", "true");
+    const chevronPath = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    chevronPath.setAttribute("d", "m4.5 7.5 5.5 5 5.5-5");
+    chevronPath.setAttribute("stroke", "currentColor");
+    chevronPath.setAttribute("stroke-width", "1.8");
+    chevronPath.setAttribute("stroke-linecap", "round");
+    chevronPath.setAttribute("stroke-linejoin", "round");
+    chevron.appendChild(chevronPath);
+    trigger.append(triggerLabel, chevron);
     const panel = document.createElement("div");
     panel.className = "exercise-picker-panel";
     panel.hidden = true;
@@ -100,7 +115,7 @@ function makeExercisePicker(select) {
     picker.append(select, trigger, panel);
 
     function updateTrigger() {
-        trigger.textContent = select.value ? select.selectedOptions[0].textContent : "Choose an exercise";
+        triggerLabel.textContent = select.value ? select.selectedOptions[0].textContent : "Choose an exercise";
         trigger.classList.toggle("is-placeholder", !select.value);
     }
     function close() {

@@ -414,8 +414,12 @@ canvas { max-width: 100%; background: var(--surface-soft) !important; border-col
 :is(#signup-page, #settings-page) #exercise-tables table tbody input { width: 100%; min-width: 0; height: 44px; }
 .exercise-picker { position: relative; width: 100%; min-width: 0; }
 .exercise-picker-value { position: absolute !important; width: 1px !important; height: 1px !important; padding: 0 !important; opacity: 0; pointer-events: none; }
-.exercise-picker-trigger { width: 100%; min-height: 44px; padding: 10px 38px 10px 13px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-soft); color: var(--ink); font: inherit; text-align: left; cursor: pointer; position: relative; }
-.exercise-picker-trigger::after { content: "⌄"; position: absolute; right: 14px; top: 7px; font-size: 1.4rem; }
+.exercise-picker-trigger { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; padding: 10px 13px; border: 1px solid var(--line); border-radius: 9px; background: var(--surface-soft); color: var(--ink); font: inherit; text-align: left; cursor: pointer; }
+.exercise-picker-trigger-label { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.exercise-picker-chevron { flex: none; width: 18px; height: 18px; color: var(--brand-deep); transform: rotate(0); transition: transform .24s ease, color .2s ease; }
+.exercise-picker-trigger[aria-expanded="true"] .exercise-picker-chevron { transform: rotate(180deg); }
+.exercise-picker-trigger:hover .exercise-picker-chevron, .exercise-picker-trigger[aria-expanded="true"] .exercise-picker-chevron { color: var(--brand); }
+@media (prefers-reduced-motion: reduce) { .exercise-picker-chevron { transition: none; } }
 .exercise-picker-trigger.is-placeholder { color: var(--muted); }
 .exercise-picker-trigger:hover, .exercise-picker-trigger[aria-expanded="true"] { border-color: var(--brand); background: var(--field-hover); color: var(--ink); }
 .exercise-picker-panel { position: static; width: 100%; margin-top: 8px; padding: 8px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: 0 6px 18px rgba(8, 57, 77, .07); }
