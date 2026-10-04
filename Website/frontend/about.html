@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/light.css" id="modeStylesheet">
     <link rel="stylesheet" type="text/css" href="./css/redesign.css">
+    <script src="./script/motion.js"></script>
     <script src="./script/initalize.js" defer></script>
     <script src="./script/localStorage.js" defer></script>
     <script src="./script/router.js" defer></script>
@@ -25,7 +26,7 @@
             <a id="menuLogo" class="menuObject" href="./index.html" aria-label="Muscle-ON! home">
                 <img src="./images/logo.png" alt="Muscle-ON! logo">
             </a>
-            <div id="title">Muscle-ON!</div>
+            <a id="title" href="./index.html">Muscle-ON!</a>
             <div id="menuBar">
                 <div id="menuContainer">
                     <nav id="menuOptionBar" aria-label="Main navigation">
@@ -41,6 +42,8 @@
     </header>
     <div class="siteBody" id="main-page">
         <h1>About</h1>
+        <p>Muscle-ON! is a workout companion for planned sessions. A training day defines when to work out and which exercises, reps, and sets to complete. The intended hardware uses EMG sensors on the muscles used by each exercise, so the session page can show movement and progress as it happens.</p>
+        <p>The current live graph and rep estimates use simulated data while the hardware connection is in development. Email reminders and scheduled workout completion tracking are also planned.</p>
         <section class="about-team">
             <h3>The Muscle-ON! Team</h3>
             <div class="team-grid">

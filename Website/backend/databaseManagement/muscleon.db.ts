@@ -26,7 +26,8 @@ export async function getUserById(userId: number): Promise<model.UserProperties 
             currentlyTraining: false, // ignore for now
             verifiedEmail: false, // ignore for now
             createdPlan: createdPlan,
-            currentlyInExercise: false // ignore for now
+            currentlyInExercise: false, // ignore for now
+            pausedSession: false
         };
     } catch (error) {
         console.error('Error getting user by ID:', error);
@@ -56,7 +57,8 @@ export async function getUserByEmail(email: string): Promise<model.UserPropertie
             currentlyTraining: false, // ignore for now
             verifiedEmail: false, // ignore for now
             createdPlan: createdPlan,
-            currentlyInExercise: false // ignore for now
+            currentlyInExercise: false, // ignore for now
+            pausedSession: false
         };
     } catch (error) {
         console.error('Error getting user by email:', error);

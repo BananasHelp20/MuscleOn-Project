@@ -144,7 +144,7 @@ function login() {
             localStorage.setItem("userSettings", JSON.stringify(answer.userSettings));
             localStorage.setItem("userProperties", JSON.stringify(answer.userProperties));
             showLoggedIn(newDeviceData);
-            location.href = "./index.html";
+            navigateToPage("./index.html");
             initializeLogoutAndDelete();
         } else {
             alert("Username or password is incorrect.");
@@ -169,7 +169,7 @@ function logout() {
         localStorage.setItem("deviceData", JSON.stringify(defaultDeviceData));
         clearUserData();
         showLoggedIn(defaultDeviceData);
-        location.href = "./index.html";
+        navigateToPage("./index.html");
     });
 }
 

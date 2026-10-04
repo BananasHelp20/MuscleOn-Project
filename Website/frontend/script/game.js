@@ -244,7 +244,7 @@ function startGame() {
             ctx.strokeStyle = '#0d3d12';
             ctx.strokeRect(x, y, w, h);
             ctx.fillStyle = '#fff';
-            ctx.font = 'bold 14px monospace';
+            ctx.font = '600 14px monospace';
             ctx.fillText(code, x + 6, y + 25);
             return;
         }
@@ -258,7 +258,7 @@ function startGame() {
         ctx.strokeStyle = '#5f0000';
         ctx.strokeRect(x, y, w, h);
         ctx.fillStyle = '#fff';
-        ctx.font = 'bold 20px monospace';
+        ctx.font = '600 20px monospace';
         ctx.fillText(code, x + 9, y + 35);
     }
 

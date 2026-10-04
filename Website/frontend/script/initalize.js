@@ -4,14 +4,16 @@ const interval = 250; //für de Aktuallisierung in Millisekunden
 function initializeLightSwitch() {
     let lightSwitch = document.getElementById("lightSwitch")
     if (lightSwitch) lightSwitch.innerText = getSettingsFromLocalStorage().mode;
-    document.getElementById("modeStylesheet").href = getSettingsFromLocalStorage().mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
+    applyTheme(getSettingsFromLocalStorage().mode);
 
-    if (lightSwitch) lightSwitch.addEventListener("click", () => {
+    if (lightSwitch) lightSwitch.addEventListener("click", async () => {
         let settings = getSettingsFromLocalStorage();
         settings.mode = settings.mode == "lightmode" ? "darkmode" : "lightmode"
-        document.getElementById("modeStylesheet").href = settings.mode == "lightmode" ? "./css/light.css" : "./css/dark.css";
-        document.getElementById("lightSwitch").innerText = settings.mode;
+        lightSwitch.disabled = true;
+        lightSwitch.innerText = settings.mode;
         setUserSettings(settings);
+        try { await applyTheme(settings.mode, true); }
+        finally { lightSwitch.disabled = false; }
     });
 }
 
@@ -35,6 +37,10 @@ function initializeLogoutAndDelete() {
 }
 
 function initializeSession() {
+    if (document.getElementById("session-page")) {
+        initializeSessionPage();
+        return;
+    }
     sessionButtonCheck();
     if (document.getElementById("startStopSession")) document.getElementById("startStopSession").addEventListener("click", () => {
         let data = getUserPropertiesFromLocalStorage();
@@ -160,7 +166,7 @@ function initializeLogout() {
 
 function initializeLogin() {
     document.getElementById("inlineLoginButton").addEventListener("click", () => {
-        window.location.href = "./login.html";
+        navigateToPage("./login.html");
     });
     let loginButton = document.getElementById("loginButton");
     if (!loginButton) return;
@@ -171,7 +177,7 @@ function initializeLogin() {
 
 function initializeSignUp() {
     document.getElementById("inlineSignupButton").addEventListener("click", () => {
-        window.location.href = "./signup.html";
+        navigateToPage("./signup.html");
     });
     if (!document.getElementById("signupButton")) return;
     document.getElementById("plan").checked = false;

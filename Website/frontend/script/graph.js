@@ -81,7 +81,8 @@ function initializeLiveGraph() {
                     labels: {
                         color: '#fff',
                         font: {
-                            size: 12
+                            size: 12,
+                            weight: 600
                         }
                     }
                 },
@@ -90,7 +91,8 @@ function initializeLiveGraph() {
                     text: 'Live Muscle Usage',
                     color: '#fff',
                     font: {
-                        size: 14
+                        size: 14,
+                        weight: 600
                     }
                 }
             },

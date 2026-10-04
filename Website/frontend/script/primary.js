@@ -8,7 +8,7 @@ function init() {
     let deviceData = getDeviceData();
     initalizeDefault(deviceData); //initializes stuff needed wheather or not the user is logged in
     initializeExerciseUpdateLoop(); //loop2
-    if (document.getElementById("liveGraph")) initLiveGraph(); // websocckets
+    // The session page starts its own live signal after the DOM is ready.
 
     if (deviceData.loggedIn) { //if somebody is logged in
         getUserData().then((data) => { //get Userdata for inialization
@@ -167,7 +167,7 @@ function initializeLoggedIn(deviceData, data) {
     });
     if (editProfileButton) editProfileButton.addEventListener("click", editListener);
     if (changePasswordLink) changePasswordLink.addEventListener("click", () => {
-        window.location.href = "./passwordSite.html";
+        navigateToPage("./passwordSite.html");
     });
     if (changePasswordButton) changePasswordButton.addEventListener("click", () => {
         if (validatePasswordChange(getUserPropertiesFromLocalStorage())) {

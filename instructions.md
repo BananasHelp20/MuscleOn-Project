@@ -1,0 +1,7 @@
+# project definition:
+The Project aims to track the process of one working out. User-journey (example of a possible user): 
+--
+Evan wants to get stronger and work out more often, but he sometimes just forgets his workout or doesn't do all of it, stopping during the workout. Evan creates an account on MuscleOn and creates a workout plan (Trainingsplan). The App notifies Evan via E-Mail everytime he should do his workout. The scheduled Workout counts as done when he started the workout 30 minutes before or after he scheduled it. (e.g. if a workout is scheduled for 14:30 in the workout plan, he can start it anywhere from 14:00 to 15:00 which would be counted as done (if he finishes it ofc)). The project hardware tracks his muscle movement and whether he does his workout or not (emg sensors on the exercise-targeted muscles) The page records reps and sets (sets++ only if the needed reps are reached and the user makes a 10 second pause (e.g. 10 reps per exercise. The user stops for longer than 10 seconds at 8 raps, and an error is shown (reps stopped to early). The user stops at 10 and waits 10 seconds, sets++. The user does 11 and waits 5 seconds, then proceeds to do 4 reps before waiting 10 seconds, the rep count would be 15 even though only 10 are required, then sets++)). This Process, aswell as the muscle activity is shown live on the website (using websockets). This workout session process should be visuallized on the website.
+--
+
+#3bb5b5

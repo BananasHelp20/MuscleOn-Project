@@ -140,7 +140,7 @@ mark {
     background-color: #ff9;
     color: #000;
     font-style: italic;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 del {
@@ -206,7 +206,7 @@ header {
     margin-top: .5em;
     margin-bottom: .5em;
     font-size: var(--mainHeaderSize);
-    font-weight: bold;
+    font-weight: 700;
     padding: 0;
     border: 0;
     outline: 0;
@@ -282,7 +282,7 @@ header {
 #inlineUsernameDisplay {
     /*Level 5 - currentUser*/
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 600;
     color: var(--menu-text-color);
     display: flex;
     align-items: center;
@@ -491,7 +491,7 @@ body {
     margin-top: 0;
     margin-bottom: 0;
     border: none;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 #viewSection {
@@ -687,7 +687,7 @@ textarea {
 
 .exerciseTitle {
     text-align: center;
-    font-weight: bold;
+    font-weight: 600;
     font-size: larger;
 }
 

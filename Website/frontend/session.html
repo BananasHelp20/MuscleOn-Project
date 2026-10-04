@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/light.css" id="modeStylesheet">
     <link rel="stylesheet" type="text/css" href="./css/redesign.css">
+    <script src="./script/motion.js"></script>
     <script src="./script/initalize.js" defer></script>
     <script src="./script/localStorage.js" defer></script>
     <script src="./script/router.js" defer></script>
@@ -15,9 +16,8 @@
     <script src="./script/game.js" defer></script>
     <script src="./script/dev.js" defer></script>
     <script src="./script/feature.js" defer></script>
+    <script src="./script/session.js" defer></script>
     <script src="./script/primary.js" defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
-    <script src="./script/graph.js" defer></script>
     <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
 </head>
 <body style="background-color: transparent">
@@ -27,7 +27,7 @@
             <a id="menuLogo" class="menuObject" href="./index.html" aria-label="Muscle-ON! home">
                 <img src="./images/logo.png" alt="Muscle-ON! logo">
             </a>
-            <div id="title">Muscle-ON!</div>
+            <a id="title" href="./index.html">Muscle-ON!</a>
             <div id="menuBar">
                 <div id="menuContainer">
                     <nav id="menuOptionBar" aria-label="Main navigation">
@@ -41,74 +41,86 @@
             </div>
         </div>
     </header>
-    <div class="siteBody" id="session-page">
-        <h1>Session</h1>
-        <div id="viewSection">
-            <span>Show Session data: <input type="checkbox" id="viewingSession"></span>
-            <span>Show Live data: <input type="checkbox" id="viewingRealTime"></span>
-            <span>Show Long-term data: <input type="checkbox" id="viewingLongterm"></span>
+    <main class="siteBody" id="session-page">
+        <div class="session-intro">
+            <div>
+                <h1>Session</h1>
+            </div>
+            <span class="session-demo-badge">Demo signal</span>
         </div>
+
+        <section id="liveSignalSection" class="session-card signal-card" aria-labelledby="signal-heading" hidden>
+            <div class="session-card-heading">
+                <div>
+                    <h2 id="signal-heading">Live muscle activity</h2>
+                    <p>Simulated muscle activity with contractions and rest.</p>
+                </div>
+                <span id="signalConnection" class="signal-connection" role="status">Connecting…</span>
+            </div>
+            <div id="liveGraph" aria-label="Live simulated muscle activity graph">
+                <canvas id="signalCanvas" role="img" aria-label="Simulated muscle activity over the last 30 seconds"></canvas>
+            </div>
+            <p class="session-note">This preview is test data. It does not measure your muscles or verify a workout.</p>
+        </section>
+
+        <p id="sessionLoginNotice" class="session-card session-login-notice">Sign in to choose a training plan and try the session flow. <a href="./login.html">Log in</a> or <a href="./signup.html">create an account</a>.</p>
+
         <div id="lockedFromLogin" hidden>
-            <div id="control">
-                <div id="sessionControlDiv">
-                    <button id="startStopSession" class="sessionCtrlButton">Start Session</button>
-                    <div id="sessionDiv" hidden>
-                        <span>Current Exercise:</span>
-                        <span id="currentExercise">Curls</span>
-                        <button id="startSkipExercise" class="setting defaultButton sessionCtrlButton">Start Exercise</button> <!-- start/skip -->
-                        <button id="resumePauseSession" class="setting defaultButton sessionCtrlButton" hidden>Pause Session</button>
-                    </div>
-                </div>
-            </div>
-            <div id="sections">
-                <div class="section" id="dynDivResponsive">
-                    <div id="dynamicHeadline" hidden>
-                        <h2>Dynamic data</h2>
-                    </div>
-                    <div id="dynamicDiv" hidden>
-                        <h3>current Session (updated every 250 milliseconds)</h3>
-                        <div id="dynamicDataDiv">
-                            <!-- Average Heart Rate: <span id="averageHeartFrequenceDyn" class="coming-soon-text">Coming Soon (:pray:)</span><br> -->
-                            Average Muscle Usage: <span id="averageMuscleUsageInPercentDyn"></span><br>
-                            Trained Muscles: <span id="trainedMuscles"></span><br>
-                            Done Exercises: <span id="exercisesFinished"></span>
+                <section class="session-card workout-shell" aria-labelledby="workout-heading">
+                    <div id="workoutContent" class="workout-content">
+                    <div class="session-card-heading">
+                        <div>
+                            <h2 id="workout-heading">Your workout</h2>
+                            <p id="sessionStatus" role="status">Choose a saved training day to begin.</p>
                         </div>
                     </div>
-                    <div id="realTimeDiv" hidden>
-                        <h3>current data (also updated every 250 milliseconds)</h3>
-                        <div id="realTimeDataDiv">
-                            <!-- Heart Rate: <span id="heartFrequence" class="coming-soon-text">Coming Soon (:pray:)</span><br> -->
-                            Current Muscle Being Trained: <span id="currentMuscleBeingTrained"></span><br>
-                            Current Exercise: <span id="currentExerciseDisplay"></span><br>
-                            Rep Count: <span id="repDisplay"></span> Reps<br>
-                            Set Count: <span id="setDisplay"></span> Sets<br>
+                    <div class="workout-grid">
+                    <div class="workout-controls">
+                    <label for="sessionPlan">Training day</label>
+                    <select id="sessionPlan"></select>
+                    <p id="scheduleWindow" class="session-note"></p>
+                    <div class="session-actions">
+                        <button id="startStopSession" class="defaultButton" type="button">Start session</button>
+                        <button id="resumePauseSession" class="defaultButton button-secondary" type="button" hidden>Pause</button>
+                        <button id="startSkipExercise" class="defaultButton button-secondary" type="button" hidden>Skip exercise</button>
+                    </div>
+                    <div class="session-progress" id="sessionProgress" hidden>
+                        <h3 id="currentExercise">—</h3>
+                        <p class="session-note">Exercise <span id="exercisePosition"></span></p>
+                        <p id="exerciseMuscles" class="session-note"></p>
+                        <div class="session-metrics">
+                            <div><strong id="repDisplay">0</strong><span id="repTarget">reps</span></div>
+                            <div><strong id="setDisplay">0</strong><span id="setTarget">sets complete</span></div>
                         </div>
-                        <h3>muscle usage graph (live)</h3>
-                        <div id="liveGraph">
+                        <p id="setFeedback" class="session-feedback">Waiting for a contraction.</p>
+                    </div>
+                    <p class="session-note set-rules">A set completes after the target reps and 10 seconds without a rep. A shorter set shows an early stop warning.</p>
+                    </div>
+                    <details class="workout-timeline" open>
+                        <summary>
+                            <span class="timeline-summary-copy">
+                                <span class="timeline-title">Exercises for this session</span>
+                                <span id="timelineCurrent" class="timeline-current-label">Choose a training day</span>
+                            </span>
+                            <svg class="timeline-chevron" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="m6 9 6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                        </summary>
+                        <ol id="exerciseSequence" class="exercise-sequence" aria-label="Workout exercise timeline"></ol>
+                    </details>
+                    </div>
+                    </div>
+                    <div id="sessionNotice" class="session-notice" role="status" aria-live="polite" aria-atomic="true" hidden>
+                        <div class="session-notice-panel">
+                            <div class="session-notice-copy">
+                                <strong id="sessionNoticeTitle"></strong>
+                                <p id="sessionNoticeMessage"></p>
+                            </div>
+                            <button id="dismissSessionNotice" class="session-notice-dismiss" type="button" aria-label="Dismiss notification">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+                            </button>
                         </div>
                     </div>
-                </div>
-                <div class="section" id="statDivResponsive">
-                    <div id="staticDiv" hidden>
-                        <h2>Static data</h2>
-                        <div id="staticDataDiv">
-                            <h3>All-Time Average</h3>
-                            Average Time Trained: <span id="averageTimeTrained"></span><br>
-                            <!-- Average Heart Rate: <span id="averageHeartFrequenceStat">Coming Soon (:pray:)</span><br> -->
-                            Average Muscle Usage In Percent: <span id="averageMuscleUsageInPercentStat"></span><br>
-                            Monthly strength increase: <span id="monthlyStrengthIncrease"></span><br>
-                            Average weekly training Time: <span id="weeklyTrainingTime"></span><br>
-                            <h3>All-Time Highscores</h3>
-                            Most trained Muscle ever: <span id="mostTrainedMuscle"></span><br>
-                            Most done exercise ever: <span id="mostDoneExercise"></span><br>
-                            <!-- Max Heart Rate: <span id="maxHeartRate" class="coming-soon-text">Coming Soon (:pray:)</span><br> -->
-                            Max Time Trained: <span id="maxTimeTrained"></span><br>
-                            Max Done in one Set for each Exercise: <span id="maxDoneInOneForEachExercise"></span><br>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </section>
         </div>
-    </div>
+    </main>
     <div class="background"></div>
 </body>

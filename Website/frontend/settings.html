@@ -8,6 +8,7 @@
     <link rel="stylesheet" type="text/css" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="./css/light.css" id="modeStylesheet">
     <link rel="stylesheet" type="text/css" href="./css/redesign.css">
+    <script src="./script/motion.js"></script>
     <script src="./script/initalize.js" defer></script>
     <script src="./script/localStorage.js" defer></script>
     <script src="./script/router.js" defer></script>
@@ -26,7 +27,7 @@
             <a id="menuLogo" class="menuObject" href="./index.html" aria-label="Muscle-ON! home">
                 <img src="./images/logo.png" alt="Muscle-ON! logo">
             </a>
-            <div id="title">Muscle-ON!</div>
+            <a id="title" href="./index.html">Muscle-ON!</a>
             <div id="menuBar">
                 <div id="menuContainer">
                     <nav id="menuOptionBar" aria-label="Main navigation">
@@ -59,16 +60,12 @@
                     <h2>Training</h2>
                     <div class="settings-row"><span>Trainingsplan</span><div><button id="createTrainingsPlan" class="setting defaultButton">Create Trainings Plan</button> <button id="cancelTrainingsPlan" class="defaultButton" hidden>Cancel</button></div></div>
                     <div class="settings-row"><span>View Exercises</span><button id="exerciseSwitch" class="setting defaultButton">All</button></div>
-                    <div id="viewSection">
-                        <span>Show Session data: <input type="checkbox" id="viewingSession"></span>
-                        <span>Show Live data: <input type="checkbox" id="viewingRealTime"></span>
-                        <span>Show Long-term data: <input type="checkbox" id="viewingLongterm"></span>
-                    </div>
                     <div id="plan-section" class="table-wrapper" hidden>
                         <div class="plan-section-heading">
                             <h2>Training plan</h2>
                             <button id="add-weekday" class="defaultButton">Add day</button>
                         </div>
+                        <p>The start time is the planned workout time. The session preview shows whether a workout starts within 30 minutes of it; reminders and attendance tracking are still in development.</p>
                         <table id="plan-table-table">
                             <thead>
                                 <tr>

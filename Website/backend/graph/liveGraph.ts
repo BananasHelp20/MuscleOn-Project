@@ -21,11 +21,13 @@ interface ClientSession {
 let wss: WebSocket.Server | null = null;
 let dataGeneratorInterval: NodeJS.Timeout | null = null;
 let currentMuscleUsage: number = 0;
-let muscleDirection: number = 1; // 1 = increasing, -1 = decreasing
-const muscleChangeRate: number = 50; // Änderungsrate pro Update
 const minMuscleValue: number = 0;
 const maxMuscleValue: number = 4500;
 const updateInterval: number = 100; // Update alle 100ms
+let repActive = false;
+let nextRepAt = 0;
+let repStartsAt = 0;
+let repEndsAt = 0;
 
 // Map um Client-IDs auf WebSocket-Verbindungen zu mappen
 const clientSessions = new Map<string, ClientSession>();
@@ -151,21 +153,29 @@ function startDataGenerator(): void {
         clearInterval(dataGeneratorInterval);
     }
 
-    currentMuscleUsage = 0;
-    muscleDirection = 1;
+    currentMuscleUsage = 180;
+    nextRepAt = Date.now() + 900;
 
     dataGeneratorInterval = setInterval(() => {
-        // Berechne nächsten Wert
-        currentMuscleUsage += muscleDirection * muscleChangeRate;
-
-        // Ändere Richtung wenn Min/Max erreicht
-        if (currentMuscleUsage >= maxMuscleValue) {
-            currentMuscleUsage = maxMuscleValue;
-            muscleDirection = -1;
-        } else if (currentMuscleUsage <= minMuscleValue) {
-            currentMuscleUsage = minMuscleValue;
-            muscleDirection = 1;
+        // A quiet baseline with short contraction bursts and occasional rest periods.
+        const now = Date.now();
+        if (!repActive && now >= nextRepAt) {
+            repActive = true;
+            repStartsAt = now;
+            repEndsAt = now + 600 + Math.random() * 250;
         }
+        if (repActive) {
+            const phase = Math.min(1, (now - repStartsAt) / (repEndsAt - repStartsAt));
+            const envelope = Math.sin(Math.PI * phase);
+            currentMuscleUsage = Math.round(260 + envelope * (2300 + Math.random() * 1000) + Math.random() * 260);
+            if (now >= repEndsAt) {
+                repActive = false;
+                nextRepAt = now + (Math.random() < 0.12 ? 10500 + Math.random() * 1800 : 900 + Math.random() * 550);
+            }
+        } else {
+            currentMuscleUsage = Math.round(140 + Math.random() * 260);
+        }
+        currentMuscleUsage = Math.max(minMuscleValue, Math.min(maxMuscleValue, currentMuscleUsage));
 
         // Sende Daten an alle verbundenen Clients
         broadcastMuscleData(currentMuscleUsage);
